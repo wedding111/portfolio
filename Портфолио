@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Диана — Дизайнер цифровых приглашений</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,700&family=Manrope:wght@300;400;600&family=Great+Vibes&family=Playfair+Display:ital@0;1&family=Tenor+Sans&family=Inter:wght@300;400;600&family=Amatic+SC:wght@700&display=swap');
+
+        :root {
+            --primary-purple: #140d21;
+            --secondary-purple: #1f1235;
+            --accent-violet: #b388ff;
+            --text-light: #f3e5f5;
+            --text-muted: #ce93d8;
+        }
+
+        body { font-family: 'Manrope', sans-serif; background-color: var(--primary-purple); color: var(--text-light); margin: 0; font-size: 16px; overflow: hidden; }
+        
+        /* --- НАВИГАЦИЯ --- */
+        nav { 
+            position: fixed; top: 0; width: 100%; z-index: 1000; 
+            display: flex; justify-content: center; gap: 30px; 
+            padding: 20px 0; background: rgba(20, 13, 33, 0.95); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(179, 136, 255, 0.1);
+        }
+        nav a { color: var(--text-muted); text-decoration: none; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        nav a:hover, nav a.active { color: #fff; text-shadow: 0 0 10px var(--accent-violet); }
+
+        /* --- СТРУКТУРА СТРАНИЦ --- */
+        main { position: relative; width: 100vw; height: 100vh; }
+        .page { 
+            position: absolute; inset: 0; opacity: 0; visibility: hidden; 
+            overflow-y: auto; overflow-x: hidden;
+            scroll-behavior: smooth; display: block; 
+        }
+        .page.active { opacity: 1; visibility: visible; }
+        
+        .content-container { max-width: 1200px; margin: 0 auto; padding: 0 5vw; }
+
+        /* --- СЕКЦИИ НА ГЛАВНОЙ --- */
+        section.home-section { padding: 100px 0; border-bottom: 1px solid rgba(179, 136, 255, 0.05); }
+        section.home-section:last-child { border-bottom: none; }
+        .section-title { font-family: 'Cormorant Garamond'; font-size: clamp(2.5rem, 5vw, 4rem); text-align: center; margin-bottom: 60px; color: #fff; }
+
+        /* 1. HERO */
+        #hero-block { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        #hero-block h1 { 
+            font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 700; 
+            font-size: clamp(3rem, 8vw, 6rem); margin: 0; line-height: 1.1; 
+        }
+        #hero-block h1 span { color: var(--accent-violet); }
+        #hero-block p { 
+            font-size: clamp(1.2rem, 2vw, 1.8rem); margin-top: 30px; color: var(--text-light); 
+            max-width: 800px; line-height: 1.6; font-weight: 300;
+        }
+
+        /* 2. ФИЛОСОФИЯ */
+        .philosophy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .philosophy-item { text-align: center; padding: 30px; background: rgba(255,255,255,0.02); border-radius: 15px; }
+        .philosophy-item .icon { font-size: 3rem; margin-bottom: 20px; display: block; }
+        .philosophy-item h3 { font-size: 1.5rem; margin-bottom: 15px; color: #fff; }
+        .philosophy-item p { color: var(--text-muted); line-height: 1.6; }
+
+        /* 3. ПОРТФОЛИО */
+        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .project-card { 
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(179, 136, 255, 0.1); 
+            border-radius: 15px; overflow: hidden; text-decoration: none; color: var(--text-light); 
+            transition: all 0.4s ease; cursor: pointer; position: relative;
+        }
+        .project-card:hover { transform: translateY(-10px); border-color: var(--accent-violet); box-shadow: 0 10px 30px rgba(179, 136, 255, 0.15); }
+        .project-card img { width: 100%; height: 280px; object-fit: cover; opacity: 0.8; transition: 0.4s; }
+        .project-card:hover img { opacity: 1; scale: 1.05; }
+        .project-card h3 { margin: 20px 20px 5px; font-size: 1.5rem; font-family: 'Cormorant Garamond'; }
+        .project-card p { margin: 0 20px 25px; color: var(--text-muted); font-size: 0.9rem; }
+
+        /* 4. ВОЗМОЖНОСТИ */
+        .capabilities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .capability-item { background: var(--secondary-purple); padding: 25px; border-radius: 10px; text-align: center; font-size: 1.1rem; font-weight: 600; border: 1px solid rgba(255,255,255,0.05); }
+
+        /* 5. ПРОЦЕСС */
+        .process-steps { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; }
+        .step { flex: 1; min-width: 280px; text-align: center; }
+        .step .number { font-size: 4rem; font-weight: 700; color: var(--accent-violet); font-family: 'Cormorant Garamond'; opacity: 0.5; }
+        .step h3 { font-size: 1.5rem; margin: 10px 0; }
+
+        /* 6. ФУТЕР */
+        footer { text-align: center; padding: 80px 0; background: linear-gradient(to top, #000, transparent); }
+        .contact-links-row { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 40px; }
+        .contact-btn {
+            display: flex; align-items: center; gap: 10px; padding: 15px 35px; border-radius: 50px; 
+            text-decoration: none; font-size: 1.1rem; font-weight: 600; transition: 0.3s; 
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff;
+        }
+        .contact-btn:hover { background: var(--accent-violet); color: #000; transform: translateY(-5px); }
+
+        /* --- СЛУЖЕБНЫЕ --- */
+        #transition-overlay { position: fixed; inset: 0; z-index: 2000; pointer-events: none; background: var(--accent-violet); transform: scaleY(0); }
+        #particles-canvas { position: fixed; inset: 0; pointer-events: none; z-index: -1; }
+        .back-btn { 
+            position: fixed; bottom: 30px; right: 30px; padding: 12px 30px; 
+            background: rgba(20, 13, 33, 0.8); backdrop-filter: blur(10px); color: #fff; 
+            text-decoration: none; border-radius: 50px; font-size: 0.9rem; z-index: 900; 
+            border: 1px solid var(--accent-violet); cursor: pointer; transition: 0.3s; 
+        }
+        .back-btn:hover { background: var(--accent-violet); color: #000; }
+
+        /* =========================================
+           СТИЛИ ДЛЯ ДЕМО-СТРАНИЦ
+           ========================================= */
+        /* GLASS WEDDING */
+        #example-glass { background: transparent; color: #fff; font-family: 'Tenor Sans', sans-serif; display: block; padding: 0; }
+        #example-glass .bg-fixed { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=80') center/cover no-repeat; z-index: -1; }
+        #example-glass .glass-container { position: relative; z-index: 1; padding: 100px 20px; display: flex; flex-direction: column; align-items: center; gap: 80vh; }
+        #example-glass .glass-panel { width: 100%; max-width: 600px; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.2); padding: 60px; text-align: center; border-radius: 20px; opacity: 0; transform: scale(0.9); transition: 0.8s; }
+        #example-glass .glass-panel.active { opacity: 1; transform: scale(1); }
+        #example-glass h1 { font-size: 4rem; margin: 0; text-transform: uppercase; font-family: 'Tenor Sans'; }
+        #example-glass h2 { font-size: 2.5rem; margin-bottom: 20px; font-family: 'Tenor Sans'; }
+        #example-glass p { font-family: 'Inter', sans-serif; font-size: 1.2rem; line-height: 1.6; }
+        #example-glass .map-box { width: 100%; height: 300px; margin-top: 30px; border-radius: 10px; overflow: hidden; filter: grayscale(100%) invert(100%); }
+        #example-glass iframe { width: 100%; height: 100%; border: none; }
+        #example-glass .btn-glass { display: inline-block; padding: 15px 40px; margin-top: 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.5); color: #fff; text-decoration: none; border-radius: 50px; font-family: 'Inter'; transition: 0.3s; }
+        #example-glass .btn-glass:hover { background: #fff; color: #000; }
+
+        /* LAVENDER WEDDING */
+        #example-lavender { background: linear-gradient(to bottom, #a18cd1 0%, #fbc2eb 100%); color: #4a3b52; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .firefly { position: absolute; width: 4px; height: 4px; background: #fff; border-radius: 50%; box-shadow: 0 0 10px #fff; animation: fly 10s infinite linear; }
+        @keyframes fly { 0% { transform: translate(0, 0); opacity: 0; } 50% { opacity: 1; } 100% { transform: translate(100px, -100px); opacity: 0; } }
+        .field { position: absolute; bottom: 0; width: 100%; height: 150px; display: flex; justify-content: space-around; align-items: flex-end; z-index: 1; pointer-events: none; }
+        .grass { width: 4px; background: #6a4a8f; border-radius: 5px 5px 0 0; transform-origin: bottom center; animation: sway 3s infinite ease-in-out alternate; }
+        .grass::before { content: ''; position: absolute; top: 10px; left: -3px; width: 10px; height: 10px; background: #8e44ad; border-radius: 50%; }
+        .grass::after { content: ''; position: absolute; top: 30px; right: -3px; width: 8px; height: 8px; background: #9b59b6; border-radius: 50%; }
+        @keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
+        .lavender-card { background: rgba(255, 255, 255, 0.8); padding: 50px; border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 10; max-width: 500px; position: relative; margin: 0 auto; }
+        .lavender-card h1 { font-family: 'Amatic SC', cursive; font-size: 4rem; margin: 0; color: #6a4a8f; line-height: 1; }
+        .lavender-card p { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; margin: 20px 0; font-style: italic; color: #4a3b52; }
+        .btn-lavender { background: #6a4a8f; color: white; border: none; padding: 12px 30px; font-size: 1.1rem; border-radius: 30px; cursor: pointer; transition: 0.3s; font-family: 'Cormorant Garamond', serif; }
+        .btn-lavender:hover { background: #8e44ad; transform: translateY(-3px); }
+
+        /* STAR WARS */
+        #star-wars { background: #000; overflow: hidden; }
+        .crawl-container { perspective: 300px; height: 100vh; display: flex; justify-content: center; overflow: hidden; position: relative; }
+        .crawl-content { position: relative; top: 100%; transform-origin: 50% 100%; animation: crawl 60s linear infinite; font-size: clamp(2rem, 6vw, 4rem); text-align: justify; color: #feda4a; max-width: 800px; margin: 0 auto; line-height: 1.5; }
+        @keyframes crawl { 0% { top: 100%; transform: rotateX(20deg) translateZ(0); } 100% { top: -250%; transform: rotateX(25deg) translateZ(-2500px); } }
+
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+
+    <nav>
+        <a onclick="document.querySelector('#hero-block').scrollIntoView()">Главная</a>
+        <a onclick="document.querySelector('#portfolio-section').scrollIntoView()">Портфолио</a>
+        <a onclick="document.querySelector('#footer-section').scrollIntoView()">Контакты</a>
+    </nav>
+    
+    <main>
+        <!-- ОСНОВНАЯ СТРАНИЦА (СКРОЛЛ) -->
+        <section id="home" class="page active">
+            
+            <!-- 1. HERO -->
+            <div id="hero-block" class="home-section">
+                <div class="content-container">
+                    <h1 class="headline">Здравствуйте! Меня зовут <span>Диана</span>.</h1>
+                    <p class="sub-headline">
+                        Я создаю цифровые приглашения, которые хочется пересматривать.<br>
+                        Без шаблонов. С душой. С любовью к деталям.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 2. ФИЛОСОФИЯ -->
+            <section class="home-section">
+                <div class="content-container">
+                    <h2 class="section-title">Моя философия</h2>
+                    <div class="philosophy-grid">
+                        <div class="philosophy-item">
+                            <span class="icon">🕊️</span>
+                            <h3>Живая анимация</h3>
+                            <p>Приглашение — это не статичная картинка, это живой сценарий, который задает настроение.</p>
+                        </div>
+                        <div class="philosophy-item">
+                            <span class="icon">⚡</span>
+                            <h3>Чистый код</h3>
+                            <p>Сайт откроется мгновенно даже при слабом интернете, не заставляя гостей ждать.</p>
+                        </div>
+                        <div class="philosophy-item">
+                            <span class="icon">💎</span>
+                            <h3>Уникальность</h3>
+                            <p>Каждая деталь рисуется и программируется лично под вас. Никаких шаблонов.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. ПОРТФОЛИО -->
+            <section id="portfolio-section" class="home-section">
+                <div class="content-container">
+                    <h2 class="section-title">Примеры работ</h2>
+                    <div class="portfolio-grid">
+                        <div class="project-card" onclick="navigateTo('#example-glass')">
+                            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800" alt="Glass Wedding">
+                            <h3>Glass Wedding</h3>
+                            <p>Минимализм и эффект стекла</p>
+                        </div>
+
+                        <div class="project-card" onclick="navigateTo('#example-lavender')">
+                            <img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=800" alt="Lavender">
+                            <h3>Lavender Wedding</h3>
+                            <p>Нежность, светлячки и Прованс</p>
+                        </div>
+
+                        <div class="project-card" onclick="navigateTo('#star-wars')">
+                            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800" alt="Star Wars">
+                            <h3>Star Wars Wedding</h3>
+                            <p>Эпичное приглашение с титрами</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. ВОЗМОЖНОСТИ -->
+            <section class="home-section">
+                <div class="content-container">
+                    <h2 class="section-title">Что я умею</h2>
+                    <div class="capabilities-grid">
+                        <div class="capability-item">📍 Интерактивные карты</div>
+                        <div class="capability-item">⏳ Таймеры отсчета</div>
+                        <div class="capability-item">✅ RSVP-формы</div>
+                        <div class="capability-item">👗 Гиды по дресс-коду</div>
+                        <div class="capability-item">🎁 Вишлисты</div>
+                        <div class="capability-item">💬 Чаты для гостей</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. ПРОЦЕСС -->
+            <section class="home-section">
+                <div class="content-container">
+                    <h2 class="section-title">Как мы работаем</h2>
+                    <div class="process-steps">
+                        <div class="step">
+                            <div class="number">1.</div>
+                            <h3>Бриф</h3>
+                            <p style="color: var(--text-muted)">Обсуждаем настроение и детали.</p>
+                        </div>
+                        <div class="step">
+                            <div class="number">2.</div>
+                            <h3>Магия</h3>
+                            <p style="color: var(--text-muted)">Я создаю дизайн и пишу код.</p>
+                        </div>
+                        <div class="step">
+                            <div class="number">3.</div>
+                            <h3>Запуск</h3>
+                            <p style="color: var(--text-muted)">Вы получаете ссылку для гостей.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. ФУТЕР -->
+            <footer id="footer-section">
+                <div class="content-container">
+                    <h2 class="section-title" style="margin-bottom: 20px;">Давайте создадим магию</h2>
+                    <p style="font-size: 1.2rem; color: var(--text-muted);">Ваш праздник заслуживает легендарного начала.</p>
+                    <div class="contact-links-row">
+                        <a href="https://t.me/di_ana_13" target="_blank" class="contact-btn">✈️ Telegram</a>
+                    </div>
+                </div>
+            </footer>
+        </section>
+
+        <!-- ДЕМО СТРАНИЦЫ -->
+        
+        <!-- GLASS WEDDING -->
+        <section id="example-glass" class="page">
+            <div class="bg-fixed"></div>
+            <div class="glass-container">
+                <div class="glass-panel"><p style="letter-spacing: 3px;">WEDDING DAY</p><h1>Sergey<br>&<br>Anna</h1><p>25 • 08 • 2026</p></div>
+                <div class="glass-panel"><h2>Детали</h2><p>Мы будем счастливы видеть вас.<br>Сбор гостей: 16:00<br>Дресс-код: Black Tie</p></div>
+                <div class="glass-panel"><h2>Локация</h2><p>Ресторан "Sky Lounge"</p><div class="map-box"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2245.5!2d37.6!3d55.75!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTXCsDQ1JzAwLjAiTiAzN8KwMzYnMDAuMCJF!5e0!3m2!1sen!2sru" loading="lazy"></iframe></div></div>
+                <div class="glass-panel"><h2>RSVP</h2><p>Свяжитесь с нами:</p><div style="display: flex; gap: 10px; justify-content: center;"><a href="#" class="btn-glass">Позвонить</a><a href="#" class="btn-glass">Telegram</a></div></div>
+            </div>
+            <a onclick="navigateTo('#home')" class="back-btn" style="border-color: rgba(255,255,255,0.5);">Закрыть демо</a>
+        </section>
+
+        <!-- LAVENDER WEDDING -->
+        <section id="example-lavender" class="page">
+            <div id="fireflies-container"></div>
+            <div class="lavender-card">
+                <h1>Саша + Маша</h1>
+                <p>Любовь витает в воздухе...<br>Приглашаем вас на нашу свадьбу в стиле Прованс.</p>
+                <hr style="border: 0; border-top: 1px dashed #aaa; margin: 30px 0;">
+                <div style="margin-bottom: 30px; font-weight: bold; font-family: 'Cormorant Garamond'; color: #4a3b52;">15 ИЮЛЯ 2026 • 16:00<br>Загородный клуб "Лаванда"</div>
+                <button class="btn-lavender">Я ПРИДУ</button>
+            </div>
+            <div class="field" id="lavender-field"></div>
+            <a onclick="navigateTo('#home')" class="back-btn" style="color:#6a4a8f; border-color:#6a4a8f; background: rgba(255,255,255,0.7);">Закрыть демо</a>
+        </section>
+
+        <!-- STAR WARS -->
+        <section id="star-wars" class="page">
+            <div class="crawl-container">
+                <div class="crawl-content">
+                    <p>ЭПИЗОД I</p><p>НОВАЯ СЕМЬЯ</p><br>
+                    <p>Давным-давно, в далекой-далекой галактике... Союз двух сердец решил бросить вызов обыденности.</p>
+                    <p>Приглашаем вас стать частью Альянса и отпраздновать победу Любви над Империей Скуки. Да пребудет с вами Сила!</p>
+                </div>
+            </div>
+            <a onclick="navigateTo('#home')" class="back-btn">Закрыть демо</a>
+        </section>
+
+    </main>
+
+    <div id="transition-overlay"></div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script>
+        // --- ПЕРЕХОДЫ ---
+        const overlay = document.getElementById('transition-overlay');
+        let currentPageId = '#home';
+        let isAnimating = false;
+
+        window.navigateTo = function(targetId) {
+            if (isAnimating || targetId === currentPageId) return;
+            isAnimating = true;
+
+            const tl = gsap.timeline({ onComplete: () => isAnimating = false });
+            tl.to(`${currentPageId}`, { opacity: 0, duration: 0.3 });
+            tl.to(overlay, { scaleY: 1, transformOrigin: 'top', duration: 0.5, ease: 'power4.inOut' })
+              .call(() => {
+                  document.querySelector(currentPageId).classList.remove('active');
+                  const targetPage = document.querySelector(targetId);
+                  targetPage.classList.add('active');
+                  targetPage.scrollTop = 0;
+                  currentPageId = targetId;
+
+                  if (targetId === '#example-lavender') initLavender();
+                  if (targetId === '#example-glass') initGlass();
+              })
+              .to(overlay, { scaleY: 0, transformOrigin: 'bottom', duration: 0.5, ease: 'power3.out' })
+              .to(`${targetId}`, { opacity: 1, duration: 0.5 });
+        };
+
+        // --- АНИМАЦИЯ НА ГЛАВНОЙ ---
+        gsap.from("#hero-block h1", { y: 50, opacity: 0, duration: 1.5, ease: "power3.out", delay: 0.2 });
+        gsap.from("#hero-block p", { y: 30, opacity: 0, duration: 1.5, ease: "power3.out", delay: 0.5 });
+
+        // --- АНИМАЦИЯ ПРИ СКРОЛЛЕ ---
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    gsap.from(entry.target.children, { y: 50, opacity: 0, stagger: 0.1, duration: 0.8, ease: "power2.out" });
+                    scrollObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.home-section .content-container').forEach(section => {
+            scrollObserver.observe(section);
+        });
+
+        // --- ЛАВАНДА (JS) ---
+        function initLavender() {
+            const fContainer = document.getElementById('fireflies-container');
+            const gContainer = document.getElementById('lavender-field');
+            if (fContainer.innerHTML !== '') return;
+            for(let i=0; i<30; i++) {
+                let f = document.createElement('div'); f.className = 'firefly';
+                f.style.left = Math.random() * 100 + '%'; f.style.top = Math.random() * 80 + '%';
+                f.style.animationDuration = (Math.random() * 5 + 5) + 's'; f.style.animationDelay = Math.random() * 5 + 's';
+                fContainer.appendChild(f);
+            }
+            for(let i=0; i<60; i++) {
+                let g = document.createElement('div'); g.className = 'grass';
+                g.style.height = (Math.random() * 50 + 50) + 'px'; g.style.animationDuration = (Math.random() * 2 + 2) + 's'; g.style.animationDelay = Math.random() + 's';
+                gContainer.appendChild(g);
+            }
+        }
+
+        // --- GLASS WEDDING (Observer) ---
+        function initGlass() {
+            const panels = document.querySelectorAll('#example-glass .glass-panel');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) { entry.target.classList.add('active'); }
+                });
+            }, { threshold: 0.2 });
+            panels.forEach(p => observer.observe(p));
+        }
+
+        // --- ФОН (ЧАСТИЦЫ) ---
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        let particles = [];
+        function initParticles() {
+            particles = [];
+            const count = Math.floor(window.innerWidth * window.innerHeight / 15000);
+            for(let i=0; i<count; i++) particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*2+0.5, spX: (Math.random()-0.5)*0.3, spY: (Math.random()-0.5)*0.3 });
+        }
+        function drawParticles() {
+            ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle = 'rgba(179, 136, 255, 0.4)';
+            particles.forEach(p => {
+                p.x+=p.spX; p.y+=p.spY; if(p.x<0||p.x>canvas.width)p.spX*=-1; if(p.y<0||p.y>canvas.height)p.spY*=-1;
+                ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,Math.PI*2); ctx.fill();
+            });
+            requestAnimationFrame(drawParticles);
+        }
+        initParticles(); drawParticles();
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; initParticles(); });
+    </script>
+</body>
+</html>
