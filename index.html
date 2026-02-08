@@ -94,6 +94,9 @@
             border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff;
         }
         .contact-btn:hover { background: var(--accent-violet); color: #000; transform: translateY(-5px); }
+        
+        .cta-button { display: inline-block; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: 0.3s; }
+        .cta-button:hover { background: var(--accent-violet) !important; color: #000 !important; }
 
         /* --- СЛУЖЕБНЫЕ --- */
         #transition-overlay { position: fixed; inset: 0; z-index: 2000; pointer-events: none; background: var(--accent-violet); transform: scaleY(0); }
@@ -217,6 +220,13 @@
                             <p>Эпичное приглашение с титрами</p>
                         </div>
                     </div>
+                    
+                    <!-- КНОПКА НА ГАЛЕРЕЮ -->
+                    <div style="width: 100%; text-align: center; margin-top: 40px;">
+                        <a href="gallery.html" class="cta-button" style="background: transparent; border: 1px solid var(--accent-violet); color: #fff;">
+                            Смотреть больше макетов →
+                        </a>
+                    </div>
                 </div>
             </section>
 
@@ -327,7 +337,9 @@
             isAnimating = true;
 
             const tl = gsap.timeline({ onComplete: () => isAnimating = false });
+
             tl.to(`${currentPageId}`, { opacity: 0, duration: 0.3 });
+
             tl.to(overlay, { scaleY: 1, transformOrigin: 'top', duration: 0.5, ease: 'power4.inOut' })
               .call(() => {
                   document.querySelector(currentPageId).classList.remove('active');
@@ -413,8 +425,3 @@
     </script>
 </body>
 </html>
-<div style="width: 100%; text-align: center; margin-top: 40px;">
-    <a href="gallery.html" class="cta-button" style="background: transparent; border: 1px solid var(--accent-violet); color: #fff;">
-        Смотреть больше макетов →
-    </a>
-</div>
