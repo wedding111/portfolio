@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение на Магическую Свадьбу</title>
+    <!-- Подключение магических шрифтов -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --dark-magic: #0a0c10;
+            --parchment: #f4e4bc;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            background-color: var(--dark-magic);
+            font-family: 'EB+Garamond', serif;
+            color: var(--parchment);
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, .magic-font {
+            font-family: 'Cinzel Decorative', cursive;
+            letter-spacing: 2px;
+        }
+
+        /* Эффект старой бумаги */
+        .parchment-bg {
+            background: 
+                linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)),
+                url('https://www.transparenttextures.com/patterns/paper-fibers.png'),
+                #f4e4bc;
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.5), 0 20px 50px rgba(0,0,0,0.8);
+            border: 8px double var(--gold);
+            position: relative;
+            color: #2c1e14;
+        }
+
+        /* Магический холст для частиц */
+        #magicCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .gold-text {
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        /* Анимация появления */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.5s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Кнопки */
+        .btn-magic {
+            background: #2c1e14;
+            color: var(--gold);
+            padding: 12px 30px;
+            border: 1px solid var(--gold);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-magic:hover {
+            background: var(--gold);
+            color: #2c1e14;
+            box-shadow: 0 0 20px var(--gold);
+        }
+
+        .btn-magic:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Аудиоплеер */
+        .audio-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            border-radius: 50%;
+            border: 1px solid var(--gold);
+            cursor: pointer;
+        }
+
+        .wax-seal {
+            width: 80px;
+            height: 80px;
+            background: #8b0000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: -40px auto 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            color: var(--gold);
+            font-size: 2rem;
+            border: 2px solid #5e0000;
+            user-select: none;
+        }
+
+        /* Стили для предсказаний */
+        .prediction-box {
+            border: 1px dashed #2c1e14;
+            padding: 20px;
+            margin-top: 20px;
+            font-style: italic;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Спиннер загрузки */
+        .magic-spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(212, 175, 55, 0.3);
+            border-top: 3px solid var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="magicCanvas"></canvas>
+
+    <!-- Музыка -->
+    <div class="audio-control" id="musicToggle" title="Включить магию звука">
+        <svg id="musicIcon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500">
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+            <circle cx="18" cy="16" r="3"></circle>
+        </svg>
+    </div>
+
+    <!-- Обложка -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518131348352-f377a062f6b8?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-30"></div>
+        <div class="text-center z-10 px-4">
+            <h3 class="gold-text text-xl mb-4 fade-in">Министерство Магии уведомляет</h3>
+            <h1 class="text-6xl md:text-8xl font-black gold-text mb-6 fade-in" style="transition-delay: 0.5s;">ВЛАДИСЛАВ & ЕЛЕНА</h1>
+            <p class="text-2xl italic fade-in" style="transition-delay: 1s;">Торжество, которое войдет в историю</p>
+            <div class="mt-12 fade-in" style="transition-delay: 1.5s;">
+                <a href="#invitation" class="btn-magic">Распечатать свиток</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция с ИИ предсказаниями -->
+    <section class="py-12 px-4">
+        <div class="max-w-2xl mx-auto text-center fade-in">
+            <h2 class="gold-text text-2xl mb-6 magic-font">Заглянуть в будущее</h2>
+            <div class="parchment-bg p-8 rounded-lg shadow-2xl">
+                <p class="mb-4">Коснитесь Хрустального Шара, чтобы узнать, что сулят Вам звезды на этом празднике...</p>
+                <button id="predictBtn" class="btn-magic">✨ Получить пророчество</button>
+                <div id="predictionResult" class="prediction-box">
+                    Здесь появится Ваше магическое предсказание...
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Само письмо -->
+    <section id="invitation" class="py-20 px-4 md:px-0">
+        <div class="max-w-3xl mx-auto parchment-bg p-8 md:p-16 text-center mt-20 fade-in">
+            <div class="wax-seal">H</div>
+            <h2 class="text-3xl mb-8 uppercase font-bold tracking-widest">Официальное Приглашение</h2>
+            
+            <p class="text-xl leading-relaxed mb-6">
+                Мы имеем честь пригласить Вас на празднование союза двух сердец. 
+                Это будет день, наполненный волшебством, искренностью и светом.
+            </p>
+
+            <div class="my-10 border-y border-gray-400 py-6">
+                <div class="text-4xl gold-text magic-font mb-2">25 ОКТЯБРЯ 2025</div>
+                <div class="text-xl italic">Сбор гостей в 16:00</div>
+            </div>
+
+            <h3 class="text-2xl gold-text mb-4">Локация: Поместье "Магический Грот"</h3>
+            <p class="mb-8 italic">Косой переулок, дом 7 (или следуйте за совами)</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left mt-12 border-t border-gray-400 pt-10">
+                <div>
+                    <h4 class="magic-font font-bold mb-2">Дресс-код</h4>
+                    <p>Magic Formal. Мы будем рады видеть Вас в нарядах глубоких оттенков: изумрудный, бордо, полночный синий.</p>
+                </div>
+                <div>
+                    <h4 class="magic-font font-bold mb-2">Подарки</h4>
+                    <p>Ваше присутствие — лучший подарок. Но если Вы захотите помочь нам с первым вложением в наш сейф в Гринготтсе, мы будем признательны.</p>
+                </div>
+            </div>
+
+            <div class="mt-16">
+                <p class="italic text-sm">Пожалуйста, подтвердите Ваше участие до 1 октября.</p>
+                <button class="btn-magic mt-6" onclick="showModal()">✨ Подтвердить присутствие</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Скрытый плеер -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Модальное окно RSVP с Gemini AI -->
+    <div id="modal" class="fixed inset-0 bg-black/90 z-[200] hidden items-center justify-center p-4">
+        <div class="parchment-bg p-8 md:p-12 max-w-lg w-full text-center relative overflow-y-auto max-h-[90vh]">
+            <h2 class="text-2xl magic-font mb-6">Ваш ответ Министерству</h2>
+            <form id="rsvpForm" class="space-y-4">
+                <input type="text" id="guestName" placeholder="Ваше Имя" class="w-full p-3 bg-transparent border-b border-black outline-none italic" required>
+                
+                <select id="guestStatus" class="w-full p-3 bg-transparent border-b border-black outline-none italic">
+                    <option>Я приду с удовольствием</option>
+                    <option>Я приду с парой</option>
+                    <option>К сожалению, не смогу</option>
+                </select>
+
+                <div class="text-left">
+                    <label class="text-sm font-bold block mb-1">Пожелания:</label>
+                    <textarea id="guestMessage" placeholder="Напишите пожелание или спросите о дресс-коде..." class="w-full p-3 bg-transparent border border-black/20 outline-none h-24 italic"></textarea>
+                    <button type="button" id="enhanceBtn" class="text-xs flex items-center gap-1 mt-1 text-red-800 hover:underline">
+                        ✨ Заколдовать текст (ИИ)
+                    </button>
+                </div>
+
+                <button type="submit" class="btn-magic w-full mt-4">Отправить сову</button>
+            </form>
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-2xl">×</button>
+        </div>
+    </div>
+
+    <script>
+        const apiKey = ""; // API ключ предоставляется средой
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'magic-wedding';
+
+        // --- GEMINI API INTEGRATION ---
+        async function callGemini(prompt, systemPrompt = "Ты - магический помощник из мира Гарри Поттера.") {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            let retries = 5;
+            let delay = 1000;
+
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            while (retries > 0) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (!response.ok) throw new Error('API Error');
+                    
+                    const data = await response.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "Магия временно недоступна...";
+                } catch (error) {
+                    retries--;
+                    if (retries === 0) return "Извините, сова заблудилась. Попробуйте позже.";
+                    await new Promise(res => setTimeout(res, delay));
+                    delay *= 2;
+                }
+            }
+        }
+
+        // Feature 1: AI Predictions
+        const predictBtn = document.getElementById('predictBtn');
+        const predictionResult = document.getElementById('predictionResult');
+
+        predictBtn.onclick = async () => {
+            predictBtn.disabled = true;
+            predictionResult.innerHTML = '<div class="magic-spinner mx-auto"></div>';
+            
+            const prompt = "Сгенерируй короткое (1-2 предложения) забавное предсказание для гостя на свадьбе в стиле профессора Трелони. Используй метафоры из мира магии.";
+            const res = await callGemini(prompt, "Ты - Сивилла Трелони, великая прорицательница.");
+            
+            predictionResult.innerText = res;
+            predictBtn.disabled = false;
+        };
+
+        // Feature 2: Text Enhancement (Magical Style)
+        const enhanceBtn = document.getElementById('enhanceBtn');
+        const guestMessage = document.getElementById('guestMessage');
+
+        enhanceBtn.onclick = async () => {
+            const currentText = guestMessage.value;
+            if (!currentText) return;
+
+            enhanceBtn.disabled = true;
+            enhanceBtn.innerText = "✨ Колдуем...";
+            
+            const prompt = `Перепиши этот текст в стиле официального письма из Хогвартса или магического поздравления: "${currentText}"`;
+            const res = await callGemini(prompt, "Ты - секретарь Министра Магии, пишущий в очень вежливом и возвышенном стиле.");
+            
+            guestMessage.value = res.trim();
+            enhanceBtn.innerText = "✨ Заколдовать текст (ИИ)";
+            enhanceBtn.disabled = false;
+        };
+
+        // --- МАГИЧЕСКИЙ ХОЛСТ (ЧАСТИЦЫ) ---
+        const canvas = document.getElementById('magicCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x || Math.random() * canvas.width;
+                this.y = y || Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * -1 - 0.5;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.life = Math.random() * 100 + 100;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.opacity > 0.01) this.opacity -= 0.003;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (particles.length < 100) particles.push(new Particle());
+            particles.forEach((p, i) => {
+                p.update();
+                p.draw();
+                if (p.opacity <= 0.01) particles.splice(i, 1);
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', initCanvas);
+        window.addEventListener('mousemove', (e) => {
+            for(let i=0; i<3; i++) particles.push(new Particle(e.x, e.y));
+        });
+
+        initCanvas();
+        animate();
+
+        // --- ИНТЕРАКТИВНОСТЬ ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Музыка
+        const music = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicToggle');
+        let isPlaying = false;
+        musicBtn.onclick = () => {
+            if (isPlaying) music.pause(); else music.play().catch(e => {});
+            isPlaying = !isPlaying;
+            musicBtn.style.opacity = isPlaying ? '1' : '0.5';
+        };
+
+        // Модальное окно
+        function showModal() { document.getElementById('modal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('modal').style.display = 'none'; }
+
+        document.getElementById('rsvpForm').onsubmit = (e) => {
+            e.preventDefault();
+            alert("Ваша сова в пути! Благодарим за ответ.");
+            closeModal();
+        };
+
+    </script>
+</body>
+</html>
