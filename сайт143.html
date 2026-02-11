@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasy Wedding | Mark & Eva</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Quicksand:wght@300;500&display=swap');
+
+        :root {
+            --bg-dark: #090014;
+            --primary: #d500f9; /* Neon Purple */
+            --secondary: #00e5ff; /* Cyan */
+            --text: #ffffff;
+            --glass: rgba(20, 10, 40, 0.6);
+            --border: rgba(213, 0, 249, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text);
+            font-family: 'Quicksand', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- 1. MAGIC CANVAS BACKGROUND --- */
+        #spirit-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            filter: blur(2px);
+        }
+
+        /* --- CONTENT --- */
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: clamp(3rem, 10vw, 6rem);
+            color: #fff;
+            text-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary);
+            margin: 20px 0;
+            letter-spacing: 5px;
+        }
+
+        .subtitle {
+            font-family: 'Cinzel Decorative', cursive;
+            color: var(--secondary);
+            font-size: 1.2rem;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- CARDS --- */
+        .magic-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 60px 40px;
+            backdrop-filter: blur(10px);
+            border-radius: 0 50px 0 50px;
+            box-shadow: 0 0 50px rgba(213, 0, 249, 0.1);
+            position: relative;
+            overflow: hidden;
+            max-width: 800px;
+        }
+
+        .magic-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(transparent, var(--primary), transparent, transparent);
+            animation: rotate 6s linear infinite;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+
+        /* --- TIMER --- */
+        .timer-grid {
+            display: flex;
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .t-circle {
+            width: 100px; height: 100px;
+            border: 2px solid var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 0 15px var(--secondary), 0 0 15px var(--secondary);
+        }
+
+        .t-val { font-size: 1.8rem; font-weight: bold; }
+        .t-lbl { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- DRESS CODE --- */
+        .aura-list {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .aura-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .aura-orb {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            filter: blur(8px);
+            animation: pulse 3s infinite alternate;
+        }
+
+        @keyframes pulse { 0% { transform: scale(0.9); opacity: 0.6; } 100% { transform: scale(1.1); opacity: 1; } }
+
+        .orb-p { background: var(--primary); box-shadow: 0 0 30px var(--primary); }
+        .orb-c { background: var(--secondary); box-shadow: 0 0 30px var(--secondary); }
+        .orb-v { background: #4a148c; box-shadow: 0 0 30px #4a148c; }
+
+        /* --- BUTTON --- */
+        .portal-btn {
+            margin-top: 50px;
+            padding: 20px 50px;
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Cinzel Decorative';
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            transition: 0.5s;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+        }
+
+        .portal-btn:hover {
+            background: var(--primary);
+            box-shadow: 0 0 50px var(--primary);
+            letter-spacing: 5px;
+        }
+
+        footer { padding: 40px; color: rgba(255,255,255,0.2); font-size: 0.8rem; text-align: center; }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="spirit-canvas"></canvas>
+
+    <div class="content-wrapper">
+        
+        <section>
+            <div class="subtitle">Join the Legend</div>
+            <h1>Mark<br>&<br>Eva</h1>
+            <div style="margin-top: 20px; font-size: 1.5rem; color: #fff; opacity: 0.8; letter-spacing: 10px;">
+                20.10.2026
+            </div>
+        </section>
+
+        <section>
+            <div class="magic-card">
+                <h2>The Invitation</h2>
+                <p style="font-size: 1.2rem; line-height: 1.8; font-weight: 300;">
+                    В этот вечер звезды сойдутся в уникальном танце. <br>
+                    Мы приглашаем вас стать частью нашей магической истории, 
+                    которая начнется под покровом сумерек в зачарованном замке. 
+                    Оставьте обыденный мир и пройдите сквозь портал нашей любви.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Your Aura</h2>
+            <p style="margin-bottom: 30px; opacity: 0.7;">Colors of the night and magic</p>
+            <div class="aura-list">
+                <div class="aura-item"><div class="aura-orb orb-p"></div><span>Mystic Purple</span></div>
+                <div class="aura-item"><div class="aura-orb orb-c"></div><span>Ether Cyan</span></div>
+                <div class="aura-item"><div class="aura-orb orb-v"></div><span>Deep Velvet</span></div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Time to Ritual</h2>
+            <div class="timer-grid" id="timer">
+                </div>
+        </section>
+
+        <section>
+            <h2>The Location</h2>
+            <p>Castle "Black Rock", Mystic Forest</p>
+            <div style="width: 100%; height: 300px; margin: 30px 0; border: 1px solid var(--border);">
+                <iframe src="http://googleusercontent.com/maps.google.com/3" width="100%" height="100%" style="border:0; filter: invert(90%) hue-rotate(240deg) brightness(0.5) contrast(1.5);" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+
+            <a href="https://t.me/durov" target="_blank" class="portal-btn">
+                Enter RSVP
+            </a>
+        </section>
+
+    </div>
+
+    <footer>
+        Magical Union of 2026
+    </footer>
+
+    <script>
+        // --- 1. MAGIC SPIRIT CANVAS ---
+        const canvas = document.getElementById('spirit-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Spirit {
+            constructor() {
+                this.init();
+            }
+            init() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = (Math.random() - 0.5) * 1.5;
+                this.speedY = (Math.random() - 0.5) * 1.5;
+                this.color = Math.random() > 0.5 ? '#d500f9' : '#00e5ff';
+                this.alpha = Math.random();
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.alpha;
+                ctx.fill();
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > width) this.speedX *= -1;
+                if (this.y < 0 || this.y > height) this.speedY *= -1;
+                
+                // Эффект мерцания
+                this.alpha += (Math.random() - 0.5) * 0.05;
+                if (this.alpha < 0) this.alpha = 0;
+                if (this.alpha > 0.8) this.alpha = 0.8;
+                this.draw();
+            }
+        }
+
+        const spirits = Array.from({ length: 100 }, () => new Spirit());
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            spirits.forEach(s => s.update());
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+
+        // --- 2. TIMER ---
+        const eventDate = new Date("Oct 20, 2026 18:00:00").getTime();
+        const timerEl = document.getElementById("timer");
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = eventDate - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            timerEl.innerHTML = `
+                <div class="t-circle"><div class="t-val">${d}</div><div class="t-lbl">Days</div></div>
+                <div class="t-circle"><div class="t-val">${h}</div><div class="t-lbl">Hours</div></div>
+                <div class="t-circle"><div class="t-val">${m}</div><div class="t-lbl">Min</div></div>
+                <div class="t-circle"><div class="t-val">${s}</div><div class="t-lbl">Sec</div></div>
+            `;
+        }
+        setInterval(updateTimer, 1000); updateTimer();
+
+    </script>
+</body>
+</html>
