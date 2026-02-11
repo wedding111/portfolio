@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chat with Nikita & Anya</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #e5ddd5;
+            --header-color: #075e54;
+            --my-msg: #dcf8c6;
+            --their-msg: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #d1d1d1;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .phone-screen {
+            width: 100%;
+            max-width: 450px;
+            height: 100%;
+            background-color: var(--bg-color);
+            background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .chat-header {
+            background-color: var(--header-color);
+            color: white;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            z-index: 10;
+            flex-shrink: 0;
+        }
+
+        .avatar {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80') center/cover;
+            margin-right: 10px;
+        }
+
+        .user-info h3 { font-size: 1rem; font-weight: 500; }
+        .user-info span { font-size: 0.8rem; opacity: 0.8; }
+
+        /* Область чата теперь содержит и сообщения, и индикатор ввода */
+        .chat-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            position: relative;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(10px);
+            animation: popIn 0.3s forwards;
+        }
+
+        @keyframes popIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .received {
+            background-color: var(--their-msg);
+            align-self: flex-start;
+            border-top-left-radius: 0;
+        }
+
+        .sent {
+            background-color: var(--my-msg);
+            align-self: flex-end;
+            border-top-right-radius: 0;
+        }
+
+        .time {
+            font-size: 0.7rem;
+            color: #999;
+            text-align: right;
+            margin-top: 4px;
+            float: right;
+            margin-left: 10px;
+        }
+
+        .msg-img {
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        /* Индикатор набора */
+        .typing-indicator {
+            background-color: var(--their-msg);
+            padding: 10px 15px;
+            border-radius: 20px;
+            border-bottom-left-radius: 0;
+            align-self: flex-start;
+            display: none; /* Скрыто по умолчанию */
+            gap: 5px;
+            width: fit-content;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        }
+        
+        .dot {
+            width: 8px; height: 8px;
+            background: #b6b6b6;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
+        /* Панель кнопок */
+        .action-area {
+            padding: 10px;
+            background: #f0f0f0;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        .btn-reply {
+            background: white;
+            color: var(--header-color);
+            border: 1px solid var(--header-color);
+            padding: 12px;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-reply.primary {
+            background: var(--header-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-screen">
+        
+        <!-- HEADER -->
+        <div class="chat-header">
+            <div class="avatar"></div>
+            <div class="user-info">
+                <h3>Никита & Аня ❤️</h3>
+                <span id="status">в сети</span>
+            </div>
+        </div>
+
+        <!-- CHAT AREA (Теперь включает и сообщения, и индикатор) -->
+        <div class="chat-area" id="chat">
+            <!-- Сюда добавляются сообщения -->
+            
+            <!-- Индикатор набора (внутри скролла) -->
+            <div class="typing-indicator" id="typing">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+
+        <!-- КНОПКИ ДЕЙСТВИЯ -->
+        <div class="action-area" id="actions">
+            <div class="btn-reply primary" onclick="reply('Я приду! 🎉')">Я буду! 🎉</div>
+            <div class="btn-reply" onclick="reply('Приду с парой (+1) 👫')">Буду с парой (+1)</div>
+            <div class="btn-reply" onclick="reply('К сожалению, не смогу 😔')">Не смогу :(</div>
+        </div>
+
+    </div>
+
+    <script>
+        const chat = document.getElementById('chat');
+        const typing = document.getElementById('typing');
+        const actions = document.getElementById('actions');
+        const status = document.getElementById('status');
+
+        // Сценарий сообщений
+        const script = [
+            { type: 'text', content: 'Привет! 👋', delay: 800 },
+            { type: 'text', content: 'У нас есть важная новость...', delay: 1500 },
+            { type: 'image', content: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80', delay: 2000 },
+            { type: 'text', content: 'МЫ ЖЕНИМСЯ! 💍✨', delay: 1000 },
+            { type: 'text', content: 'И мы очень хотим видеть тебя рядом в этот день!', delay: 1500 },
+            { type: 'text', content: '📍 25 Августа 2026\nЛофт "Счастье", ул. Мира 10\n⏰ Начало в 16:00', delay: 2500 },
+            { type: 'text', content: 'Ну что, ты с нами?', delay: 1000, action: true }
+        ];
+
+        let step = 0;
+
+        function showTyping() {
+            typing.style.display = 'flex';
+            status.innerText = 'печатает...';
+            // Прокручиваем к индикатору
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function hideTyping() {
+            typing.style.display = 'none';
+            status.innerText = 'в сети';
+        }
+
+        function addMessage(msg, isSentByMe = false) {
+            const div = document.createElement('div');
+            div.className = `message ${isSentByMe ? 'sent' : 'received'}`;
+            
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            if (msg.type === 'text') {
+                div.innerHTML = `${msg.content.replace(/\n/g, '<br>')} <div class="time">${time}</div>`;
+            } else if (msg.type === 'image') {
+                div.innerHTML = `<img src="${msg.content}" class="msg-img"> <div class="time">${time}</div>`;
+            }
+
+            // Вставляем сообщение ПЕРЕД индикатором набора
+            chat.insertBefore(div, typing);
+            
+            // Прокручиваем вниз
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function nextStep() {
+            if (step >= script.length) return;
+
+            const currentMsg = script[step];
+            
+            showTyping();
+
+            setTimeout(() => {
+                hideTyping();
+                addMessage(currentMsg);
+                
+                if (currentMsg.action) {
+                    actions.style.display = 'flex';
+                    chat.scrollTop = chat.scrollHeight;
+                } else {
+                    step++;
+                    setTimeout(nextStep, 500); 
+                }
+            }, currentMsg.delay);
+        }
+
+        function reply(text) {
+            actions.style.display = 'none';
+            addMessage({ type: 'text', content: text }, true);
+            
+            setTimeout(() => {
+                showTyping();
+                setTimeout(() => {
+                    hideTyping();
+                    addMessage({ type: 'text', content: 'Супер! Записали тебя ❤️ До встречи!' });
+                }, 1500);
+            }, 500);
+        }
+
+        // Запуск
+        window.onload = () => {
+            setTimeout(nextStep, 1000);
+        };
+    </script>
+</body>
+</html>
