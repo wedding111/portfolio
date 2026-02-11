@@ -1,0 +1,949 @@
+print("""
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Таинство Лесной Глуби: Лира & Сайлас</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* CSS Переменные - Лесное Зачарование */
+        :root {
+            --color-emerald: #0A4A32; /* Глубокий Изумруд */
+            --color-silver: #C2D3D3; /* Лунный Серебро */
+            --color-rose: #E881A2; /* Цветок Розы */
+            --color-amber: #D3A74A; /* Золотой Янтарь */
+            --color-violet: #5B3D6E; /* Сумеречный Фиолет */
+
+            --text-light-green: #E0FFE0; /* Светлый текст для темного фона */
+            --text-dark-forest: #102A1A; /* Темный текст для светлого фона */
+            --bg-forest-deep: #051A0D; /* Глубокий лесной фон */
+            --bg-forest-light: #F8FAF0; /* Светлый, природный фон */
+
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Lora', serif;
+        }
+
+        /* Общие стили */
+        body {
+            font-family: var(--font-body);
+            margin: 0;
+            overflow-x: hidden;
+            background-color: var(--bg-forest-deep);
+            color: var(--text-light-green);
+            line-height: 1.8;
+            scroll-behavior: smooth;
+            perspective: 1000px;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="%23D3A74A"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.83-7-7.93 0-.62.08-1.21.21-1.79L9 15v1h4.85l-.5-.85L12 12.5V8h2v3l-1.5 2.5 1.5 2.5 1.4-2.4c.48.06.96.09 1.4.09 3.03 0 5.5-2.07 5.9-4.85L13 10V5h-2v3l-1.5 2.5 1.5 2.5-1.4 2.4c-.48-.06-.96-.09-1.4-.09-3.03 0-5.5 2.07-5.9 4.85z"/></svg>') 10 10, auto; /* Пользовательский курсор-лист */
+        }
+
+        /* Hero Section - Эхо-Роща */
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--text-light-green);
+            background: linear-gradient(180deg, var(--bg-forest-deep) 0%, rgba(10, 74, 50, 0.7) 100%);
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        /* Canvas для светлячков и легкая туманность */
+        .particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        /* Анимация падающих листьев/лепестков */
+        .falling-leaf {
+            position: absolute;
+            top: -10%;
+            font-size: 2em;
+            opacity: 0;
+            pointer-events: none;
+            animation: fall 10s linear infinite;
+            color: var(--color-amber);
+            text-shadow: 0 0 5px rgba(211, 167, 74, 0.5);
+            z-index: 1; /* Под заголовком, но над фоном */
+        }
+
+        @keyframes fall {
+            0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 0.8; }
+            100% { transform: translate3d(var(--x-end), 110vh, 0) rotate(var(--rot-end)); opacity: 0; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            transform-style: preserve-3d;
+            transform: rotateY(var(--rotY, 0deg)) rotateX(var(--rotX, 0deg));
+            transition: transform 0.1s linear;
+        }
+
+        /* Анимация органического роста для заголовка */
+        .hero-content h1 {
+            font-family: var(--font-display);
+            font-size: 6.5em;
+            margin-bottom: 0.1em;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px var(--color-light-green), 0 0 40px var(--color-emerald);
+            opacity: 0;
+            transform: scale(0.8) translateZ(-100px);
+            animation: organicGrow 2.5s ease-out forwards;
+            animation-delay: 1s;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes organicGrow {
+            0% { opacity: 0; transform: scale(0.8) translateZ(-100px) translateY(50px); filter: blur(10px); }
+            50% { opacity: 0.8; filter: blur(3px); }
+            100% { opacity: 1; transform: scale(1) translateZ(0) translateY(0); filter: blur(0); }
+        }
+
+        .hero-content p {
+            font-family: var(--font-body);
+            font-size: 1.8em;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 10px var(--text-light-green);
+            opacity: 0;
+            animation: liquidReveal 1.5s ease-out forwards;
+            animation-delay: 3.5s;
+        }
+
+        /* Жидкий эффект для подзаголовка */
+        @keyframes liquidReveal {
+            0% { opacity: 0; transform: translateY(30px) scaleY(0.5); filter: blur(10px); }
+            100% { opacity: 1; transform: translateY(0) scaleY(1); filter: blur(0); }
+        }
+
+        /* Кнопка "Резной Деревянный Медальон" */
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(145deg, #4F321C, #7A5239); /* Деревянная текстура */
+            color: var(--color-amber);
+            padding: 18px 45px;
+            margin-top: 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.4);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInScaleUp 1s ease-out forwards;
+            animation-delay: 5s;
+            border: 2px solid var(--color-amber);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+            font-family: var(--font-body);
+        }
+
+        .cta-button::before { /* Свечение по краю */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            box-shadow: inset 0 0 15px var(--color-amber), 0 0 15px var(--color-amber);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            mix-blend-mode: overlay;
+        }
+
+        .cta-button:hover::before {
+            opacity: 1;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.6);
+            border-color: var(--color-rose);
+        }
+
+        /* Общие стили для секций */
+        section {
+            padding: 100px 5%;
+            max-width: 1400px;
+            margin: -5vh auto 0 auto;
+            text-align: center;
+            background-color: var(--bg-forest-light);
+            color: var(--text-dark-forest);
+            box-shadow: 0 0 80px rgba(0,0,0,0.1) inset;
+            border-radius: 30px;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(100px) rotateX(5deg);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+            transform-style: preserve-3d;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0) rotateX(0deg);
+        }
+
+        section h2 {
+            font-family: var(--font-display);
+            font-size: 4.5em;
+            color: var(--color-emerald);
+            margin-bottom: 0.8em;
+            position: relative;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        section h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -15px;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-emerald), var(--color-amber));
+            animation: drawLine 1.8s ease-out forwards;
+            animation-play-state: paused;
+            border-radius: 2px;
+            box-shadow: 0 0 10px var(--color-emerald);
+        }
+
+        section.visible h2::after {
+            animation-play-state: running;
+        }
+
+        @keyframes drawLine {
+            0% { width: 0; opacity: 0; }
+            100% { width: 150px; opacity: 1; }
+        }
+
+        /* Раздел "Корни и Мелодии" (Наша История) */
+        .story-timeline {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            padding: 80px 0;
+            transform-style: preserve-3d;
+            perspective: 1200px;
+        }
+
+        /* Анимированная "Ветвящаяся Лоза" */
+        .story-timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #8B4513 0%, #0A4A32 50%, #8B4513 100%); /* Коричневый-зеленый градиент */
+            transform: translateX(-50%);
+            animation: growVine 2.5s ease-out forwards;
+            animation-play-state: paused;
+            transform-origin: top;
+            opacity: 0.7;
+            box-shadow: 0 0 15px rgba(10, 74, 50, 0.5);
+            border-radius: 2px;
+        }
+
+        section.visible .story-timeline::before {
+            animation-play-state: running;
+        }
+
+        @keyframes growVine {
+            0% { height: 0; opacity: 0; transform: translateX(-50%) scaleY(0); }
+            100% { height: 100%; opacity: 0.7; transform: translateX(-50%) scaleY(1); }
+        }
+
+        /* Отдельное событие - "Распускающийся Цветок" */
+        .timeline-event {
+            display: flex;
+            align-items: center;
+            width: 85%;
+            max-width: 1000px;
+            margin-bottom: 120px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(100px) rotateX(20deg) scale(0.8);
+            transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+            background: rgba(255,255,255,0.7);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 20px;
+            color: var(--text-dark-forest);
+        }
+
+        .timeline-event.visible {
+            opacity: 1;
+            transform: translateY(0) rotateX(0deg) scale(1);
+        }
+
+        .timeline-event:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-event:nth-child(odd) .event-icon-wrapper {
+            margin-right: 60px;
+        }
+
+        .timeline-event:nth-child(even) .event-icon-wrapper {
+            margin-left: 60px;
+        }
+
+        .event-icon-wrapper {
+            position: relative;
+            z-index: 1;
+            flex-shrink: 0;
+        }
+
+        /* Иконка события - "Лесной Символ" */
+        .event-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--color-rose), var(--color-amber));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.8em;
+            color: var(--bg-forest-deep);
+            border: 5px solid var(--color-emerald);
+            box-shadow: 0 0 20px var(--color-rose), 0 0 40px var(--color-amber);
+            animation: bloomPulse 2.5s infinite alternate ease-in-out;
+            transition: transform 0.3s ease;
+        }
+        .timeline-event:hover .event-icon {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        @keyframes bloomPulse {
+            0% { box-shadow: 0 0 15px var(--color-rose), 0 0 30px var(--color-amber); transform: scale(1); }
+            50% { box-shadow: 0 0 25px var(--color-rose), 0 0 50px var(--color-amber), 0 0 70px var(--color-violet); transform: scale(1.05); }
+            100% { box-shadow: 0 0 15px var(--color-rose), 0 0 30px var(--color-amber); transform: scale(1); }
+        }
+
+        .event-content {
+            flex-grow: 1;
+            text-align: left;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+        .timeline-event:nth-child(even) .event-content {
+            text-align: right;
+        }
+
+        .event-content h3 {
+            font-family: var(--font-display);
+            color: var(--color-emerald);
+            margin-top: 0;
+            font-size: 2.3em;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+        }
+
+        /* Раздел "Дресс-код" - Элементальные Камни Леса */
+        .dress-code-colors {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 80px;
+            flex-wrap: wrap;
+        }
+
+        /* Цветовой "Лесной Самоцвет" */
+        .color-gem {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%; /* Для круглой формы, можно сделать многоугольник для "грани" */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1em;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+            transform-style: preserve-3d;
+            border: 3px solid transparent;
+            color: var(--text-light-green); /* Дефолтный цвет для текста */
+        }
+
+        .color-gem span.hex-code {
+            position: absolute;
+            bottom: -40px;
+            opacity: 0;
+            transition: all 0.4s ease-out;
+            font-size: 0.8em;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 8px;
+            white-space: nowrap;
+            letter-spacing: 1px;
+            transform: translateZ(20px);
+        }
+
+        .color-gem:hover {
+            transform: translateY(-15px) scale(1.08) rotateY(15deg);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+            z-index: 10;
+            border-color: var(--color-silver);
+        }
+
+        .color-gem:hover span.hex-code {
+            bottom: 10px;
+            opacity: 1;
+        }
+
+        /* Цвета самоцветов */
+        .color-gem.emerald {
+            background: radial-gradient(circle at center, #26A69A, var(--color-emerald));
+            color: var(--text-light-green);
+        }
+        .color-gem.silver {
+            background: radial-gradient(circle at center, #EFEFEF, var(--color-silver));
+            color: var(--text-dark-forest);
+        }
+        .color-gem.rose {
+            background: radial-gradient(circle at center, #FFC1CC, var(--color-rose));
+            color: var(--text-light-green);
+        }
+        .color-gem.amber {
+            background: radial-gradient(circle at center, #FFCA28, var(--color-amber));
+            color: var(--text-dark-forest);
+        }
+        .color-gem.violet {
+            background: radial-gradient(circle at center, #9575CD, var(--color-violet));
+            color: var(--text-light-green);
+        }
+
+        /* RSVP Секция - Колодец Желаний */
+        .rsvp-section {
+            background: linear-gradient(135deg, rgba(5, 26, 13, 0.9) 0%, rgba(16, 42, 26, 0.95) 100%);
+            color: var(--text-light-green);
+            padding: 70px;
+            border-radius: 30px;
+            box-shadow: 0 0 80px rgba(0,0,0,0.5) inset;
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+            border: 2px solid var(--color-emerald);
+            animation: subtleGlow 4s infinite ease-in-out alternate;
+        }
+
+        @keyframes subtleGlow {
+            0% { box-shadow: 0 0 40px rgba(10, 74, 50, 0.5) inset; }
+            100% { box-shadow: 0 0 60px rgba(10, 74, 50, 0.8) inset; }
+        }
+
+        .rsvp-section::before { /* Эффект водной ряби */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(var(--color-emerald), 0.2); /* Цвет ряби */
+            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100"><filter id="turbulence" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" result="turbulence"/></filter><rect x="0" y="0" width="100" height="100" filter="url(#turbulence)" opacity="0.5"/></svg>');
+            mask-size: 200% 200%;
+            animation: waterRipple 30s linear infinite;
+            mix-blend-mode: soft-light;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        @keyframes waterRipple {
+            0% { mask-position: 0% 0%; }
+            100% { mask-position: 100% 100%; }
+        }
+
+
+        .rsvp-section p {
+            font-family: var(--font-body);
+            font-size: 1.4em;
+            margin-bottom: 35px;
+            text-shadow: 0 0 12px var(--color-emerald);
+            color: var(--text-light-green);
+        }
+
+        .rsvp-section a.telegram-scroll {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(45deg, #7A5239, #4F321C); /* Цвета свитка/дерева */
+            color: var(--color-amber);
+            padding: 20px 50px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(122, 82, 57, 0.6);
+            animation: scrollGlow 3s infinite ease-in-out alternate;
+            border: 3px solid var(--color-amber);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .rsvp-section a.telegram-scroll i {
+            margin-right: 15px;
+            font-size: 1.6em;
+            animation: iconTwirl 4s infinite linear;
+        }
+
+        @keyframes iconTwirl {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Эффект разворачивающегося свитка */
+        .rsvp-section a.telegram-scroll::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent 50%, rgba(255,255,255,0.2) 50%);
+            background-size: 200% 100%;
+            background-position: 100% 0;
+            transition: background-position 0.6s ease;
+            mix-blend-mode: overlay;
+        }
+
+        .rsvp-section a.telegram-scroll:hover::before {
+            background-position: 0% 0;
+        }
+
+        .rsvp-section a.telegram-scroll:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 0 50px rgba(122, 82, 57, 0.9), 0 0 80px rgba(211, 167, 74, 0.7);
+            border-color: var(--color-rose);
+            animation: none;
+        }
+
+        @keyframes scrollGlow {
+            0% { box-shadow: 0 0 20px rgba(122, 82, 57, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(211, 167, 74, 0.7), 0 0 60px rgba(122, 82, 57, 0.5); }
+            100% { box-shadow: 0 0 20px rgba(122, 82, 57, 0.4); }
+        }
+
+
+        /* Адаптивность */
+        @media (max-width: 1024px) {
+            .hero-content h1 {
+                font-size: 5em;
+                letter-spacing: 2px;
+            }
+            .hero-content p {
+                font-size: 1.5em;
+            }
+            section h2 {
+                font-size: 3.5em;
+            }
+            .timeline-event {
+                width: 90%;
+            }
+            .timeline-event:nth-child(odd) .event-icon-wrapper,
+            .timeline-event:nth-child(even) .event-icon-wrapper {
+                margin: 0 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 3em;
+                letter-spacing: 1px;
+            }
+            .hero-content p {
+                font-size: 1.2em;
+                padding: 0 15px;
+            }
+            .cta-button {
+                padding: 15px 35px;
+                font-size: 1em;
+            }
+            section {
+                padding: 70px 3%;
+                margin-top: -20px;
+            }
+            section h2 {
+                font-size: 2.8em;
+            }
+            .story-timeline::before {
+                left: 50%;
+            }
+            .timeline-event {
+                flex-direction: column;
+                text-align: center;
+                margin-bottom: 80px;
+            }
+            .timeline-event:nth-child(even) {
+                flex-direction: column;
+            }
+            .timeline-event .event-icon-wrapper {
+                margin: 0 0 25px 0 !important;
+            }
+            .event-content, .timeline-event:nth-child(even) .event-content {
+                text-align: center;
+            }
+            .event-icon {
+                width: 90px;
+                height: 90px;
+                font-size: 2.5em;
+            }
+            .event-content h3 {
+                font-size: 2em;
+            }
+            .color-gem {
+                width: 120px;
+                height: 120px;
+                font-size: 0.9em;
+            }
+            .rsvp-section {
+                padding: 50px;
+            }
+            .rsvp-section p {
+                font-size: 1.2em;
+            }
+            .rsvp-section a.telegram-scroll {
+                padding: 18px 40px;
+                font-size: 1.1em;
+            }
+            .rsvp-section a.telegram-scroll i {
+                font-size: 1.5em;
+                margin-right: 12px;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2.5em;
+                letter-spacing: 0.5px;
+            }
+            .hero-content p {
+                font-size: 1em;
+            }
+            section h2 {
+                font-size: 2.2em;
+            }
+            .event-content h3 {
+                font-size: 1.8em;
+            }
+            .color-gem {
+                width: 100px;
+                height: 100px;
+                font-size: 0.8em;
+            }
+            .rsvp-section {
+                padding: 30px;
+            }
+            .rsvp-section p {
+                font-size: 1em;
+            }
+            .rsvp-section a.telegram-scroll {
+                padding: 15px 30px;
+                font-size: 1em;
+            }
+            .rsvp-section a.telegram-scroll i {
+                font-size: 1.2em;
+                margin-right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-section">
+        <canvas class="particle-canvas"></canvas>
+        <div class="hero-content">
+            <h1>Лира & Сайлас</h1>
+            <p>Приглашаем вас в Эхо-Рощу на</p>
+            <p>Таинство Лесной Глуби!</p>
+            <p>15 сентября 2024 года</p>
+            <a href="#our-story" class="cta-button">Войти в Рощу</a>
+        </div>
+    </div>
+
+    <section id="our-story">
+        <h2>Корни и Мелодии</h2>
+        <div class="story-timeline">
+            <div class="timeline-event">
+                <div class="event-icon-wrapper">
+                    <div class="event-icon">🎶</div>
+                </div>
+                <div class="event-content">
+                    <h3>Мелодия Встречи</h3>
+                    <p>Лира, следуя за вдохновением, заблудилась в чаще, и её песня привела к ней Сайласа, который хранил тайны леса. Их первая встреча у Забытого Источника стала началом новой мелодии.</p>
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="event-icon-wrapper">
+                    <div class="event-icon">🌳</div>
+                </div>
+                <div class="event-content">
+                    <h3>Ветви Переплетаются</h3>
+                    <p>Их любовь росла, как древнее дерево, прорастая сквозь мхи и лишайники. Каждый день был новым листом, каждое испытание – укреплением корней, связывающих их души.</p>
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="event-icon-wrapper">
+                    <div class="event-icon">✨</div>
+                </div>
+                <div class="event-content">
+                    <h3>Магия Обещания</h3>
+                    <p>В самой глубине Эхо-Рощи, под покровом звёзд, Сайлас протянул Лире ветвь, увитую светящимися цветами, и попросил стать его вечным спутником. Лес замер, слушая их обещания.</p>
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="event-icon-wrapper">
+                    <div class="event-icon">🕊️</div>
+                </div>
+                <div class="event-content">
+                    <h3>Вечный Шепот</h3>
+                    <p>Теперь они приглашают вас стать частью их Таинства, когда два сердца соединятся в вечном танце. Присоединяйтесь к нам, чтобы разделить этот волшебный день!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="dress-code">
+        <h2>Элементальные Камни Леса</h2>
+        <p>Просим вас выбрать наряды в палитре "Лесного Зачарования", чтобы ваш образ гармонично вписался в магию Эхо-Рощи. Позвольте себе сиять, как драгоценные камни, освещенные лунным светом!</p>
+        <div class="dress-code-colors">
+            <div class="color-gem emerald">
+                <p>Глубокий Изумруд</p>
+                <span class="hex-code">#0A4A32</span>
+            </div>
+            <div class="color-gem silver">
+                <p>Лунный Серебро</p>
+                <span class="hex-code">#C2D3D3</span>
+            </div>
+            <div class="color-gem rose">
+                <p>Цветок Розы</p>
+                <span class="hex-code">#E881A2</span>
+            </div>
+            <div class="color-gem amber">
+                <p>Золотой Янтарь</p>
+                <span class="hex-code">#D3A74A</span>
+            </div>
+            <div class="color-gem violet">
+                <p>Сумеречный Фиолет</p>
+                <span class="hex-code">#5B3D6E</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="rsvp">
+        <h2>Колодец Желаний</h2>
+        <div class="rsvp-section">
+            <p>Пожалуйста, отправьте ваш "Шепот" подтверждения присутствия через Telegram. Мы с нетерпением ждем вашего сигнала, чтобы подготовить ваше место в Эхо-Роще!</p>
+            <a href="https://t.me/YOUR_TELEGRAM_USERNAME" target="_blank" class="telegram-scroll">
+                <i class="fab fa-telegram-plane"></i>
+                Отправить Шепот
+            </a>
+            <p style="margin-top: 40px; font-size: 1em; color: var(--text-light-green); text-shadow: none;">
+                <i>(Не забудьте заменить 'YOUR_TELEGRAM_USERNAME' на ваш персональный логин Telegram!)</i>
+            </p>
+        </div>
+    </section>
+
+    <script>
+        // JavaScript для Canvas: Светлячки и Падающие Листья
+        const canvas = document.querySelector('.particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let fireflies = [];
+        const numFireflies = 80;
+        let mouseX = 0, mouseY = 0;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            fireflies = [];
+            for (let i = 0; i < numFireflies; i++) {
+                fireflies.push(createFirefly());
+            }
+        }
+
+        function createFirefly() {
+            return {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2 + 1,
+                speedX: (Math.random() - 0.5) * 0.4,
+                speedY: (Math.random() - 0.5) * 0.4,
+                color: `rgba(255, 255, 200, ${Math.random() * 0.5 + 0.3})`, // Теплый желтый
+                glowRadius: Math.random() * 10 + 5,
+                life: Math.random() * 100 + 50,
+                maxLife: Math.random() * 100 + 50
+            };
+        }
+
+        function updateCanvasElements() {
+            for (let i = 0; i < fireflies.length; i++) {
+                let f = fireflies[i];
+                f.x += f.speedX;
+                f.y += f.speedY;
+
+                // Fireflies react to mouse (gently move away)
+                const dist = Math.sqrt((f.x - mouseX) ** 2 + (f.y - mouseY) ** 2);
+                if (dist < 100) {
+                    f.x += (f.x - mouseX) / dist * 0.2;
+                    f.y += (f.y - mouseY) / dist * 0.2;
+                }
+
+                f.life--;
+                if (f.life < 0) {
+                    fireflies[i] = createFirefly();
+                }
+
+                // Wrap around screen
+                if (f.x < 0) f.x = canvas.width;
+                if (f.x > canvas.width) f.x = 0;
+                if (f.y < 0) f.y = canvas.height;
+                if (f.y > canvas.height) f.y = 0;
+            }
+        }
+
+        function drawCanvasElements() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < fireflies.length; i++) {
+                let f = fireflies[i];
+                const opacity = f.life / f.maxLife;
+
+                // Draw glow
+                const gradient = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.glowRadius);
+                gradient.addColorStop(0, `rgba(255, 255, 100, ${opacity * 0.6})`);
+                gradient.addColorStop(1, `rgba(255, 255, 100, 0)`);
+                ctx.fillStyle = gradient;
+                ctx.fillRect(f.x - f.glowRadius, f.y - f.glowRadius, f.glowRadius * 2, f.glowRadius * 2);
+
+                // Draw firefly body
+                ctx.fillStyle = f.color.replace(/[^,]+(?=\))/, opacity);
+                ctx.beginPath();
+                ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function animateCanvas() {
+            updateCanvasElements();
+            drawCanvasElements();
+            requestAnimationFrame(animateCanvas);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            // Update CSS variables for hero-content 3D tilt
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const rotX = ((mouseY - centerY) / centerY) * -5; // -5 to 5 deg
+            const rotY = ((mouseX - centerX) / centerX) * 5;   // -5 to 5 deg
+            document.documentElement.style.setProperty('--rotX', `${rotX}deg`);
+            document.documentElement.style.setProperty('--rotY', `${rotY}deg`);
+        });
+
+        resizeCanvas();
+        animateCanvas();
+
+        // Falling leaves (CSS animation driven by JS to create multiple elements)
+        const heroSection = document.querySelector('.hero-section');
+        const leafEmojis = ['🍂', '🍁', '🌿', '🌷']; // Can use more complex SVG leaves
+        function createFallingLeaf() {
+            const leaf = document.createElement('span');
+            leaf.classList.add('falling-leaf');
+            leaf.textContent = leafEmojis[Math.floor(Math.random() * leafEmojis.length)];
+            leaf.style.left = Math.random() * 100 + 'vw';
+            leaf.style.animationDuration = Math.random() * 10 + 10 + 's'; // 10-20 seconds
+            leaf.style.animationDelay = Math.random() * 10 + 's';
+            leaf.style.setProperty('--x-end', (Math.random() - 0.5) * 500 + 'px'); // Random horizontal drift
+            leaf.style.setProperty('--rot-end', (Math.random() * 720 - 360) + 'deg'); // Random rotation
+            heroSection.appendChild(leaf);
+
+            leaf.addEventListener('animationend', () => {
+                leaf.remove();
+                createFallingLeaf(); // Recreate when animation ends
+            });
+        }
+        for (let i = 0; i < 20; i++) { // Number of falling leaves
+            createFallingLeaf();
+        }
+
+
+        // JavaScript для Анимаций при скролле (Intersection Observer API)
+        const sections = document.querySelectorAll('section');
+        const timelineEvents = document.querySelectorAll('.timeline-event');
+
+        const sectionObserverOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, sectionObserverOptions);
+
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+        const timelineEventObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.4
+        });
+
+        timelineEvents.forEach(event => {
+            timelineEventObserver.observe(event);
+        });
+
+        // Плавный скролл для кнопки "Войти в Рощу"
+        document.querySelector('.cta-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
+""")
