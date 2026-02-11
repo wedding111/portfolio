@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Invitation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: #111;
+            font-family: 'Oswald', sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .instruction {
+            margin-bottom: 50px;
+            color: #888;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            animation: pulse 2s infinite;
+        }
+
+        /* Сцена */
+        .scene {
+            width: 300px;
+            height: 300px;
+            perspective: 1000px;
+        }
+
+        /* Сам куб */
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: translateZ(-150px) rotateX(-15deg) rotateY(15deg);
+            transition: transform 0.1s; /* Плавность вращения */
+        }
+
+        /* Грани куба */
+        .face {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 1.5rem;
+            color: #000;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.1);
+            user-select: none;
+            backface-visibility: hidden; /* Скрываем заднюю часть грани */
+        }
+
+        /* Позиционирование граней */
+        .front  { transform: rotateY(0deg) translateZ(150px); }
+        .back   { transform: rotateY(180deg) translateZ(150px); }
+        .right  { transform: rotateY(90deg) translateZ(150px); }
+        .left   { transform: rotateY(-90deg) translateZ(150px); }
+        .top    { transform: rotateX(90deg) translateZ(150px); }
+        .bottom { transform: rotateX(-90deg) translateZ(150px); }
+
+        /* Дизайн граней */
+        h2 { margin: 0; font-weight: 500; text-transform: uppercase; }
+        p { font-size: 1rem; color: #555; }
+        
+        .btn-cube {
+            padding: 10px 30px;
+            background: #000;
+            color: #fff;
+            border: none;
+            margin-top: 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+
+    </style>
+</head>
+<body>
+
+    <div class="instruction">⟲ ВРАЩАЙ КУБ МЫШКОЙ ⟳</div>
+
+    <div class="scene">
+        <div class="cube" id="cube">
+            
+            <!-- ГРАНЬ 1: ГЛАВНАЯ -->
+            <div class="face front">
+                <div style="font-size: 4rem; line-height: 1;">A&M</div>
+                <div style="width: 50px; height: 2px; background: black; margin: 10px 0;"></div>
+                <p>WEDDING INVITE</p>
+            </div>
+
+            <!-- ГРАНЬ 2: ДАТА (Сзади) -->
+            <div class="face back">
+                <h2>Когда?</h2>
+                <div style="font-size: 3rem; font-weight: bold;">25</div>
+                <div style="font-size: 1.5rem;">ИЮЛЯ 2026</div>
+                <p>16:00</p>
+            </div>
+
+            <!-- ГРАНЬ 3: ГДЕ (Справа) -->
+            <div class="face right">
+                <h2>Где?</h2>
+                <p style="margin-top: 20px;">
+                    LOFT HALL #2<br>
+                    Арсенальная наб.<br>
+                    Санкт-Петербург
+                </p>
+            </div>
+
+            <!-- ГРАНЬ 4: ФОТО (Слева) -->
+            <div class="face left" style="background: url('https://images.unsplash.com/photo-1522673607200-1645062cd495?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80') center/cover;">
+            </div>
+
+            <!-- ГРАНЬ 5: ДЕТАЛИ (Сверху) -->
+            <div class="face top">
+                <h2>Dress Code</h2>
+                <p>Black & White</p>
+                <div style="margin-top:10px;">⚫⚪</div>
+            </div>
+
+            <!-- ГРАНЬ 6: RSVP (Снизу) -->
+            <div class="face bottom">
+                <h2>Ты с нами?</h2>
+                <button class="btn-cube" onclick="alert('Ура! Ждем.')">Я ПРИДУ</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const cube = document.getElementById('cube');
+        let isDragging = false;
+        let startX, startY;
+        let currentX = -15; // Начальный угол X
+        let currentY = 15;  // Начальный угол Y
+
+        document.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            cube.style.transition = 'none'; // Убираем плавность для мгновенной реакции
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+
+            // Вращаем куб
+            // dy меняет rotateX, dx меняет rotateY
+            cube.style.transform = `translateZ(-150px) rotateX(${currentX - dy * 0.5}deg) rotateY(${currentY + dx * 0.5}deg)`;
+        });
+
+        document.addEventListener('mouseup', (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+            
+            // Сохраняем новую позицию
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+            currentX -= dy * 0.5;
+            currentY += dx * 0.5;
+            
+            cube.style.transition = 'transform 0.5s'; // Возвращаем плавность
+        });
+
+        // Поддержка тачскрина (телефон)
+        document.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            cube.style.transition = 'none';
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault(); // Чтобы страница не скроллилась
+            const dx = e.touches[0].clientX - startX;
+            const dy = e.touches[0].clientY - startY;
+            cube.style.transform = `translateZ(-150px) rotateX(${currentX - dy * 0.5}deg) rotateY(${currentY + dx * 0.5}deg)`;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            isDragging = false;
+             // Упрощенная логика сохранения позиции для тача (можно доработать)
+        });
+    </script>
+</body>
+</html>
