@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Шикарная Свадьба | Приглашение</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;500&family=Pinyon+Script&display=swap');
+
+        :root {
+            --cream: #f9f7f2;
+            --gold: #c5a059;
+            --text-dark: #4a443f;
+            --glass: rgba(255, 255, 255, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--cream);
+            color: var(--text-dark);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- СЛОЖНАЯ АНИМАЦИЯ ФОНА --- */
+        #canvas-silk {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        /* --- ОБЩИЕ СТИЛИ --- */
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            perspective: 1000px; /* Для 3D эффекта */
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            position: relative;
+        }
+
+        /* --- 3D КАРТОЧКА --- */
+        .card-3d {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 80px 40px;
+            border-radius: 4px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.05);
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+            text-align: center;
+        }
+
+        .card-content {
+            transform: translateZ(50px); /* Вынос контента вперед */
+        }
+
+        /* --- ТИПОГРАФИКА --- */
+        .script-font {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 3.5rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .date-line {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+            border-top: 1px solid var(--gold);
+            border-bottom: 1px solid var(--gold);
+            padding: 15px 0;
+            display: inline-block;
+            margin: 20px 0;
+        }
+
+        /* --- ТАЙМЕР --- */
+        .timer {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
+            justify-content: center;
+        }
+
+        .timer-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .timer-val {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+        }
+
+        .timer-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.6;
+        }
+
+        /* --- ИНФОРМАЦИЯ --- */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 60px;
+            text-align: left;
+        }
+
+        .info-block h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* --- КАРТА --- */
+        .map-box {
+            width: 100%;
+            height: 300px;
+            margin-top: 40px;
+            filter: sepia(0.3) contrast(0.9);
+            border: 1px solid var(--gold);
+        }
+
+        /* --- КНОПКА --- */
+        .btn-rsvp {
+            display: inline-block;
+            margin-top: 50px;
+            padding: 20px 50px;
+            background: var(--text-dark);
+            color: var(--cream);
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 3px;
+            transition: 0.4s;
+            border: 1px solid var(--text-dark);
+        }
+
+        .btn-rsvp:hover {
+            background: transparent;
+            color: var(--text-dark);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Анимация появления */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: 1.5s all ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .info-grid { grid-template-columns: 1fr; text-align: center; }
+            .timer { gap: 15px; }
+            .card-3d { padding: 40px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas-silk"></canvas>
+
+    <section class="section">
+        <div class="container reveal">
+            <div class="card-3d">
+                <div class="card-content">
+                    <div class="script-font">Save the Date</div>
+                    <h1>Alexander <br>& Catherine</h1>
+                    <div class="date-line">25 СЕНТЯБРЯ 2026</div>
+                    <p style="margin-top: 20px; font-weight: 300; letter-spacing: 2px;">
+                        ПРИГЛАШАЕМ ВАС РАЗДЕЛИТЬ НАШЕ СЧАСТЬЕ
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container reveal">
+            <div class="card-3d">
+                <div class="card-content">
+                    <h2 style="font-family: 'Cinzel'; letter-spacing: 5px;">ПРОГРАММА ДНЯ</h2>
+                    
+                    <div class="info-grid">
+                        <div class="info-block">
+                            <h3>Церемония</h3>
+                            <p>16:00 — Регистрация в загородной резиденции "Villa De Luxe". Сбор гостей за 30 минут.</p>
+                        </div>
+                        <div class="info-block">
+                            <h3>Ужин</h3>
+                            <p>18:00 — Торжественный банкет, живая музыка и атмосфера вечера.</p>
+                        </div>
+                    </div>
+
+                    <div class="timer" id="wedding-timer">
+                        </div>
+
+                    <div class="map-box">
+                        <iframe src="http://googleusercontent.com/maps.google.com/6" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+
+                    <a href="https://t.me/durov" target="_blank" class="btn-rsvp">ПОДТВЕРДИТЬ УЧАСТИЕ</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // --- 1. АНИМАЦИЯ ШЕЛКА (WAVE) ---
+        const canvas = document.getElementById('canvas-silk');
+        const ctx = canvas.getContext('2d');
+        let w, h;
+        const lines = [];
+
+        function init() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+            lines.length = 0;
+            for (let i = 0; i < 6; i++) {
+                lines.push({
+                    y: h * 0.5,
+                    amp: 50 + i * 20,
+                    freq: 0.002 + i * 0.0005,
+                    phase: i * 2,
+                    speed: 0.01 + i * 0.002,
+                    color: `rgba(197, 160, 89, ${0.1 + i * 0.05})`
+                });
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, w, h);
+            lines.forEach(line => {
+                ctx.beginPath();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = line.color;
+                for (let x = 0; x < w; x++) {
+                    const y = line.y + Math.sin(x * line.freq + line.phase) * line.amp + 
+                              Math.sin(x * line.freq * 0.5 + line.phase) * line.amp * 0.5;
+                    x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+                line.phase += line.speed;
+            });
+            requestAnimationFrame(draw);
+        }
+
+        // --- 2. 3D НАКЛОН КАРТОЧЕК ---
+        const cards = document.querySelectorAll('.card-3d');
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth / 2 - e.pageX) / 40;
+            const y = (window.innerHeight / 2 - e.pageY) / 40;
+            cards.forEach(card => {
+                card.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+            });
+        });
+
+        // --- 3. ПОЯВЛЕНИЕ ПРИ СКРОЛЛЕ ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // --- 4. ТАЙМЕР ---
+        const weddingDate = new Date("Sep 25, 2026 16:00:00").getTime();
+        
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = weddingDate - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.getElementById('wedding-timer').innerHTML = `
+                <div class="timer-item"><span class="timer-val">${d}</span><span class="timer-label">Дней</span></div>
+                <div class="timer-item"><span class="timer-val">${h}</span><span class="timer-label">Часов</span></div>
+                <div class="timer-item"><span class="timer-val">${m}</span><span class="timer-label">Минут</span></div>
+            `;
+        }
+
+        window.addEventListener('resize', init);
+        init();
+        draw();
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+    </script>
+</body>
+</html>
