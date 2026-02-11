@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Denis & Alina | Wedding Flight</title>
+    <!-- Шрифты: Courier для "печатной машинки" и жирный шрифт для заголовков -->
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Oswald:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #1e3c72; /* Темно-синий (Navy) */
+            --secondary: #2a5298;
+            --accent: #d92027; /* Красный (как штамп) */
+            --paper: #f4f1ea; /* Цвет старой бумаги */
+            --text: #2b2b2b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #dceefb; /* Цвет неба */
+            font-family: 'Courier Prime', monospace;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* --- ФОН (ОБЛАКА) --- */
+        .clouds-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: linear-gradient(to bottom, #89c4f4 0%, #dceefb 100%);
+        }
+
+        .cloud {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: floatCloud linear infinite;
+        }
+        .c1 { width: 100px; height: 40px; top: 10%; left: -20%; animation-duration: 25s; }
+        .c2 { width: 150px; height: 60px; top: 30%; left: -20%; animation-duration: 40s; animation-delay: 5s; }
+        .c3 { width: 80px; height: 30px; top: 60%; left: -20%; animation-duration: 30s; animation-delay: 2s; }
+
+        @keyframes floatCloud {
+            0% { left: -20%; }
+            100% { left: 120%; }
+        }
+
+        /* --- САМОЛЕТИК --- */
+        .plane-container {
+            position: fixed;
+            top: 50px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .plane {
+            font-size: 3rem;
+            position: absolute;
+            animation: flyPlane 20s linear infinite;
+        }
+
+        @keyframes flyPlane {
+            0% { left: -10%; transform: rotate(5deg); top: 20px; }
+            50% { top: 0px; }
+            100% { left: 110%; transform: rotate(5deg); top: 20px; }
+        }
+
+        /* --- КОНТЕЙНЕР --- */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* --- БИЛЕТ (BOARDING PASS) --- */
+        .ticket {
+            background: var(--paper);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            margin-bottom: 50px;
+        }
+
+        /* Синяя шапка */
+        .ticket-header {
+            background: var(--primary);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .airline-name {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 1.2rem;
+        }
+
+        .ticket-body {
+            padding: 30px;
+            position: relative;
+        }
+
+        /* Пунктирная линия отрыва */
+        .tear-line {
+            border-top: 2px dashed #ccc;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        /* Вырезы по бокам */
+        .tear-line::before, .tear-line::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            width: 20px;
+            height: 20px;
+            background: #dceefb; /* Цвет фона страницы */
+            border-radius: 50%;
+        }
+        .tear-line::before { left: -40px; }
+        .tear-line::after { right: -40px; }
+
+        .route {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .city-code {
+            font-family: 'Oswald', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .city-name {
+            font-size: 0.9rem;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .flight-icon {
+            font-size: 2rem;
+            color: var(--accent);
+            transform: rotate(90deg);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            text-align: left;
+        }
+
+        .label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        .value {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+
+        /* --- ШТАМПЫ --- */
+        .stamp-title {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            font-size: 2.5rem;
+            color: var(--primary);
+            border: 3px solid var(--primary);
+            display: inline-block;
+            padding: 10px 20px;
+            transform: rotate(-3deg);
+            opacity: 0.8;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 10px;
+        }
+
+        .stamp-approved {
+            color: var(--accent);
+            border-color: var(--accent);
+            transform: rotate(5deg);
+        }
+
+        /* --- VISA FORM --- */
+        .visa-form {
+            background: #fff;
+            padding: 40px;
+            border: 1px solid #ccc;
+            position: relative;
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, #f9f9f9 10px, #f9f9f9 20px);
+        }
+
+        .visa-header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .form-row {
+            margin-bottom: 15px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #999;
+            background: #fff;
+            font-family: 'Courier Prime', monospace;
+        }
+
+        .btn-checkin {
+            background: var(--accent);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        .btn-checkin:hover { background: #b0151b; }
+
+        /* --- BARCODE --- */
+        .barcode {
+            height: 40px;
+            width: 100%;
+            background: repeating-linear-gradient(
+                to right,
+                #000 0px, #000 2px,
+                transparent 2px, transparent 5px,
+                #000 5px, #000 7px
+            );
+            margin-top: 20px;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 600px) {
+            .city-code { font-size: 2.5rem; }
+            .info-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ФОН -->
+    <div class="clouds-bg">
+        <div class="cloud c1"></div>
+        <div class="cloud c2"></div>
+        <div class="cloud c3"></div>
+    </div>
+
+    <!-- ЛЕТАЮЩИЙ САМОЛЕТ -->
+    <div class="plane-container">
+        <div class="plane">✈️</div>
+    </div>
+
+    <div class="container">
+        
+        <!-- СЕКЦИЯ 1: ПОСАДОЧНЫЙ ТАЛОН -->
+        <div class="ticket">
+            <div class="ticket-header">
+                <span class="airline-name">Wedding Air</span>
+                <span>BOARDING PASS</span>
+            </div>
+            
+            <div class="ticket-body">
+                <div class="route">
+                    <div style="text-align: left;">
+                        <div class="city-code">MSK</div>
+                        <div class="city-name">МОСКВА</div>
+                    </div>
+                    <div class="flight-icon">✈</div>
+                    <div style="text-align: right;">
+                        <div class="city-code">AER</div>
+                        <div class="city-name">СОЧИ</div>
+                    </div>
+                </div>
+
+                <div class="info-grid">
+                    <div>
+                        <div class="label">Пассажиры</div>
+                        <div class="value">GUESTS</div>
+                    </div>
+                    <div>
+                        <div class="label">Рейс</div>
+                        <div class="value">WN-2026</div>
+                    </div>
+                    <div>
+                        <div class="label">Дата</div>
+                        <div class="value">20 ИЮЛ</div>
+                    </div>
+                    <div>
+                        <div class="label">Время</div>
+                        <div class="value">16:30</div>
+                    </div>
+                    <div>
+                        <div class="label">Гейт</div>
+                        <div class="value">№1</div>
+                    </div>
+                    <div>
+                        <div class="label">Класс</div>
+                        <div class="value">VIP</div>
+                    </div>
+                </div>
+
+                <div class="tear-line"></div>
+
+                <div style="text-align: center;">
+                    <h2 style="font-family: 'Oswald'; text-transform: uppercase; color: var(--primary);">Денис & Алина</h2>
+                    <p style="margin-top: 10px; font-size: 0.9rem;">Приглашаем вас отправиться в путешествие нашей любви!</p>
+                </div>
+
+                <div class="barcode"></div>
+            </div>
+        </div>
+
+        <!-- СЕКЦИЯ 2: ПЛАН ПОЛЕТА -->
+        <div style="text-align: center; margin-bottom: 50px;">
+            <div class="stamp-title">FLIGHT PLAN</div>
+            
+            <div style="background: white; padding: 20px; border-radius: 10px; text-align: left; border: 1px dashed #999;">
+                <p><strong>16:00</strong> — Check-in (Сбор гостей)</p>
+                <hr style="border: 0; border-top: 1px dotted #ccc; margin: 10px 0;">
+                <p><strong>17:00</strong> — Take off (Церемония)</p>
+                <hr style="border: 0; border-top: 1px dotted #ccc; margin: 10px 0;">
+                <p><strong>18:30</strong> — In-flight meal (Банкет)</p>
+                <hr style="border: 0; border-top: 1px dotted #ccc; margin: 10px 0;">
+                <p><strong>22:00</strong> — Turbulence (Танцы)</p>
+            </div>
+        </div>
+
+        <!-- СЕКЦИЯ 3: VISA FORM (RSVP) -->
+        <div style="text-align: center;">
+            <div class="stamp-title stamp-approved">ENTRY VISA</div>
+            
+            <div class="visa-form">
+                <div class="visa-header">MIGRATION CARD / RSVP</div>
+                
+                <form onsubmit="alert('Виза одобрена! Добро пожаловать на борт!'); return false;">
+                    <div class="form-row">
+                        <div class="label">Full Name / ФИО</div>
+                        <input type="text" placeholder="IVANOV IVAN" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="label">Companions / Спутники</div>
+                        <select>
+                            <option>Travelling Alone (1)</option>
+                            <option>With Partner (2)</option>
+                            <option>Family (3+)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="label">Preferences / Еда и напитки</div>
+                        <input type="text" placeholder="Vegetarian? Wine?">
+                    </div>
+
+                    <button class="btn-checkin">CHECK-IN</button>
+                </form>
+            </div>
+        </div>
+
+        <footer style="text-align: center; margin-top: 40px; opacity: 0.6; font-size: 0.8rem;">
+            © Wedding Air Lines 2026. Have a nice flight!
+        </footer>
+
+    </div>
+
+</body>
+</html>
