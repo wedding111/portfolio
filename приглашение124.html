@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тебе приглашение! | Вечеринка Максима</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700;900&family=Montserrat:wght@400;500&display=swap');
+
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #1a1a1d; /* Глубокий темный фон */
+            color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            overflow: hidden; /* Предотвращает появление полос прокрутки от конфетти */
+        }
+
+        .party-container {
+            padding: 40px;
+            max-width: 600px;
+        }
+        
+        /* --- ТИПОГРАФИКА --- */
+        h1 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 900;
+            font-size: 3.5em;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+            text-shadow: 0 0 10px rgba(255, 82, 82, 0.5), 0 0 20px rgba(255, 82, 82, 0.5);
+        }
+
+        h2 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            font-size: 2em;
+            color: #c3073f; /* Яркий акцентный цвет */
+            margin: 10px 0 40px 0;
+        }
+
+        .details {
+            font-size: 1.2em;
+            line-height: 1.8;
+            margin-bottom: 50px;
+            text-align: left;
+            border-left: 3px solid #c3073f;
+            padding-left: 25px;
+        }
+        
+        .details strong {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        /* --- КНОПКА RSVP --- */
+        .rsvp-section {
+            margin-top: 50px;
+        }
+
+        #rsvp-button {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            font-size: 1.5em;
+            text-transform: uppercase;
+            color: #fff;
+            background-color: #c3073f;
+            border: none;
+            padding: 20px 50px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px -10px #c3073f;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            z-index: 10;
+        }
+        
+        #rsvp-button:hover:not(:disabled) {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px -10px #c3073f;
+        }
+
+        #rsvp-button:active:not(:disabled) {
+            transform: translateY(-2px);
+        }
+        
+        #rsvp-button:disabled {
+            background-color: #4e4e50;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="party-container">
+        <h1>Ты приглашен!</h1>
+        <h2>На огненную вечеринку в честь 30-летия Максима</h2>
+        
+        <div class="details">
+            <p><strong>КОГДА:</strong> 18 октября 2027, сбор гостей в 19:00</p>
+            <p><strong>ГДЕ:</strong> Лофт "The Place", ул. Модная, д. 15</p>
+            <p><strong>ЧТО БУДЕТ:</strong> Громкая музыка, танцы до утра, авторские коктейли и, конечно, праздничный торт! Твое присутствие — лучший подарок.</p>
+        </div>
+
+        <div class="rsvp-section">
+            <p>Сообщи, что придешь, и приготовься к взрыву эмоций!</p>
+            <button id="rsvp-button">Я приду!</button>
+        </div>
+    </div>
+    
+    <!-- ИСПРАВЛЕНИЕ: Подключаем библиотеку конфетти из надежного источника (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const rsvpButton = document.getElementById('rsvp-button');
+
+            rsvpButton.addEventListener('click', () => {
+                // 1. Отключаем кнопку, чтобы избежать повторных нажатий
+                rsvpButton.disabled = true;
+                rsvpButton.textContent = '🎉 Увидимся на тусе!';
+
+                // 2. Настройки для нашего салюта
+                const duration = 2 * 1000; // Длительность салюта - 2 секунды
+                const animationEnd = Date.now() + duration;
+                const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+                function randomInRange(min, max) {
+                    return Math.random() * (max - min) + min;
+                }
+
+                // 3. Запускаем интервал, который будет "стрелять" конфетти, пока не закончится время
+                const interval = setInterval(function() {
+                    const timeLeft = animationEnd - Date.now();
+
+                    // Если время вышло, останавливаем интервал
+                    if (timeLeft <= 0) {
+                        return clearInterval(interval);
+                    }
+
+                    const particleCount = 50 * (timeLeft / duration);
+                    
+                    // Запускаем два "выстрела" из случайных точек вверху экрана для эффекта салюта
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                }, 250);
+            });
+        });
+    </script>
+</body>
+</html>
