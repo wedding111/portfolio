@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Wedding | Max & Kira</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@300;500;700&display=swap');
+
+        :root {
+            --bg: #000000;
+            --neon: #00f3ff; /* Cyan */
+            --silver: #e0e0e0;
+            --dark-glass: rgba(0, 20, 30, 0.85);
+            --border: rgba(0, 243, 255, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--silver);
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            width: 100vw;
+        }
+
+        /* --- 1. DIGITAL RAIN CANVAS --- */
+        #matrix-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+        }
+
+        /* --- CONTAINER --- */
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 100px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 10vw, 7rem);
+            line-height: 0.9;
+            text-transform: uppercase;
+            color: #fff;
+            margin: 20px 0;
+            text-shadow: 0 0 10px var(--neon), 0 0 30px var(--neon);
+            letter-spacing: 5px;
+        }
+
+        .glitch-text {
+            font-size: 1.2rem;
+            letter-spacing: 10px;
+            color: var(--neon);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 40px;
+            border-left: 5px solid var(--neon);
+            padding-left: 20px;
+            display: inline-block;
+        }
+
+        /* --- WELCOME (TERMINAL CARD) --- */
+        .terminal-card {
+            background: var(--dark-glass);
+            border: 1px solid var(--border);
+            padding: 50px;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
+            text-align: left;
+            margin-bottom: 50px;
+        }
+
+        /* Декор углов "Скобки" */
+        .terminal-card::before, .terminal-card::after {
+            content: ''; position: absolute; width: 20px; height: 20px;
+            border: 2px solid var(--neon); transition: 0.3s;
+        }
+        .terminal-card::before { top: -2px; left: -2px; border-right: 0; border-bottom: 0; }
+        .terminal-card::after { bottom: -2px; right: -2px; border-left: 0; border-top: 0; }
+
+        .terminal-header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            font-family: monospace;
+            color: var(--neon);
+            font-size: 0.8rem;
+        }
+
+        .greeting-text {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        /* --- DRESS CODE (CHIPS) --- */
+        .chip-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .chip-item {
+            text-align: center;
+        }
+
+        .chip {
+            width: 100px; height: 60px;
+            background: #111;
+            border: 1px solid #333;
+            position: relative;
+            margin-bottom: 15px;
+            transition: 0.3s;
+            /* Эффект микросхемы */
+            background-image: linear-gradient(90deg, transparent 50%, rgba(255,255,255,0.05) 50%),
+                              linear-gradient(0deg, transparent 50%, rgba(255,255,255,0.05) 50%);
+            background-size: 10px 10px;
+        }
+
+        .chip::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
+            background: currentColor;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        .chip:hover { transform: scale(1.1); border-color: var(--neon); }
+
+        .c-silver { color: #fff; }
+        .c-neon { color: #00f3ff; }
+        .c-black { color: #333; }
+
+        .chip-name { font-family: monospace; font-size: 0.8rem; color: var(--neon); text-transform: uppercase; }
+
+        /* --- TIMER (DIGITAL) --- */
+        .timer-digital {
+            display: flex;
+            gap: 20px;
+            font-family: 'Orbitron';
+        }
+
+        .td-box {
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid var(--neon);
+            padding: 20px;
+            min-width: 90px;
+            text-align: center;
+            clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
+        }
+
+        .td-num { font-size: 2.5rem; color: #fff; text-shadow: 0 0 10px var(--neon); }
+        .td-lbl { font-size: 0.6rem; color: var(--neon); margin-top: 5px; }
+
+        /* --- MAP & BUTTON --- */
+        .map-cyber {
+            width: 100%; height: 350px;
+            border: 1px solid var(--neon);
+            margin: 40px 0;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+        }
+
+        .map-cyber iframe {
+            width: 100%; height: 100%;
+            /* Синяя инверсия */
+            filter: invert(100%) hue-rotate(180deg) brightness(1.2) contrast(1.2);
+        }
+
+        .cyber-btn {
+            display: inline-block;
+            padding: 20px 60px;
+            background: transparent;
+            color: var(--neon);
+            text-decoration: none;
+            font-family: 'Orbitron';
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 2px;
+            border: 2px solid var(--neon);
+            position: relative;
+            transition: 0.3s;
+            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+        }
+
+        .cyber-btn:hover {
+            background: var(--neon);
+            color: #000;
+            box-shadow: 0 0 50px var(--neon);
+        }
+
+        footer {
+            padding: 50px;
+            text-align: center;
+            font-family: monospace;
+            color: #555;
+            font-size: 0.8rem;
+        }
+
+        /* Anim */
+        .glitch-anim { animation: glitch 1s infinite alternate; }
+        @keyframes glitch {
+            0% { opacity: 1; transform: translateX(0); }
+            95% { opacity: 1; transform: translateX(0); }
+            96% { opacity: 0.8; transform: translateX(-2px); }
+            97% { opacity: 0.8; transform: translateX(2px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="matrix-canvas"></canvas>
+
+    <div class="container">
+        
+        <section style="min-height: 90vh; justify-content: center;">
+            <div class="glitch-text glitch-anim">System Online</div>
+            <h1>Max<br>&<br>Kira</h1>
+            <div style="margin-top: 20px; font-family: monospace; color: #888;">
+                [DATE: 11.11.2026] [STATUS: CONFIRMED]
+            </div>
+        </section>
+
+        <section>
+            <h2>Protocol: Welcome</h2>
+            <div class="terminal-card">
+                <div class="terminal-header">> READ_MESSAGE.TXT</div>
+                <p class="greeting-text">
+                    <span style="color: var(--neon);">System:</span> Соединение установлено. <br><br>
+                    В мире нулей и единиц мы нашли настоящую любовь. 
+                    Мы приглашаем вас выйти из оффлайна и присоединиться к нашему обновлению статуса.
+                    Будущее начинается здесь.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Visual Settings</h2>
+            <p style="color: #888; margin-bottom: 20px;">Mode: Cyber-Formal / Chrome / Neon</p>
+            
+            <div class="chip-grid">
+                <div class="chip-item">
+                    <div class="chip c-silver"></div>
+                    <span class="chip-name">Titanium</span>
+                </div>
+                <div class="chip-item">
+                    <div class="chip c-neon"></div>
+                    <span class="chip-name">Neon Cyan</span>
+                </div>
+                <div class="chip-item">
+                    <div class="chip c-black"></div>
+                    <span class="chip-name">Carbon</span>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Launch T-Minus</h2>
+            <div class="timer-digital" id="timer">
+                </div>
+        </section>
+
+        <section>
+            <h2>Coordinates</h2>
+            <p>Sector: Technopark "Orbita", Moscow</p>
+
+            <div class="map-cyber">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2245.2427829777174!2d37.61556097728472!3d55.75393027308434!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a50b315e573%3A0xa886bf5a3d9b2e68!2z0JzQvtGB0LrQvtCy0YHQutC40Lkg0JrRgNC10LzQu9GM!5e0!3m2!1sru!2sru!4v1700000000000!5m2!1sru!2sru" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+
+            <a href="https://t.me/durov" target="_blank" class="cyber-btn">
+                Execute RSVP
+            </a>
+        </section>
+
+    </div>
+
+    <footer>
+        END OF LINE_
+    </footer>
+
+    <script>
+        // --- 1. DIGITAL RAIN ANIMATION (MATRIX STYLE) ---
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        resize();
+
+        // Символы: Катакана + Латиница + Цифры
+        const chars = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const fontSize = 14;
+        const columns = width / fontSize;
+        
+        // Массив для отслеживания Y-координаты каждого столбца
+        const drops = [];
+        for(let x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+
+        function drawMatrix() {
+            // Полупрозрачный черный фон для эффекта затухания
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.fillStyle = '#00f3ff'; // Neon Cyan text
+            ctx.font = fontSize + 'px monospace';
+
+            for(let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                
+                // Эффект: некоторые символы белые (яркие)
+                if(Math.random() > 0.95) ctx.fillStyle = '#fff';
+                else ctx.fillStyle = '#00f3ff';
+
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                // Сброс капли наверх случайно
+                if(drops[i] * fontSize > height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                
+                drops[i]++;
+            }
+            requestAnimationFrame(drawMatrix);
+        }
+
+        window.addEventListener('resize', () => {
+            resize();
+            // Re-init drops
+            drops.length = 0;
+            const cols = width / fontSize;
+            for(let x = 0; x < cols; x++) drops[x] = 1;
+        });
+        
+        drawMatrix();
+
+
+        // --- 2. TIMER ---
+        const eventDate = new Date("Nov 11, 2026 18:00:00").getTime();
+        const timerEl = document.getElementById("timer");
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = eventDate - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            timerEl.innerHTML = `
+                <div class="td-box"><div class="td-num">${d}</div><div class="td-lbl">DAY</div></div>
+                <div class="td-box"><div class="td-num">${h}</div><div class="td-lbl">HRS</div></div>
+                <div class="td-box"><div class="td-num">${m}</div><div class="td-lbl">MIN</div></div>
+                <div class="td-box"><div class="td-num">${s}</div><div class="td-lbl">SEC</div></div>
+            `;
+        }
+        setInterval(updateTimer, 1000); updateTimer();
+
+    </script>
+</body>
+</html>
