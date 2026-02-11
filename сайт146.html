@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riviera Wedding | Maxim & Yana</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap');
+
+        :root {
+            --bg-water: #006994;
+            --accent: #40e0d0; /* Бирюза */
+            --sand: #fdf5e6;
+            --gold: #d4af37;
+            --text: #ffffff;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-water);
+            background: linear-gradient(to bottom, #005c83, #00334e);
+            color: var(--text);
+            font-family: 'Lato', sans-serif;
+            overflow-x: hidden;
+            width: 100vw;
+        }
+
+        /* --- 1. WATER RIPPLE CANVAS --- */
+        #water-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            cursor: crosshair;
+        }
+
+        /* --- CONTAINER --- */
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 100px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: clamp(3.5rem, 10vw, 7rem);
+            font-weight: 700;
+            line-height: 1;
+            margin: 20px 0;
+            color: var(--sand);
+            text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            font-style: italic;
+        }
+
+        .sup-title {
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        h2 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        /* --- GREETING CARD (FROSTED GLASS) --- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 60px;
+            border-radius: 20px; /* Скругление */
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            transition: transform 0.5s;
+        }
+        
+        .glass-card:hover { transform: translateY(-5px); }
+
+        .greeting-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #e0f7fa;
+            font-weight: 300;
+        }
+
+        /* --- DRESS CODE (SEA STONES) --- */
+        .stones-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stone-wrap {
+            text-align: center;
+        }
+
+        .stone {
+            width: 80px; height: 60px;
+            /* Органическая форма камня */
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            margin: 0 auto 15px auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: 0.5s;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .stone:hover {
+            border-radius: 50%; /* Превращается в круг */
+            transform: scale(1.1);
+        }
+
+        .s-white { background: #fdf5e6; }
+        .s-teal { background: #008080; }
+        .s-gold { background: linear-gradient(135deg, #d4af37, #fceeb5); }
+
+        .stone-name { text-transform: uppercase; font-size: 0.7rem; letter-spacing: 2px; }
+
+        /* --- TIMER (YACHT STYLE) --- */
+        .timer-clean {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .tm-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tm-num {
+            font-family: 'Bodoni Moda';
+            font-size: 3rem;
+            font-weight: 400;
+        }
+
+        .tm-lbl {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-top: 5px;
+        }
+
+        /* --- MAP & BUTTON --- */
+        .map-wrapper {
+            width: 100%; height: 350px;
+            border-radius: 30px;
+            overflow: hidden;
+            margin: 40px 0;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .map-wrapper iframe {
+            width: 100%; height: 100%;
+            /* Морской фильтр */
+            filter: hue-rotate(180deg) brightness(0.9) contrast(1.1);
+        }
+
+        .white-btn {
+            background: #fff;
+            color: #005c83;
+            padding: 20px 60px;
+            font-family: 'Bodoni Moda';
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 50px;
+            transition: 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .white-btn:hover {
+            background: var(--accent);
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(64, 224, 208, 0.4);
+        }
+
+        footer {
+            padding: 50px;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+            text-align: center;
+        }
+
+        /* Anim */
+        .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <canvas id="water-canvas"></canvas>
+
+    <div class="container">
+        
+        <section style="min-height: 90vh; justify-content: center;">
+            <div class="sup-title reveal active">The Wedding Celebration</div>
+            <h1 class="reveal active">Maxim<br>&<br>Yana</h1>
+            <div class="reveal active" style="margin-top: 20px; font-size: 1.2rem; font-style: italic;">
+                August 15th • Riviera Coast
+            </div>
+        </section>
+
+        <section>
+            <h2 class="reveal">Welcome</h2>
+            <div class="glass-card reveal">
+                <p class="greeting-text">
+                    "Море объединяет страны, которые оно разделяет." <br><br>
+                    Мы приглашаем вас на берег нашей мечты. Туда, где шум прибоя заглушает суету, а время останавливается.
+                    Разделите с нами этот день, наполненный морским бризом, солнцем и любовью.
+                    <br><br>
+                    С нетерпением ждем встречи!
+                </p>
+                <div style="text-align: right; margin-top: 20px; font-family: 'Bodoni Moda'; font-style: italic;">M & Y</div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="reveal">Palette</h2>
+            <p class="reveal" style="color: #b2ebf2; margin-bottom: 20px;">Light Fabrics. Beach Formal.</p>
+            
+            <div class="stones-grid reveal">
+                <div class="stone-wrap">
+                    <div class="stone s-white"></div>
+                    <span class="stone-name">Sand</span>
+                </div>
+                <div class="stone-wrap">
+                    <div class="stone s-teal"></div>
+                    <span class="stone-name">Deep Sea</span>
+                </div>
+                <div class="stone-wrap">
+                    <div class="stone s-gold"></div>
+                    <span class="stone-name">Sunset Gold</span>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="reveal">Countdown</h2>
+            <div class="timer-clean reveal" id="timer">
+                </div>
+        </section>
+
+        <section>
+            <h2 class="reveal">The Venue</h2>
+            <p class="reveal">Yacht Club "Azure", Sochi</p>
+            
+            <div class="map-wrapper reveal">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2955.514757530635!2d39.71804231545624!3d43.58554297912444!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40f58a36c1e5512b%3A0x4a0a5823155502a5!2z0JzQvtGA0L_QvtGA0YIg0KHQvtGH0Lg!5e0!3m2!1sru!2sru!4v1700000000000!5m2!1sru!2sru" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+
+            <a href="https://t.me/durov" target="_blank" class="white-btn reveal">
+                RSVP via Telegram
+            </a>
+        </section>
+
+    </div>
+
+    <footer>
+        Summer 2026
+    </footer>
+
+    <script>
+        // --- 1. WATER RIPPLE EFFECT ---
+        const canvas = document.getElementById('water-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        
+        let ripples = [];
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+
+        class Ripple {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.radius = 0;
+                this.maxRadius = Math.random() * 100 + 50;
+                this.speed = Math.random() * 2 + 1;
+                this.opacity = 1;
+                this.lineWidth = 2;
+            }
+
+            update() {
+                this.radius += this.speed;
+                this.opacity -= 0.01; // Исчезает
+                this.lineWidth -= 0.02;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(64, 224, 208, ${this.opacity})`; // Turquoise outline
+                ctx.lineWidth = Math.max(0.1, this.lineWidth);
+                ctx.stroke();
+                
+                // Второе кольцо для реализма
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius * 0.8, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity * 0.5})`;
+                ctx.lineWidth = Math.max(0.1, this.lineWidth * 0.5);
+                ctx.stroke();
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height); // Чистим каждый кадр
+
+            // Удаляем старые волны
+            ripples = ripples.filter(r => r.opacity > 0);
+
+            ripples.forEach(r => {
+                r.update();
+                r.draw();
+            });
+
+            // Случайные капли (как дождь или естественное движение воды)
+            if(Math.random() > 0.95) {
+                ripples.push(new Ripple(Math.random()*width, Math.random()*height));
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // Добавляем волну там, где мышка
+        window.addEventListener('mousemove', (e) => {
+            // Ограничиваем частоту, чтобы не было слишком много
+            if(Math.random() > 0.5) {
+                ripples.push(new Ripple(e.clientX, e.clientY));
+            }
+        });
+
+        // Клик тоже создает волну
+        window.addEventListener('click', (e) => {
+             ripples.push(new Ripple(e.clientX, e.clientY));
+             ripples.push(new Ripple(e.clientX, e.clientY)); // Двойная волна
+        });
+
+        window.addEventListener('resize', resize);
+        resize();
+        animate();
+
+
+        // --- 2. TIMER ---
+        const eventDate = new Date("Aug 15, 2026 16:00:00").getTime();
+        const timerEl = document.getElementById("timer");
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = eventDate - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            timerEl.innerHTML = `
+                <div class="tm-unit"><div class="tm-num">${d}</div><div class="tm-lbl">Days</div></div>
+                <div class="tm-unit"><div class="tm-num">${h}</div><div class="tm-lbl">Hours</div></div>
+                <div class="tm-unit"><div class="tm-num">${m}</div><div class="tm-lbl">Mins</div></div>
+                <div class="tm-unit"><div class="tm-num">${s}</div><div class="tm-lbl">Sec</div></div>
+            `;
+        }
+        setInterval(updateTimer, 1000); updateTimer();
+
+        // --- 3. SCROLL REVEAL ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
