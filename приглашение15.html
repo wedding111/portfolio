@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pasha & Yulia | The Adventure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Amatic+SC:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #fcf5c7; /* Песочно-желтый */
+            --water: #a8d8ea;
+            --land: #e0f3db;
+            --path: #ff6b6b;
+            --text: #2d3436;
+            --card-bg: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Josefin Sans', sans-serif;
+            color: var(--text);
+            overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- ЗАГОЛОВОК --- */
+        header {
+            text-align: center;
+            padding: 20px;
+            background: #fff;
+            border-bottom: 3px dashed var(--path);
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            font-family: 'Amatic SC', cursive;
+            font-size: 3rem;
+            color: var(--path);
+        }
+
+        /* --- КАРТА --- */
+        .map-container {
+            position: relative;
+            flex: 1;
+            background-image: 
+                radial-gradient(#e6e6e6 1px, transparent 1px),
+                radial-gradient(#e6e6e6 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            overflow: hidden;
+            cursor: grab;
+        }
+
+        /* Декор карты (Река) */
+        .river {
+            position: absolute;
+            top: 0; bottom: 0; left: 40%;
+            width: 100px;
+            background: var(--water);
+            transform: skewX(-20deg);
+            opacity: 0.5;
+        }
+
+        /* SVG ПУТЬ */
+        .path-svg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        path {
+            fill: none;
+            stroke: var(--path);
+            stroke-width: 4;
+            stroke-dasharray: 20;
+            stroke-linecap: round;
+            animation: dash 60s linear infinite;
+        }
+
+        @keyframes dash {
+            to { stroke-dashoffset: -1000; }
+        }
+
+        /* --- ЛОКАЦИИ (ПИНЫ) --- */
+        .location {
+            position: absolute;
+            z-index: 2;
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border-radius: 50%;
+            border: 4px solid var(--path);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 0 rgba(0,0,0,0.1);
+        }
+
+        .location:hover { transform: scale(1.2) translateY(-10px); }
+        .location.active { background: var(--path); color: #fff; }
+
+        /* Позиции пинов (в процентах для адаптивности) */
+        #loc-1 { top: 20%; left: 15%; } /* Сборы */
+        #loc-2 { top: 40%; left: 55%; } /* Церемония */
+        #loc-3 { top: 70%; left: 30%; } /* Вечеринка */
+
+        .loc-label {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            white-space: nowrap;
+            font-size: 0.9rem;
+            border: 1px solid #ddd;
+        }
+
+        /* --- ИНФО КАРТОЧКА (ВСПЛЫВАЮЩАЯ) --- */
+        .info-card {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(150%); /* Скрыта внизу */
+            width: 90%;
+            max-width: 500px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+            text-align: center;
+        }
+
+        .info-card.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px; right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .card-icon { font-size: 3rem; margin-bottom: 10px; display: block; }
+        
+        .btn-action {
+            background: var(--path);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-family: inherit;
+            font-weight: bold;
+            margin-top: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #d63031;
+            transition: 0.2s;
+        }
+        .btn-action:active { transform: translateY(4px); box-shadow: none; }
+
+        /* --- RSVP MODAL --- */
+        .rsvp-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .rsvp-box {
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            width: 90%; max-width: 400px;
+        }
+
+        /* --- МОБИЛЬНЫЙ --- */
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            #loc-1 { left: 10%; }
+            #loc-2 { left: 70%; }
+            #loc-3 { left: 20%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>НАШЕ ПРИКЛЮЧЕНИЕ</h1>
+        <p style="letter-spacing: 2px; font-size: 0.8rem;">ПАША + ЮЛЯ • 15.08.26</p>
+    </header>
+
+    <div class="map-container" id="map">
+        <!-- Река -->
+        <div class="river"></div>
+
+        <!-- SVG Линия маршрута -->
+        <svg class="path-svg">
+            <!-- Кривая Безье, соединяющая точки (координаты примерные) -->
+            <path d="M 15% 20% Q 50% 10% 55% 40% T 30% 70%" id="route-path" />
+        </svg>
+
+        <!-- ТОЧКА 1 -->
+        <div class="location" id="loc-1" onclick="showInfo(1)">
+            🏠
+            <div class="loc-label">1. Старт</div>
+        </div>
+
+        <!-- ТОЧКА 2 -->
+        <div class="location" id="loc-2" onclick="showInfo(2)">
+            💍
+            <div class="loc-label">2. "Да!"</div>
+        </div>
+
+        <!-- ТОЧКА 3 -->
+        <div class="location" id="loc-3" onclick="showInfo(3)">
+            ⛺
+            <div class="loc-label">3. Кэмп</div>
+        </div>
+
+        <!-- ИНФО КАРТОЧКА -->
+        <div class="info-card" id="infoCard">
+            <span class="close-btn" onclick="hideInfo()">&times;</span>
+            <span class="card-icon" id="c-icon">Icon</span>
+            <h2 id="c-title">Title</h2>
+            <p id="c-desc" style="margin: 10px 0; color: #666; line-height: 1.5;">Description</p>
+            <p id="c-time" style="font-weight: bold; color: var(--path);">Time</p>
+            <button class="btn-action" onclick="openRSVP()">Я УЧАСТВУЮ!</button>
+        </div>
+    </div>
+
+    <!-- RSVP ФОРМА -->
+    <div class="rsvp-overlay" id="rsvpModal">
+        <div class="rsvp-box">
+            <h2>Готов к приключениям?</h2>
+            <p style="margin-bottom: 20px;">Оставь свое имя в журнале путешественников</p>
+            <input type="text" placeholder="Имя Фамилия" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 2px solid #ddd; border-radius: 5px;">
+            <button class="btn-action" onclick="alert('Ура! Ждем тебя в команде!'); document.getElementById('rsvpModal').style.display='none';">ОТПРАВИТЬ</button>
+            <div style="margin-top: 15px; font-size: 0.8rem; cursor: pointer; color: #999;" onclick="document.getElementById('rsvpModal').style.display='none'">Закрыть</div>
+        </div>
+    </div>
+
+    <script>
+        // Данные для каждой точки
+        const data = {
+            1: {
+                title: "Дом Родителей",
+                icon: "🏠",
+                desc: "Встречаемся на заднем дворе. Лимонад, легкие закуски и объятия. Родители будут плакать (от счастья).",
+                time: "⏰ 12:00"
+            },
+            2: {
+                title: "Церемония у Озера",
+                icon: "💍",
+                desc: "Самый важный момент. Мы скажем друг другу клятвы, обменяемся кольцами и, возможно, упадем в воду (шутка).",
+                time: "⏰ 14:30"
+            },
+            3: {
+                title: "Вечеринка в Лесу",
+                icon: "⛺",
+                desc: "Глэмпинг-вечеринка! Костер, гитары, маршмэллоу и танцы под звездным небом до утра.",
+                time: "⏰ 18:00"
+            }
+        };
+
+        const card = document.getElementById('infoCard');
+        const title = document.getElementById('c-title');
+        const icon = document.getElementById('c-icon');
+        const desc = document.getElementById('c-desc');
+        const time = document.getElementById('c-time');
+
+        // Показать инфо
+        function showInfo(id) {
+            // Заполняем данными
+            title.innerText = data[id].title;
+            icon.innerText = data[id].icon;
+            desc.innerText = data[id].desc;
+            time.innerText = data[id].time;
+
+            // Подсвечиваем активный пин
+            document.querySelectorAll('.location').forEach(el => el.classList.remove('active'));
+            document.getElementById('loc-' + id).classList.add('active');
+
+            // Показываем карточку
+            card.classList.add('show');
+        }
+
+        // Скрыть инфо
+        function hideInfo() {
+            card.classList.remove('show');
+            document.querySelectorAll('.location').forEach(el => el.classList.remove('active'));
+        }
+
+        // RSVP
+        function openRSVP() {
+            document.getElementById('rsvpModal').style.display = 'flex';
+        }
+
+        // --- ЛОГИКА SVG ПУТИ ---
+        // Чтобы линия соединяла точки даже при ресайзе окна
+        function updatePath() {
+            const loc1 = document.getElementById('loc-1').getBoundingClientRect();
+            const loc2 = document.getElementById('loc-2').getBoundingClientRect();
+            const loc3 = document.getElementById('loc-3').getBoundingClientRect();
+            const map = document.getElementById('map').getBoundingClientRect();
+
+            // Вычисляем центры точек относительно карты
+            const x1 = ((loc1.left + loc1.width/2) - map.left);
+            const y1 = ((loc1.top + loc1.height/2) - map.top);
+            
+            const x2 = ((loc2.left + loc2.width/2) - map.left);
+            const y2 = ((loc2.top + loc2.height/2) - map.top);
+
+            const x3 = ((loc3.left + loc3.width/2) - map.left);
+            const y3 = ((loc3.top + loc3.height/2) - map.top);
+
+            // Рисуем кривую (M=Move, Q=Quadratic Curve, T=Smooth Curve)
+            // Это простая кривая, можно усложнить
+            const pathString = `M ${x1} ${y1} Q ${(x1+x2)/2} ${y1-50} ${x2} ${y2} T ${x3} ${y3}`;
+            
+            document.getElementById('route-path').setAttribute('d', pathString);
+        }
+
+        // Обновляем линию при загрузке и ресайзе
+        window.addEventListener('resize', updatePath);
+        window.addEventListener('load', updatePath);
+        // Небольшая задержка для точного рендеринга
+        setTimeout(updatePath, 100);
+    </script>
+</body>
+</html>
+
+
+        
