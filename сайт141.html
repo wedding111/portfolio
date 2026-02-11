@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Wedding | Constantin & Victoria</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap');
+
+        :root {
+            --bg-deep: #0a1024; /* Глубокий сапфировый */
+            --bg-lighter: #111b38;
+            --gold: #d9bf77;
+            --gold-light: #f7e8b7;
+            --text: #ffffff;
+            --paper: #fcfcfc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text);
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+            width: 100vw;
+        }
+
+        /* --- 1. CHAMPAGNE BUBBLES CANVAS --- */
+        #bubbles-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 100%, #1a2a5e, var(--bg-deep) 70%);
+        }
+
+        /* --- CONTAINER --- */
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 80px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3 {
+            font-family: 'Cinzel', serif;
+            text-transform: uppercase;
+            color: var(--gold);
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            line-height: 1;
+            margin: 20px 0;
+            background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+            -webkit-background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 0 10px rgba(217, 191, 119, 0.3));
+        }
+
+        .divider {
+            height: 1px;
+            width: 150px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 30px auto;
+        }
+
+        /* --- HERO --- */
+        .hero {
+            min-height: 100vh;
+            justify-content: center;
+        }
+        .hero-date {
+            font-size: 1.5rem;
+            letter-spacing: 8px;
+            margin-bottom: 20px;
+            color: var(--gold-light);
+        }
+
+        /* --- GREETING CARD (ПРИВЕТСТВИЕ) --- */
+        .letter-card {
+            background: rgba(10, 16, 36, 0.8);
+            border: 1px solid var(--gold);
+            padding: 60px;
+            position: relative;
+            margin: 50px 0;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Декоративные уголки */
+        .letter-card::before, .letter-card::after {
+            content: ''; position: absolute; width: 30px; height: 30px;
+            border: 2px solid var(--gold);
+            transition: 0.5s;
+        }
+        .letter-card::before { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
+        .letter-card::after { bottom: 10px; right: 10px; border-left: 0; border-top: 0; }
+
+        .greeting-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #ccc;
+            max-width: 700px;
+        }
+
+        /* --- DRESS CODE (ПАЛИТРА) --- */
+        .palette-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .color-swatch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            transition: transform 0.3s;
+        }
+        .color-swatch:hover { transform: translateY(-10px); }
+
+        .circle {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        /* Блик на круге */
+        .circle::after {
+            content: ''; position: absolute; top: 10px; left: 15px;
+            width: 20px; height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transform: rotate(-45deg);
+        }
+
+        .c-navy { background: #0a1024; }
+        .c-gold { background: linear-gradient(135deg, #d9bf77, #997f3d); }
+        .c-black { background: #000; }
+        .c-beige { background: #f5f5dc; }
+
+        .color-name { font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); }
+
+        /* --- TIMER --- */
+        .timer-box {
+            border: 1px solid var(--gold);
+            padding: 40px;
+            display: flex;
+            gap: 40px;
+            background: rgba(0,0,0,0.4);
+            margin-top: 30px;
+        }
+        .t-val { font-size: 3rem; font-family: 'Cinzel'; color: var(--gold-light); }
+        .t-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* --- MAP & BUTTON --- */
+        .map-frame {
+            width: 100%; height: 350px;
+            border: 1px solid var(--gold);
+            margin: 40px 0;
+            /* Синий фильтр для карты */
+            filter: grayscale(100%) sepia(100%) hue-rotate(190deg) saturate(300%) brightness(0.7);
+        }
+
+        .rsvp-btn {
+            background: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 20px 60px;
+            font-family: 'Cinzel';
+            font-size: 1.2rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rsvp-btn::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: var(--gold); z-index: -1; transition: 0.4s;
+        }
+        .rsvp-btn:hover::before { left: 0; }
+        .rsvp-btn:hover { color: var(--bg-deep); }
+
+        footer {
+            padding: 40px;
+            border-top: 1px solid rgba(217, 191, 119, 0.2);
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .timer-box { flex-wrap: wrap; justify-content: center; gap: 20px; }
+            .letter-card { padding: 30px; }
+        }
+        
+        /* Animation Classes */
+        .reveal { opacity: 0; transform: translateY(30px); transition: 1s; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+    </style>
+</head>
+<body>
+
+    <!-- 1. CHAMPAGNE BUBBLES BG -->
+    <canvas id="bubbles-canvas"></canvas>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-date reveal active">24.10.2026</div>
+        <h1 class="reveal active">Constantin<br>&<br>Victoria</h1>
+        <div class="divider reveal active"></div>
+        <p class="reveal active" style="font-size: 1.5rem; font-style: italic;">The Royal Reception</p>
+    </section>
+
+    <div class="container">
+        
+        <!-- 2. GREETING (НОВОЕ: ПРИВЕТСТВИЕ) -->
+        <section>
+            <h2 class="reveal">Дорогие Гости</h2>
+            <div class="letter-card reveal">
+                <p class="greeting-text">
+                    Мы рады сообщить вам, что скоро состоится самое важное событие в нашей жизни.<br><br>
+                    Мы прошли долгий путь вместе, и теперь хотим разделить момент создания нашей семьи с теми, кто нам по-настоящему дорог. 
+                    Ваша поддержка и любовь всегда были для нас вдохновением.
+                    <br><br>
+                    Приглашаем вас окунуться в атмосферу праздника, любви и волшебства.
+                </p>
+                <div style="margin-top: 30px; font-family: 'Cinzel'; color: var(--gold);">
+                    С любовью, Константин и Виктория
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. DRESS CODE (НОВОЕ: ДРЕСС-КОД) -->
+        <section>
+            <h2 class="reveal">Dress Code</h2>
+            <p class="reveal" style="max-width: 600px; margin-top: 10px; color: #aaa;">
+                Мы будем признательны, если вы поддержите цветовую гамму нашего вечера. 
+                Формат: <strong>Black Tie</strong>.
+            </p>
+
+            <div class="palette-grid reveal">
+                <div class="color-swatch">
+                    <div class="circle c-navy"></div>
+                    <span class="color-name">Sapphire</span>
+                </div>
+                <div class="color-swatch">
+                    <div class="circle c-black"></div>
+                    <span class="color-name">Black</span>
+                </div>
+                <div class="color-swatch">
+                    <div class="circle c-gold"></div>
+                    <span class="color-name">Gold</span>
+                </div>
+                <div class="color-swatch">
+                    <div class="circle c-beige"></div>
+                    <span class="color-name">Cream</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. TIMER & DETAILS -->
+        <section>
+            <h2 class="reveal">До торжества</h2>
+            <div class="timer-box reveal" id="timer">
+                <!-- JS -->
+            </div>
+        </section>
+
+        <!-- 5. LOCATION & RSVP -->
+        <section>
+            <h2 class="reveal">The Palace</h2>
+            <p class="reveal">Санкт-Петербург, Дворец Великого Князя</p>
+
+            <div class="map-frame reveal">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1998.6037999827364!2d30.32943131609697!3d59.93587798187522!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696310fca64e6af%3A0x1d3a010471131153!2z0JPRgNCw0L3kLQ!5e0!3m2!1sru!2sru!4v1600000000000!5m2!1sru!2sru" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+
+            <a href="https://t.me/durov" target="_blank" class="rsvp-btn reveal">
+                Подтвердить Участие
+            </a>
+        </section>
+
+    </div>
+
+    <footer>
+        C & V Wedding 2026
+    </footer>
+
+    <script>
+        // --- 1. CHAMPAGNE BUBBLES ANIMATION ---
+        const canvas = document.getElementById('bubbles-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            initParticles();
+        }
+
+        class Bubble {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                this.x = Math.random() * width;
+                this.y = height + Math.random() * 100; // Start below screen
+                this.size = Math.random() * 3 + 1; // Small elegant bubbles
+                this.speed = Math.random() * 1 + 0.5;
+                this.alpha = Math.random() * 0.5 + 0.1;
+                this.wobble = Math.random() * Math.PI * 2;
+            }
+
+            update() {
+                this.y -= this.speed;
+                this.wobble += 0.05;
+                this.x += Math.sin(this.wobble) * 0.5; // Gentle sway
+
+                if (this.y < -10) {
+                    this.init();
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(217, 191, 119, ${this.alpha})`; // Gold color
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for(let i=0; i<150; i++) {
+                particles.push(new Bubble());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        animate();
+
+        // --- 2. TIMER ---
+        const eventDate = new Date("Oct 24, 2026 16:00:00").getTime();
+        const timerEl = document.getElementById("timer");
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = eventDate - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            timerEl.innerHTML = `
+                <div><div class="t-val">${d}</div><div class="t-label">Дней</div></div>
+                <div><div class="t-val">${h}</div><div class="t-label">Часов</div></div>
+                <div><div class="t-val">${m}</div><div class="t-label">Минут</div></div>
+                <div><div class="t-val">${s}</div><div class="t-label">Сек</div></div>
+            `;
+        }
+        setInterval(updateTimer, 1000); updateTimer();
+
+        // --- 3. SCROLL REVEAL ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
