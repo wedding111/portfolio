@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение на новоселье! | Оля & Леша</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lobster&family=Comfortaa:wght@400;700&display=swap');
+
+        body {
+            margin: 0;
+            font-family: 'Comfortaa', cursive;
+            background-color: #f3f4f6; /* Светло-серый фон */
+            color: #374151;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-family: 'Lobster', cursive;
+            font-size: 3em;
+            color: #16a085;
+            margin: 0 0 10px 0;
+        }
+
+        p {
+            font-size: 1.1em;
+            line-height: 1.7;
+        }
+
+        /* --- БЛОК ДЛЯ СКРЕТЧ-КАРТЫ --- */
+        .scratch-card-wrapper {
+            position: relative;
+            width: 100%;
+            height: 150px; /* Высота области для стирания */
+            margin: 30px 0;
+            cursor: crosshair; /* Подсказка пользователю, что здесь можно что-то делать */
+            border-radius: 10px;
+            overflow: hidden; /* Скрываем все, что выходит за рамки */
+        }
+        
+        /* Слой с секретной информацией (адресом) */
+        .hidden-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #e0f2fe; /* Небесно-голубой фон под скретч-слоем */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #0c4a6e;
+        }
+        
+        /* Слой, который будем стирать (холст) */
+        #scratch-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .date {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Новоселье!</h1>
+        <p>Мы наконец-то переехали! Мечты сбываются, коробки разобраны, и мы готовы разделить нашу радость с вами. Приходите в гости!</p>
+        
+        <p><strong>А чтобы узнать наш новый адрес, сотрите защитный слой!</strong></p>
+
+        <!-- === ИНТЕРАКТИВНЫЙ БЛОК "СКРЕТЧ-ЛОТЕРЕЯ" === -->
+        <div class="scratch-card-wrapper">
+            <!-- Секретный контент, который скрыт под холстом -->
+            <div class="hidden-content">
+                <div>Наш новый адрес:</div>
+                <div>ул. Уютная, д. 8, кв. 42</div>
+            </div>
+            <!-- Холст, который будем "стирать" -->
+            <canvas id="scratch-canvas"></canvas>
+        </div>
+
+        <div class="date">
+            Ждём вас 15 ноября 2027 в 18:00
+        </div>
+        <p>С любовью, ваши Оля и Леша</p>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('scratch-canvas');
+            const ctx = canvas.getContext('2d');
+            const wrapper = canvas.parentElement;
+
+            let isDrawing = false;
+
+            function setupCanvas() {
+                // Устанавливаем реальный размер холста равным его отображаемому размеру
+                canvas.width = wrapper.clientWidth;
+                canvas.height = wrapper.clientHeight;
+
+                // Заливаем холст "защитным" цветом
+                ctx.fillStyle = '#bdc3c7'; // Серебристый цвет
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Добавляем текст поверх защитного слоя
+                ctx.fillStyle = '#2c3e50';
+                ctx.font = 'bold 24px "Comfortaa", cursive';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('Сотри меня!', canvas.width / 2, canvas.height / 2);
+
+                // Устанавливаем "режим стирания"
+                ctx.globalCompositeOperation = 'destination-out';
+            }
+
+            function getEventPosition(event) {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+
+                if (event.changedTouches) { // для тач-событий
+                    return {
+                        x: (event.changedTouches[0].clientX - rect.left) * scaleX,
+                        y: (event.changedTouches[0].clientY - rect.top) * scaleY
+                    };
+                }
+                // для мыши
+                return {
+                    x: (event.clientX - rect.left) * scaleX,
+                    y: (event.clientY - rect.top) * scaleY
+                };
+            }
+            
+            function scratch(e) {
+                if (!isDrawing) return;
+                
+                e.preventDefault();
+                const pos = getEventPosition(e);
+                
+                // Рисуем прозрачный круг в месте курсора, "стирая" верхний слой
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, 25, 0, Math.PI * 2); // Радиус "стерки" 25px
+                ctx.fill();
+            }
+
+            // --- ОБРАБОТЧИКИ СОБЫТИЙ ---
+            canvas.addEventListener('mousedown', (e) => {
+                isDrawing = true;
+                scratch(e);
+            });
+            
+            canvas.addEventListener('touchstart', (e) => {
+                isDrawing = true;
+                scratch(e);
+            });
+
+            canvas.addEventListener('mousemove', scratch);
+            canvas.addEventListener('touchmove', scratch);
+
+            // Прекращаем "стирать", когда кнопка мыши отпущена или палец убран
+            window.addEventListener('mouseup', () => isDrawing = false);
+            window.addEventListener('touchend', () => isDrawing = false);
+            
+            // Инициализируем холст при загрузке и при изменении размера окна
+            setupCanvas();
+            window.addEventListener('resize', setupCanvas);
+        });
+    </script>
+</body>
+</html>
