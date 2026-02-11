@@ -5,244 +5,237 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Диана — Дизайнер цифровых приглашений</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400;1,700&family=Manrope:wght@300;400;600&family=Playfair+Display:ital@0;1&family=Tenor+Sans&family=Orbitron:wght@400;900&display=swap');
-
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,700&family=Manrope:wght@300;400;600&family=Great+Vibes&family=Playfair+Display:ital@0;1&family=Tenor+Sans&family=Inter:wght@300;400;600&family=Amatic+SC:wght@700&display=swap');
+        
         :root {
             --primary-purple: #140d21;
+            --secondary-purple: #1f1235;
             --accent-violet: #b388ff;
             --text-light: #f3e5f5;
             --text-muted: #ce93d8;
         }
 
-        body, html { margin: 0; padding: 0; background-color: var(--primary-purple); color: var(--text-light); font-family: 'Manrope', sans-serif; overflow-x: hidden; }
-
+        body { font-family: 'Manrope', sans-serif; background-color: var(--primary-purple); color: var(--text-light); margin: 0; font-size: 16px; overflow-x: hidden; }
+        
         /* --- НАВИГАЦИЯ --- */
         nav { 
             position: fixed; top: 0; width: 100%; z-index: 1000; 
             display: flex; justify-content: center; gap: 30px; 
-            padding: 20px 0; background: rgba(20, 13, 33, 0.9); backdrop-filter: blur(10px);
+            padding: 20px 0; background: rgba(20, 13, 33, 0.95); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(179, 136, 255, 0.1);
         }
-        nav a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
-        nav a:hover { color: #fff; }
+        nav a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        nav a:hover { color: #fff; text-shadow: 0 0 10px var(--accent-violet); }
 
-        /* --- ГЛАВНЫЕ СЕКЦИИ --- */
-        .page { display: none; min-height: 100vh; width: 100%; position: relative; }
-        .page.active { display: block; }
-        .content-container { max-width: 1200px; margin: 0 auto; padding: 80px 5vw; }
+        /* --- СТРУКТУРА --- */
+        .content-container { max-width: 1200px; margin: 0 auto; padding: 0 5vw; }
+        section.home-section { padding: 80px 0; border-bottom: 1px solid rgba(179, 136, 255, 0.05); }
+        .section-title { font-family: 'Cormorant Garamond'; font-size: clamp(2.2rem, 5vw, 3.5rem); text-align: center; margin-bottom: 50px; color: #fff; }
 
-        /* --- ГЛАВНАЯ СТРАНИЦА --- */
-        #hero { height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        #hero h1 { font-family: 'Cormorant Garamond'; font-size: clamp(3rem, 8vw, 5rem); font-style: italic; }
-        #hero h1 span { color: var(--accent-violet); }
+        /* HERO */
+        #hero-block { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        #hero-block h1 { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 700; font-size: clamp(2.8rem, 8vw, 5.5rem); margin: 0; line-height: 1.1; }
+        #hero-block h1 span { color: var(--accent-violet); }
+        #hero-block p { font-size: clamp(1.1rem, 2vw, 1.6rem); margin-top: 30px; color: var(--text-light); max-width: 800px; line-height: 1.6; font-weight: 300; }
 
-        /* --- ПОРТФОЛИО --- */
-        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; margin-top: 50px; }
+        /* ПОРТФОЛИО */
+        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
         .project-card { 
             background: rgba(255,255,255,0.03); border: 1px solid rgba(179, 136, 255, 0.1); 
-            border-radius: 15px; overflow: hidden; cursor: pointer; transition: 0.4s;
+            border-radius: 15px; overflow: hidden; transition: 0.4s ease; cursor: pointer; 
         }
         .project-card:hover { transform: translateY(-10px); border-color: var(--accent-violet); }
-        .card-preview { height: 200px; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond'; font-size: 1.5rem; text-align: center; padding: 20px; }
-        .project-card h3 { padding: 15px 15px 5px; margin: 0; font-family: 'Cormorant Garamond'; }
-        .project-card p { padding: 0 15px 20px; margin: 0; color: var(--text-muted); font-size: 0.9rem; }
+        .card-preview { width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond'; font-size: 1.2rem; }
+        .project-card h3 { margin: 15px 15px 5px; font-size: 1.3rem; font-family: 'Cormorant Garamond'; }
+        .project-card p { margin: 0 15px 20px; color: var(--text-muted); font-size: 0.85rem; }
 
-        /* --- КНОПКА НАЗАД --- */
+        /* ФИЛОСОФИЯ И ПРОЦЕСС */
+        .philosophy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .philosophy-item { text-align: center; padding: 30px; background: rgba(255,255,255,0.02); border-radius: 15px; }
+        .process-steps { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 30px; }
+        .step { flex: 1; min-width: 250px; text-align: center; }
+        .step .number { font-size: 3.5rem; font-weight: 700; color: var(--accent-violet); font-family: 'Cormorant Garamond'; opacity: 0.4; }
+
+        /* КОНТЕЙНЕР ДЛЯ ПРОСМОТРА МАКЕТОВ (FULLSCREEN) */
+        #demo-viewer {
+            position: fixed; inset: 0; background: #000; z-index: 2000;
+            display: none; flex-direction: column;
+        }
+        #demo-frame { width: 100%; height: 100%; border: none; }
+        
         .back-btn { 
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             padding: 12px 30px; background: rgba(0,0,0,0.8); color: #fff; 
-            border: 1px solid var(--accent-violet); border-radius: 50px; cursor: pointer; z-index: 2000;
-            transition: 0.3s; font-weight: 600;
+            border: 1px solid var(--accent-violet); border-radius: 50px; cursor: pointer; z-index: 2100;
+            transition: 0.3s; font-weight: 600; font-family: 'Manrope';
         }
         .back-btn:hover { background: var(--accent-violet); color: #000; }
 
-        /* --- СТИЛИ ДЛЯ ДЕМО-ОКНА --- */
-        .demo-content { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px; }
-        .demo-title { font-family: 'Cormorant Garamond'; font-size: 4rem; margin-bottom: 20px; }
-
-        /* Фоновые частицы */
-        #particles-canvas { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+        #particles-canvas { position: fixed; inset: 0; pointer-events: none; z-index: -1; }
+        footer { text-align: center; padding: 60px 0; }
+        .contact-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 30px; border-radius: 50px; text-decoration: none; color: #fff; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); }
     </style>
 </head>
 <body>
-
     <canvas id="particles-canvas"></canvas>
 
-    <nav id="main-nav">
-        <a onclick="showPage('home')">Главная</a>
-        <a onclick="document.getElementById('portfolio-section').scrollIntoView({behavior:'smooth'})">Портфолио</a>
+    <nav id="top-nav">
+        <a onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Главная</a>
+        <a onclick="document.getElementById('portfolio-section').scrollIntoView({behavior: 'smooth'})">Портфолио</a>
+        <a onclick="document.getElementById('footer-section').scrollIntoView({behavior: 'smooth'})">Контакты</a>
     </nav>
 
-    <main id="home" class="page active">
-        <section id="hero">
-            <h1>Меня зовут <span>Диана</span></h1>
-            <p>Я создаю приглашения, которые оживают в руках ваших гостей</p>
-        </section>
-
-        <section id="portfolio-section" class="content-container">
-            <h2 style="text-align:center; font-family:'Cormorant Garamond'; font-size: 3rem;">Портфолио</h2>
-            <div class="portfolio-grid">
-                
-                <div class="project-card" onclick="showPage('demo-132')">
-                    <div class="card-preview" style="background:#2b0a0a; color:#d4af37;">Deep Cherry</div>
-                    <h3>Sergey & Olga</h3>
-                    <p>Благородная вишня с золотым тиснением.</p>
-                </div>
-
-                <div class="project-card" onclick="showPage('demo-133')">
-                    <div class="card-preview" style="background:#050510; color:#00f3ff;">Space Grid</div>
-                    <h3>Max & Liza</h3>
-                    <p>Футуристичный дизайн с цифровой сеткой.</p>
-                </div>
-
-                <div class="project-card" onclick="showPage('demo-141')">
-                    <div class="card-preview" style="background:#0a1024; color:#d9bf77;">Royal Sapphire</div>
-                    <h3>Constantin & Victoria</h3>
-                    <p>Королевский синий и пузырьки шампанского.</p>
-                </div>
-
-                <div class="project-card" onclick="showPage('demo-144')">
-                    <div class="card-preview" style="background:#1a0505; color:#c5a059;">Red Velvet</div>
-                    <h3>Boris & Anna</h3>
-                    <p>Страстный красный и лепестки роз.</p>
-                </div>
-
-                <div class="project-card" onclick="showPage('demo-146')">
-                    <div class="card-preview" style="background:#006994; color:#fff;">Riviera</div>
-                    <h3>Maxim & Yana</h3>
-                    <p>Свежесть моря и эффект водной глади.</p>
-                </div>
-
-                <div class="project-card" onclick="showPage('demo-154')">
-                    <div class="card-preview" style="background:#000; color:#00f3ff;">Cyberpunk</div>
-                    <h3>Max & Kira</h3>
-                    <p>Цифровой дождь и неоновые огни.</p>
-                </div>
-
-                <div class="project-card" onclick="showPage('demo-165')">
-                    <div class="card-preview" style="background:#f9f7f2; color:#c5a059;">Silk</div>
-                    <h3>Luxury Style</h3>
-                    <p>Элегантность шелка и кремовые тона.</p>
-                </div>
-
-                <div class="project-card" onclick="showPage('demo-169')">
-                    <div class="card-preview" style="background:#0A4A32; color:#C2D3D3;">Forest</div>
-                    <h3>Лира & Сайлас</h3>
-                    <p>Магия утреннего леса и туман.</p>
-                </div>
-
+    <div id="main-content">
+        <section id="hero-block" class="home-section">
+            <div class="content-container">
+                <h1 class="headline">Здравствуйте! Меня зовут <span>Диана</span>.</h1>
+                <p class="sub-headline">
+                    Я создаю цифровые приглашения, которые задают тон всему событию.<br>
+                    Интерактивные сайты, которые влюбляют гостей в ваш праздник.
+                </p>
             </div>
         </section>
-    </main>
 
-    <section id="demo-132" class="page" style="background:#2b0a0a;">
-        <div class="demo-content">
-            <h1 class="demo-title" style="color:#d4af37">Sergey & Olga</h1>
-            <p>Здесь будет отображаться полный дизайн макета 132 (Deep Cherry)</p>
-            <button class="back-btn" onclick="showPage('home')">← НАЗАД К ПОРТФОЛИО</button>
-        </div>
-    </section>
+        <section id="portfolio-section" class="home-section">
+            <div class="content-container">
+                <h2 class="section-title">Примеры работ</h2>
+                <div class="portfolio-grid">
+                    <div class="project-card" onclick="openDemo('сайт141.html')">
+                        <div class="card-preview" style="background: #0a1024; color: #d9bf77;">Royal Sapphire</div>
+                        <h3>Constantin & Victoria</h3>
+                        <p>Королевский сапфировый стиль с анимацией пузырьков.</p>
+                    </div>
+                    <div class="project-card" onclick="openDemo('сайт144.html')">
+                        <div class="card-preview" style="background: #1a0505; color: #c5a059;">Red Velvet</div>
+                        <h3>Boris & Anna</h3>
+                        <p>Глубокий винный цвет и эффект падающих лепестков роз.</p>
+                    </div>
+                    <div class="project-card" onclick="openDemo('сайт169.html')">
+                        <div class="card-preview" style="background: #0A4A32; color: #C2D3D3;">Forest Mystery</div>
+                        <h3>Лира & Сайлас</h3>
+                        <p>Магический лесной дизайн с эффектом тумана.</p>
+                    </div>
+                    <div class="project-card" onclick="openDemo('сайт154.html')">
+                        <div class="card-preview" style="background: #000; color: #00f3ff; font-family: 'Orbitron';">Digital Love</div>
+                        <h3>Max & Kira</h3>
+                        <p>Стиль «Киберпанк» с цифровым дождем Matrix.</p>
+                    </div>
+                    <div class="project-card" onclick="openDemo('сайт146.html')">
+                        <div class="card-preview" style="background: #006994; color: #fff;">Riviera Water</div>
+                        <h3>Maxim & Yana</h3>
+                        <p>Морская свежесть с интерактивной гладью воды.</p>
+                    </div>
+                    <div class="project-card" onclick="openDemo('сайт132.html')">
+                        <div class="card-preview" style="background: #2b0a0a; color: #d4af37;">Deep Cherry</div>
+                        <h3>Sergey & Olga</h3>
+                        <p>Благородная вишня с золотым тиснением.</p>
+                    </div>
+                    <div class="project-card" onclick="openDemo('сайт134.html')">
+                        <div class="card-preview" style="background: #021a1a; color: #f4eeb1;">Magic Dust</div>
+                        <h3>Roman & Sofia</h3>
+                        <p>Фэнтези-атмосфера со «звездной пылью».</p>
+                    </div>
+                    <div class="project-card" onclick="openDemo('сайт143.html')">
+                        <div class="card-preview" style="background: #090014; border-bottom: 2px solid #d500f9;">Neon Fantasy</div>
+                        <h3>Mark & Eva</h3>
+                        <p>Яркий футуристичный дизайн с неоновым свечением.</p>
+                    </div>
+                    <div class="project-card" onclick="openDemo('сайт133.html')">
+                        <div class="card-preview" style="background: #050510; color: #00f3ff;">Space Grid</div>
+                        <h3>Max & Liza</h3>
+                        <p>Космический минимализм с анимированным небом.</p>
+                    </div>
+                    <div class="project-card" onclick="openDemo('сайт165.html')">
+                        <div class="card-preview" style="background: #f9f7f2; color: #c5a059;">Silk Elegance</div>
+                        <h3>Luxury Wedding</h3>
+                        <p>Нежный кремовый дизайн с 3D-анимацией.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <section id="demo-133" class="page" style="background:#050510;">
-        <div class="demo-content">
-            <h1 class="demo-title" style="color:#00f3ff; font-family:'Orbitron'">MAX & LIZA</h1>
-            <p>Здесь будет отображаться полный дизайн макета 133 (Space Grid)</p>
-            <button class="back-btn" onclick="showPage('home')">← НАЗАД К ПОРТФОЛИО</button>
-        </div>
-    </section>
+        <section class="home-section">
+            <div class="content-container">
+                <h2 class="section-title">Моя философия</h2>
+                <div class="philosophy-grid">
+                    <div class="philosophy-item"><span class="icon">🕊️</span><h3>Живая анимация</h3><p>Приглашение — это живой сценарий.</p></div>
+                    <div class="philosophy-item"><span class="icon">⚡</span><h3>Скорость и легкость</h3><p>Сайт откроется мгновенно.</p></div>
+                    <div class="philosophy-item"><span class="icon">💎</span><h3>Эксклюзивность</h3><p>Каждый проект пишется вручную на коде.</p></div>
+                </div>
+            </div>
+        </section>
 
-    <section id="demo-141" class="page" style="background:#0a1024;">
-        <div class="demo-content">
-            <h1 class="demo-title" style="color:#d9bf77">Constantin & Victoria</h1>
-            <p>Демонстрация макета 141 (Royal Sapphire)</p>
-            <button class="back-btn" onclick="showPage('home')">← НАЗАД К ПОРТФОЛИО</button>
-        </div>
-    </section>
+        <section class="home-section">
+            <div class="content-container">
+                <h2 class="section-title">Как я работаю</h2>
+                <div class="process-steps">
+                    <div class="step"><div class="number">1.</div><h3>Идея</h3><p>Обсуждаем ваши предпочтения.</p></div>
+                    <div class="step"><div class="number">2.</div><h3>Разработка</h3><p>Я создаю уникальный дизайн.</p></div>
+                    <div class="step"><div class="number">3.</div><h3>Готово</h3><p>Вы получаете ссылку.</p></div>
+                </div>
+            </div>
+        </section>
 
-    <section id="demo-144" class="page" style="background:#1a0505;">
-        <div class="demo-content">
-            <h1 class="demo-title" style="color:#c5a059">Boris & Anna</h1>
-            <p>Демонстрация макета 144 (Red Velvet)</p>
-            <button class="back-btn" onclick="showPage('home')">← НАЗАД К ПОРТФОЛИО</button>
-        </div>
-    </section>
+        <footer id="footer-section">
+            <div class="content-container">
+                <h2 class="section-title">Создадим шедевр вместе?</h2>
+                <a href="https://t.me/di_ana_13" target="_blank" class="contact-btn">Написать в Telegram</a>
+                <p style="margin-top: 40px; color: var(--text-muted); font-size: 0.8rem;">© 2025 Диана</p>
+            </div>
+        </footer>
+    </div>
 
-    <section id="demo-146" class="page" style="background:#006994;">
-        <div class="demo-content">
-            <h1 class="demo-title" style="color:#fff">Maxim & Yana</h1>
-            <p>Демонстрация макета 146 (Riviera)</p>
-            <button class="back-btn" onclick="showPage('home')">← НАЗАД К ПОРТФОЛИО</button>
-        </div>
-    </section>
-
-    <section id="demo-154" class="page" style="background:#000;">
-        <div class="demo-content">
-            <h1 class="demo-title" style="color:#00f3ff; font-family:'Orbitron'">CYBER WEDDING</h1>
-            <p>Демонстрация макета 154 (Matrix Style)</p>
-            <button class="back-btn" onclick="showPage('home')">← НАЗАД К ПОРТФОЛИО</button>
-        </div>
-    </section>
-
-    <section id="demo-165" class="page" style="background:#f9f7f2; color:#4a443f;">
-        <div class="demo-content">
-            <h1 class="demo-title" style="color:#c5a059">Silk Elegance</h1>
-            <p>Демонстрация макета 165 (Luxury Silk)</p>
-            <button class="back-btn" onclick="showPage('home')">← НАЗАД К ПОРТФОЛИО</button>
-        </div>
-    </section>
-
-    <section id="demo-169" class="page" style="background:#0A4A32;">
-        <div class="demo-content">
-            <h1 class="demo-title" style="color:#C2D3D3">Лира & Сайлас</h1>
-            <p>Демонстрация макета 169 (Forest Mystery)</p>
-            <button class="back-btn" onclick="showPage('home')">← НАЗАД К ПОРТФОЛИО</button>
-        </div>
-    </section>
+    <div id="demo-viewer">
+        <iframe id="demo-frame" src=""></iframe>
+        <button class="back-btn" onclick="closeDemo()">← НАЗАД К ПОРТФОЛИО</button>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <script>
-        // Функция переключения страниц
-        function showPage(pageId) {
-            const nav = document.getElementById('main-nav');
-            
-            // Прячем навигацию, если мы в режиме демо
-            if (pageId === 'home') {
-                nav.style.display = 'flex';
-            } else {
-                nav.style.display = 'none';
-            }
+        const viewer = document.getElementById('demo-viewer');
+        const frame = document.getElementById('demo-frame');
+        const mainContent = document.getElementById('main-content');
+        const topNav = document.getElementById('top-nav');
 
-            // Анимация перехода
-            gsap.to(".page.active", { opacity: 0, duration: 0.4, onComplete: () => {
-                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                const nextPage = document.getElementById(pageId);
-                nextPage.classList.add('active');
-                gsap.fromTo(nextPage, { opacity: 0 }, { opacity: 1, duration: 0.4 });
-                window.scrollTo(0,0);
-            }});
+        function openDemo(url) {
+            frame.src = url; // Загружаем файл в iframe
+            viewer.style.display = 'flex';
+            mainContent.style.display = 'none'; // Скрываем главную, чтобы не мешала
+            topNav.style.display = 'none';
+            window.scrollTo(0,0);
         }
 
-        // Фоновые частицы
+        function closeDemo() {
+            viewer.style.display = 'none';
+            mainContent.style.display = 'block'; // Возвращаем главную
+            topNav.style.display = 'flex';
+            frame.src = ""; // Очищаем iframe
+        }
+
+        // ВАШИ ЧАСТИЦЫ
         const canvas = document.getElementById('particles-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         let particles = [];
-        function init() {
-            for(let i=0; i<50; i++) {
-                particles.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, size:Math.random()*2, spX:Math.random()*0.5-0.25, spY:Math.random()*0.5-0.25});
+        function initParticles() {
+            particles = [];
+            for(let i=0; i<40; i++) {
+                particles.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, size:Math.random()*2, spX:(Math.random()-0.5)*0.4, spY:(Math.random()-0.5)*0.4});
             }
         }
-        function animate() {
-            ctx.clearRect(0,0,canvas.width, canvas.height);
-            ctx.fillStyle = "rgba(179, 136, 255, 0.3)";
+        function drawParticles() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = 'rgba(179, 136, 255, 0.3)';
             particles.forEach(p => {
-                p.x += p.spX; p.y += p.spY;
-                if(p.x<0 || p.x>canvas.width) p.spX *= -1;
-                if(p.y<0 || p.y>canvas.height) p.spY *= -1;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+                p.x+=p.spX; p.y+=p.spY;
+                if(p.x<0||p.x>canvas.width)p.spX*=-1;
+                if(p.y<0||p.y>canvas.height)p.spY*=-1;
+                ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,Math.PI*2); ctx.fill();
             });
-            requestAnimationFrame(animate);
+            requestAnimationFrame(drawParticles);
         }
-        init(); animate();
+        initParticles(); drawParticles();
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; initParticles(); });
     </script>
 </body>
 </html>
