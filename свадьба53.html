@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lavender Wedding</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(to bottom, #a18cd1 0%, #fbc2eb 100%); /* Закат в Провансе */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            color: #4a3b52;
+        }
+
+        /* --- СВЕТЛЯЧКИ --- */
+        .firefly {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff;
+            animation: fly 10s infinite linear;
+        }
+        @keyframes fly {
+            0% { transform: translate(0, 0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translate(100px, -100px); opacity: 0; }
+        }
+
+        /* --- ТРАВА (ЛАВАНДА) --- */
+        .field {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 150px;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .grass {
+            width: 4px;
+            background: #6a4a8f;
+            border-radius: 5px 5px 0 0;
+            transform-origin: bottom center;
+            animation: sway 3s infinite ease-in-out alternate;
+        }
+        /* Цветочки на траве */
+        .grass::before {
+            content: ''; position: absolute; top: 10px; left: -3px;
+            width: 10px; height: 10px; background: #8e44ad; border-radius: 50%;
+        }
+        .grass::after {
+            content: ''; position: absolute; top: 30px; right: -3px;
+            width: 8px; height: 8px; background: #9b59b6; border-radius: 50%;
+        }
+
+        @keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
+
+        /* --- КАРТОЧКА --- */
+        .card {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 10;
+            max-width: 500px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Amatic SC', cursive;
+            font-size: 4rem;
+            margin: 0;
+            color: #6a4a8f;
+        }
+
+        p { font-size: 1.3rem; margin: 20px 0; font-style: italic; }
+
+        .btn-lavender {
+            background: #6a4a8f;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-lavender:hover { background: #8e44ad; transform: translateY(-3px); }
+
+    </style>
+</head>
+<body>
+
+    <!-- Светлячки (генерируются JS) -->
+    <div id="fireflies"></div>
+
+    <div class="card">
+        <h1>Саша + Маша</h1>
+        <p>
+            Любовь витает в воздухе...<br>
+            Приглашаем вас на нашу свадьбу в стиле Прованс.
+        </p>
+        <hr style="border: 0; border-top: 1px dashed #aaa; margin: 30px 0;">
+        <div style="margin-bottom: 30px; font-weight: bold;">
+            15 ИЮЛЯ 2026 • 16:00<br>
+            Загородный клуб "Лаванда"
+        </div>
+        <button class="btn-lavender" onclick="alert('Мы вас ждем!')">Я ПРИДУ</button>
+    </div>
+
+    <!-- Поле с цветами -->
+    <div class="field" id="field"></div>
+
+    <script>
+        // 1. Создаем светлячков
+        const fContainer = document.getElementById('fireflies');
+        for(let i=0; i<30; i++) {
+            let f = document.createElement('div');
+            f.className = 'firefly';
+            f.style.left = Math.random() * 100 + 'vw';
+            f.style.top = Math.random() * 80 + 'vh';
+            f.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            f.style.animationDelay = Math.random() * 5 + 's';
+            fContainer.appendChild(f);
+        }
+
+        // 2. Создаем траву
+        const gContainer = document.getElementById('field');
+        for(let i=0; i<60; i++) {
+            let g = document.createElement('div');
+            g.className = 'grass';
+            g.style.height = (Math.random() * 50 + 50) + 'px'; // Разная высота
+            g.style.animationDuration = (Math.random() * 2 + 2) + 's'; // Разная скорость
+            g.style.animationDelay = Math.random() + 's';
+            gContainer.appendChild(g);
+        }
+    </script>
+</body>
+</html>
