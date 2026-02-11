@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destiny | Wedding Invitation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #1a0b2e; /* Глубокий фиолетовый */
+            --card-bg: #2d1b4e;
+            --gold: #d4af37;
+            --text: #e0dbe6;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text);
+            font-family: 'Cormorant Garamond', serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 40px 20px;
+        }
+
+        /* --- ФОНОВЫЕ ЗВЕЗДЫ --- */
+        .stars {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            z-index: -1;
+            animation: twinkle 20s infinite linear;
+        }
+
+        @keyframes twinkle {
+            from { transform: translateY(0); }
+            to { transform: translateY(-550px); }
+        }
+
+        /* --- ЗАГОЛОВОК --- */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 3rem;
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* --- СЕТКА КАРТ --- */
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            perspective: 1000px; /* Для 3D эффекта */
+            max-width: 1000px;
+        }
+
+        /* --- КАРТА --- */
+        .card-wrapper {
+            background-color: transparent;
+            width: 260px;
+            height: 400px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* Класс для переворота */
+        .card-wrapper.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        /* Общие стили для переда и зада */
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            border: 2px solid var(--gold);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* РУБАШКА (Лицевая сторона, пока не нажали) */
+        .card-front {
+            background-color: var(--card-bg);
+            background-image: repeating-linear-gradient(
+                45deg,
+                rgba(212, 175, 55, 0.05) 0px,
+                rgba(212, 175, 55, 0.05) 2px,
+                transparent 2px,
+                transparent 10px
+            );
+        }
+
+        .mystic-symbol {
+            font-size: 4rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 5px var(--gold));
+        }
+
+        .instruction {
+            font-family: 'Cinzel Decorative';
+            color: var(--gold);
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+
+        /* ОБОРОТНАЯ СТОРОНА (Контент) */
+        .card-back {
+            background-color: #fff;
+            color: #1a1a1a;
+            transform: rotateY(180deg);
+            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+        }
+
+        .card-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px solid var(--gold);
+        }
+
+        .arcana-name {
+            font-family: 'Cinzel Decorative';
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--gold);
+            width: 100%;
+            padding-bottom: 5px;
+        }
+
+        .card-details {
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        /* --- RSVP SECION (Появляется позже) --- */
+        .rsvp-section {
+            margin-top: 60px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 1s;
+            pointer-events: none; /* Нельзя нажать пока скрыто */
+        }
+
+        .rsvp-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .gold-btn {
+            background: transparent;
+            color: var(--gold);
+            font-family: 'Cinzel Decorative';
+            font-size: 1.2rem;
+            padding: 15px 40px;
+            border: 1px solid var(--gold);
+            cursor: pointer;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gold-btn:hover {
+            background: var(--gold);
+            color: var(--bg-color);
+            box-shadow: 0 0 20px var(--gold);
+        }
+
+        @media (max-width: 800px) {
+            .cards-container { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stars"></div>
+
+    <header>
+        <div class="subtitle">Судьба свела нас</div>
+        <h1>Игорь & Мария</h1>
+        <div class="subtitle">Открой карты, чтобы узнать детали</div>
+    </header>
+
+    <div class="cards-container">
+        
+        <!-- КАРТА 1: ПАРА -->
+        <div class="card-wrapper" onclick="flipCard(this)">
+            <div class="card-inner">
+                <!-- Рубашка -->
+                <div class="card-front">
+                    <div class="mystic-symbol">VI</div>
+                    <div class="instruction">Влюбленные</div>
+                </div>
+                <!-- Лицо -->
+                <div class="card-back">
+                    <div class="arcana-name">THE LOVERS</div>
+                    <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" class="card-img">
+                    <div class="card-details">
+                        Мы решили объединить наши пути. <br>
+                        Приглашаем вас стать свидетелями нашей магии.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- КАРТА 2: ДАТА -->
+        <div class="card-wrapper" onclick="flipCard(this)">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="mystic-symbol">XVII</div>
+                    <div class="instruction">Звезда</div>
+                </div>
+                <div class="card-back">
+                    <div class="arcana-name">THE STAR</div>
+                    <div style="font-size: 3rem; color: var(--gold);">20</div>
+                    <div style="font-size: 1.5rem;">ОКТЯБРЯ</div>
+                    <div style="font-size: 1.2rem; margin-top: 10px;">2026 ГОДА</div>
+                    <div style="border-top: 1px solid #ccc; margin-top: 15px; padding-top: 10px;">
+                        Сбор: 16:30
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- КАРТА 3: ЛОКАЦИЯ -->
+        <div class="card-wrapper" onclick="flipCard(this)">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="mystic-symbol">XXI</div>
+                    <div class="instruction">Мир</div>
+                </div>
+                <div class="card-back">
+                    <div class="arcana-name">THE WORLD</div>
+                    <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" class="card-img">
+                    <div class="card-details">
+                        <strong>ЗАМОК "БИП"</strong><br>
+                        г. Павловск<br>
+                        ул. Мариинская, 4
+                    </div>
+                    <div style="margin-top: 15px; font-size: 0.9rem; font-style: italic;">
+                        Dress Code: Velvet & Gold
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RSVP (ПОЯВЛЯЕТСЯ ПОСЛЕ ОТКРЫТИЯ КАРТ) -->
+    <div class="rsvp-section" id="rsvp">
+        <h2 style="font-family: 'Cinzel Decorative'; color: var(--gold); margin-bottom: 20px;">Карты говорят... Вы придете?</h2>
+        <form onsubmit="alert('Судьба записана!'); return false;">
+            <input type="text" placeholder="Ваше Имя" style="background: transparent; border: none; border-bottom: 1px solid var(--gold); padding: 10px; color: white; width: 300px; text-align: center; font-family: 'Cormorant Garamond'; font-size: 1.2rem; margin-bottom: 20px;">
+            <br>
+            <button class="gold-btn">Исполнить Предначертанное</button>
+        </form>
+    </div>
+
+    <script>
+        let flippedCount = 0;
+
+        function flipCard(card) {
+            // Если карта уже перевернута, ничего не делаем
+            if (card.classList.contains('flipped')) return;
+
+            // Переворачиваем
+            card.classList.add('flipped');
+            flippedCount++;
+
+            // Если открыты все 3 карты, показываем форму RSVP
+            if (flippedCount === 3) {
+                setTimeout(() => {
+                    document.getElementById('rsvp').classList.add('visible');
+                    // Плавный скролл к форме
+                    document.getElementById('rsvp').scrollIntoView({behavior: "smooth"});
+                }, 800);
+            }
+        }
+    </script>
+</body>
+</html>
+
