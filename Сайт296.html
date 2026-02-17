@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Александр & Мария | Royal Blue</title>
+    
+    <!-- Шрифты: Cormorant (С засечками) и Montserrat (Круглый) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Яркий Королевский Синий */
+            --blue-royal: #2c5aa0;
+            --blue-light: #4b7bc4;
+            
+            /* Серый фон */
+            --bg-grey: #f4f4f6;
+            
+            /* Текст */
+            --text-black: #222222;
+            --heart-red: #e74c3c;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- ЭФФЕКТ СЕРЕБРА (Текст) --- */
+        .silver-text {
+            background: linear-gradient(to bottom, #ffffff 0%, #c0c0c0 40%, #e0e0e0 60%, #a0a0a0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* --- ЛЕТАЮЩИЕ ЛЕПЕСТКИ (Фон) --- */
+        #petals-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 999; /* Поверх всего */
+        }
+
+        .petal {
+            position: absolute;
+            background: #fff;
+            border-radius: 100% 0 100% 0;
+            opacity: 0.8;
+            animation: fall linear infinite;
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+        }
+
+        /* Синий лепесток */
+        .petal.p-blue { background: var(--blue-light); }
+        /* Серебряный лепесток */
+        .petal.p-silver { background: #dcdcdc; }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(110vh) translateX(50px) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- 1. HEADER (Синий) --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, var(--blue-royal), #1e3c72);
+            padding: 20px;
+            position: relative;
+        }
+
+        .invite-label {
+            color: #ccc;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 10vw, 6rem); /* Адаптивный размер */
+            line-height: 1.1;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        /* Анимация имен */
+        .hero-name {
+            display: block;
+            opacity: 0;
+            transform: translateY(50px) scale(0.9);
+            animation: silver-rise 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .name-1 { animation-delay: 0.2s; }
+        .amp { animation-delay: 0.5s; font-size: 3rem; font-style: italic; display: block; margin: 10px 0; }
+        .name-2 { animation-delay: 0.8s; }
+
+        @keyframes silver-rise {
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .date-box {
+            margin-top: 40px;
+            border: 1px solid #fff;
+            padding: 10px 30px;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            color: #fff;
+            border-radius: 2px;
+        }
+
+        /* --- ОБЩИЕ СЕКЦИИ --- */
+        section {
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        /* ЧЕРЕДОВАНИЕ ФОНОВ */
+        .section-grey {
+            background-color: var(--bg-grey);
+            color: var(--text-black);
+        }
+
+        .section-blue {
+            background-color: var(--blue-royal);
+            color: #fff;
+        }
+
+        /* Заголовки */
+        .section-grey h2 {
+            font-family: 'Cormorant Garamond';
+            font-size: 3rem;
+            color: var(--blue-royal);
+            margin-bottom: 30px;
+        }
+
+        .section-blue h2 {
+            font-family: 'Cormorant Garamond';
+            font-size: 3rem;
+            /* Серебряный заголовок на синем */
+            background: linear-gradient(to bottom, #fff, #ccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+        }
+
+        p { font-size: 1.2rem; line-height: 1.6; margin-bottom: 20px; }
+
+        /* --- ТАЙМЕР (На сером фоне - черный текст) --- */
+        .timer-row {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .t-box {
+            min-width: 80px;
+            border-top: 2px solid var(--blue-royal);
+            padding-top: 10px;
+        }
+
+        .t-num { font-family: 'Cormorant Garamond'; font-size: 3rem; font-weight: bold; display: block; line-height: 1; }
+        .t-lbl { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- КАЛЕНДАРЬ (На синем фоне) --- */
+        .calendar-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .day-name { font-weight: bold; color: #b0c4de; font-size: 0.9rem; }
+        .day { padding: 10px; color: #e0e0e0; }
+
+        /* Сердечко на дате */
+        .day.special {
+            position: relative;
+            background: #fff;
+            color: var(--blue-royal);
+            font-weight: bold;
+            border-radius: 50%; /* Кружок */
+            animation: pulse 2s infinite;
+        }
+
+        .day.special::after {
+            content: '♥';
+            position: absolute;
+            top: -15px; left: 50%; transform: translateX(-50%);
+            color: #fff; /* Белое сердечко сверху */
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px var(--blue-royal);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+
+        /* --- КАРТА (Квадратная на сером фоне) --- */
+        .map-square {
+            width: 100%;
+            max-width: 500px;
+            /* Квадрат (Aspect Ratio) */
+            aspect-ratio: 1 / 1; 
+            margin: 40px auto 0;
+            border: 10px solid #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        iframe { width: 100%; height: 100%; border: 0; filter: saturate(0.8); }
+
+        /* --- ДРЕСС-КОД --- */
+        .palette {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .color-dot {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* --- КНОПКА (Серебряная) --- */
+        .btn-silver {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 20px 60px;
+            /* Серебряный градиент */
+            background: linear-gradient(135deg, #e0e0e0, #ffffff, #c0c0c0);
+            color: var(--text-black);
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+
+        .btn-silver:hover { transform: translateY(-3px); }
+
+        @media (max-width: 600px) {
+            .timer-row { gap: 15px; }
+            .t-num { font-size: 2rem; }
+            .map-square { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Летающие лепестки -->
+    <div id="petals-container"></div>
+
+    <!-- 1. HEADER (Синий фон) -->
+    <header>
+        <span class="invite-label">Приглашение на свадьбу</span>
+        <h1>
+            <span class="hero-name name-1 silver-text">Александр</span>
+            <span class="hero-name amp silver-text">&</span>
+            <span class="hero-name name-2 silver-text">София</span>
+        </h1>
+        <div class="date-box">20 СЕНТЯБРЯ 2026</div>
+    </header>
+
+    <!-- 2. ИНФО + ТАЙМЕР (Серый фон) -->
+    <section class="section-grey">
+        <h2>Дорогие гости!</h2>
+        <p>Мы будем счастливы видеть вас на нашем празднике.<br>Разделите с нами этот особенный день.</p>
+        
+        <div class="timer-row" id="timer">
+            <div class="t-box"><span class="t-num" id="d">00</span><span class="t-lbl">Дней</span></div>
+            <div class="t-box"><span class="t-num" id="h">00</span><span class="t-lbl">Часов</span></div>
+            <div class="t-box"><span class="t-num" id="m">00</span><span class="t-lbl">Мин</span></div>
+            <div class="t-box"><span class="t-num" id="s">00</span><span class="t-lbl">Сек</span></div>
+        </div>
+    </section>
+
+    <!-- 3. КАЛЕНДАРЬ (Синий фон) -->
+    <section class="section-blue">
+        <h2 class="silver-text">Сентябрь 2026</h2>
+        
+        <div class="calendar-container">
+            <div class="cal-grid">
+                <div class="day-name">ПН</div><div class="day-name">ВТ</div><div class="day-name">СР</div><div class="day-name">ЧТ</div><div class="day-name">ПТ</div><div class="day-name">СБ</div><div class="day-name">ВС</div>
+                
+                <div class="day"></div> <div class="day">1</div> <div class="day">2</div> <div class="day">3</div> <div class="day">4</div> <div class="day">5</div> <div class="day">6</div>
+                <div class="day">7</div> <div class="day">8</div> <div class="day">9</div> <div class="day">10</div> <div class="day">11</div> <div class="day">12</div> <div class="day">13</div>
+                <div class="day">14</div> <div class="day">15</div> <div class="day">16</div> <div class="day">17</div> <div class="day">18</div> <div class="day">19</div>
+                
+                <!-- ДАТА -->
+                <div class="day special">20</div>
+                
+                <div class="day">21</div> <div class="day">22</div> <div class="day">23</div> <div class="day">24</div> <div class="day">25</div> <div class="day">26</div> <div class="day">27</div>
+                <div class="day">28</div> <div class="day">29</div> <div class="day">30</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. ЛОКАЦИЯ (Серый фон) -->
+    <section class="section-grey">
+        <h2>Локация & Дресс-код</h2>
+        <p>Цветовая гамма: Синий, Серебро, Серый.</p>
+        <div class="palette">
+            <div class="color-dot" style="background: #2c5aa0;"></div>
+            <div class="color-dot" style="background: #c0c0c0;"></div>
+            <div class="color-dot" style="background: #e0e0e0;"></div>
+        </div>
+
+        <p style="margin-top: 40px;">Ресторан "Grand Palace", Санкт-Петербург</p>
+        
+        <!-- Квадратная карта -->
+        <div class="map-square">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1998.6037873639528!2d30.3141!3d59.9386!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z0KHQsNC90LrRgi3Qn9C10YLQtdGA0LHRg9GA0LM!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <a href="https://t.me/durov" target="_blank" class="btn-silver">Написать нам</a>
+    </section>
+
+    <script>
+        // --- 1. Лепестки (Синие и Серебряные) ---
+        const container = document.getElementById('petals-container');
+
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+            
+            // Чередуем цвета (синий / серебро)
+            if (Math.random() > 0.5) {
+                petal.classList.add('p-blue');
+            } else {
+                petal.classList.add('p-silver');
+            }
+            
+            // Размер
+            const size = Math.random() * 15 + 8;
+            petal.style.width = size + 'px';
+            petal.style.height = size + 'px';
+            
+            // Позиция
+            petal.style.left = Math.random() * 100 + 'vw';
+            
+            // Скорость
+            const duration = Math.random() * 5 + 8;
+            petal.style.animationDuration = duration + 's';
+            
+            container.appendChild(petal);
+
+            setTimeout(() => { petal.remove(); }, duration * 1000);
+        }
+
+        setInterval(createPetal, 400);
+
+        // --- 2. Таймер ---
+        const target = new Date('September 20, 2026 15:00:00').getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
