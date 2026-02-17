@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Алиса & Константин | Surreal Wedding</title>
+    
+    <!-- Шрифты: Pinyon Script (Магический) и Alice (Текстовый) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alice&family=Pinyon+Script&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deep: #120a2e; /* Глубокий космос */
+            --gold: #d4af37;
+            --cheshire-purple: #a65acc;
+            --alice-blue: #7cb9e8;
+            --white-soft: #f0f0f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--white-soft);
+            font-family: 'Alice', serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- ФОН (Дымка и Улыбка) --- */
+        .fog-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, #2a1b4a, #120a2e 70%);
+            z-index: -2;
+        }
+
+        /* Чеширская улыбка (CSS Shadow) */
+        .cat-smile {
+            position: fixed;
+            top: 15%; right: 10%;
+            width: 200px; height: 100px;
+            border-radius: 50%;
+            box-shadow: 0 15px 0 0 var(--cheshire-purple); /* Только нижняя тень создает улыбку */
+            filter: drop-shadow(0 0 20px var(--cheshire-purple)) blur(2px);
+            opacity: 0;
+            animation: smile-fade 10s infinite;
+            z-index: -1;
+            transform: rotate(10deg);
+        }
+
+        @keyframes smile-fade {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 0.8; }
+        }
+
+        /* --- ЛЕТАЮЩИЕ КАРТЫ (Изогнутые) --- */
+        .floating-cards {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .card-shape {
+            position: absolute;
+            width: 60px; height: 90px;
+            background: #fff;
+            border-radius: 10px; /* Скругленные углы */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: #c92a2a;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            /* Изгиб карты */
+            clip-path: path('M 5,0 Q 30,10 55,0 L 60,90 Q 30,80 0,90 Z'); 
+            animation: float-card 15s linear infinite;
+            opacity: 0.7;
+        }
+
+        .c-black { color: #000; }
+
+        @keyframes float-card {
+            0% { transform: translateY(110vh) rotate(0deg) scale(0.8); }
+            100% { transform: translateY(-10vh) rotate(360deg) scale(1); }
+        }
+
+        /* --- HEADER --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* --- ШЛЯПА ШЛЯПНИКА (Soft Blob Art) --- */
+        .hat-container {
+            position: relative;
+            width: 250px; height: 250px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 30px rgba(74, 43, 105, 0.5));
+            animation: breathe 6s ease-in-out infinite;
+        }
+
+        /* Тулья шляпы */
+        .hat-top {
+            position: absolute;
+            bottom: 40px; left: 50%; transform: translateX(-50%);
+            width: 140px; height: 160px;
+            background: linear-gradient(135deg, #2d4a3e, #1a2e26);
+            /* Жидкая форма */
+            border-radius: 45% 55% 20% 20% / 50% 50% 10% 10%;
+        }
+
+        /* Поля шляпы */
+        .hat-brim {
+            position: absolute;
+            bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: 220px; height: 40px;
+            background: #1a2e26;
+            border-radius: 50%; /* Овал */
+            transform: translateX(-50%) rotate(-5deg);
+        }
+
+        /* Лента */
+        .hat-ribbon {
+            position: absolute;
+            bottom: 45px; left: 50%; transform: translateX(-50%);
+            width: 145px; height: 40px;
+            background: #a65acc;
+            border-radius: 10px;
+            opacity: 0.8;
+            mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+        }
+
+        /* Карточка 10/6 */
+        .hat-card-tag {
+            position: absolute;
+            bottom: 50px; right: 40px;
+            background: #fff;
+            color: #000;
+            padding: 5px 10px;
+            font-family: 'Alice';
+            font-weight: bold;
+            transform: rotate(15deg);
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.05) rotate(2deg); }
+        }
+
+        h1 {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 5rem;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            line-height: 1.1;
+            z-index: 10;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            margin-top: 20px;
+            color: var(--alice-blue);
+            text-transform: uppercase;
+        }
+
+        /* --- SECTIONS (Зеркала) --- */
+        section {
+            padding: 100px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Жидкое зеркало */
+        .mirror-frame {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            /* Асимметричная капля */
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            padding: 60px;
+            margin-bottom: 50px;
+            box-shadow: inset 0 0 30px rgba(255,255,255,0.1);
+            animation: morph-mirror 10s infinite alternate;
+        }
+
+        @keyframes morph-mirror {
+            0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        }
+
+        h2 {
+            font-family: 'Pinyon Script';
+            font-size: 3.5rem;
+            color: var(--alice-blue);
+            margin-bottom: 30px;
+        }
+
+        /* --- ЧАСЫ КРОЛИКА (Таймер) --- */
+        .rabbit-watch {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .watch-face {
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            background: radial-gradient(#fff, #eee);
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            position: relative;
+        }
+
+        /* Ушки часов */
+        .watch-face::before {
+            content: '';
+            position: absolute;
+            top: -10px; left: 50%; transform: translateX(-50%);
+            width: 10px; height: 10px;
+            background: var(--gold);
+            border-radius: 50%;
+        }
+
+        .wf-num { font-family: 'Alice'; font-size: 2rem; font-weight: bold; }
+        .wf-lbl { font-size: 0.6rem; text-transform: uppercase; color: #555; }
+
+        /* --- КРОЛИЧЬЯ НОРА (Список) --- */
+        .hole-list {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .hole-item {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0; /* JS reveal */
+            transform: translateY(20px);
+            transition: all 1s;
+        }
+
+        .hole-item.visible { opacity: 1; transform: translateY(0); }
+
+        .time-gold { color: var(--gold); font-family: 'Pinyon Script'; font-size: 2rem; display: block; }
+
+        /* --- КАРТА (Замочная скважина мягкая) --- */
+        .keyhole-soft {
+            width: 100%;
+            height: 400px;
+            /* Мягкая форма замочной скважины */
+            clip-path: path("M 150 0 Q 250 0 250 100 Q 250 180 180 200 L 220 400 L 80 400 L 120 200 Q 50 180 50 100 Q 50 0 150 0 Z");
+            background: #fff;
+            margin: 40px auto;
+            transition: clip-path 1s;
+            max-width: 300px; /* Ограничим ширину для формы */
+        }
+        
+        .keyhole-soft:hover {
+            /* При наведении превращается в овал */
+            clip-path: ellipse(100% 100% at 50% 50%);
+        }
+
+        iframe { width: 100%; height: 100%; filter: hue-rotate(240deg) invert(90%); }
+
+        /* --- КНОПКА (Зелье) --- */
+        .potion-btn {
+            display: inline-block;
+            margin-top: 50px;
+            width: 120px; height: 160px;
+            background: linear-gradient(to bottom, #a1c4fd, #c2e9fb); /* Голубое зелье */
+            border-radius: 40% 40% 45% 45% / 60% 60% 40% 40%; /* Форма колбы */
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            color: #1a0b2e;
+            font-weight: bold;
+            font-family: 'Alice';
+            box-shadow: 0 0 30px var(--alice-blue);
+            animation: float-potion 4s infinite ease-in-out;
+        }
+
+        /* Пробка */
+        .potion-btn::before {
+            content: '';
+            position: absolute;
+            top: -15px; width: 40px; height: 20px;
+            background: #8b5a2b; /* Корк */
+            border-radius: 5px;
+        }
+
+        /* Бирка */
+        .potion-btn span {
+            background: #fff;
+            padding: 5px;
+            transform: rotate(-10deg);
+            border: 1px solid #000;
+            font-size: 0.9rem;
+        }
+
+        @keyframes float-potion {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* --- АЛИСА (Силуэт) --- */
+        .alice-falling {
+            position: absolute;
+            top: 20%; left: 10%;
+            width: 100px; height: 150px;
+            background: var(--alice-blue);
+            opacity: 0.2;
+            /* Абстрактный силуэт платья */
+            clip-path: polygon(50% 0%, 20% 30%, 0% 100%, 100% 100%, 80% 30%);
+            animation: fall-slow 20s linear infinite;
+            filter: blur(10px);
+        }
+
+        @keyframes fall-slow {
+            0% { transform: translateY(-50px) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            .rabbit-watch { gap: 10px; }
+            .watch-face { width: 70px; height: 70px; }
+            .keyhole-soft { clip-path: ellipse(100% 100% at 50% 50%); width: 90%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="fog-layer"></div>
+    <div class="cat-smile"></div>
+    <div class="alice-falling"></div>
+
+    <!-- Летающие карты (JS вставит сюда) -->
+    <div class="floating-cards" id="cards-container"></div>
+
+    <header>
+        <!-- Шляпа (Pure CSS) -->
+        <div class="hat-container">
+            <div class="hat-top"></div>
+            <div class="hat-ribbon"></div>
+            <div class="hat-card-tag">10/6</div>
+            <div class="hat-brim"></div>
+        </div>
+
+        <h1>Алиса <br> & <br> Константин</h1>
+        <div class="subtitle">ВРЕМЯ ПИТЬ ЧАЙ</div>
+        <p style="margin-top: 20px; color: var(--gold);">15 ИЮЛЯ 2026</p>
+    </header>
+
+    <section>
+        <div class="mirror-frame">
+            <h2>Не опаздывай!</h2>
+            <p>Белый Кролик уже смотрит на свои часы. Не заставляйте Королеву ждать!</p>
+            
+            <div class="rabbit-watch" id="timer">
+                <div class="watch-face">
+                    <span class="wf-num" id="d">00</span>
+                    <span class="wf-lbl">Дней</span>
+                </div>
+                <div class="watch-face">
+                    <span class="wf-num" id="h">00</span>
+                    <span class="wf-lbl">Часов</span>
+                </div>
+                <div class="watch-face">
+                    <span class="wf-num" id="m">00</span>
+                    <span class="wf-lbl">Мин</span>
+                </div>
+                <div class="watch-face">
+                    <span class="wf-num" id="s">00</span>
+                    <span class="wf-lbl">Сек</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="mirror-frame">
+            <h2>Безумный План</h2>
+            <div class="hole-list">
+                <div class="hole-item js-reveal">
+                    <span class="time-gold">15:00</span>
+                    Падение в Кроличью Нору (Сбор гостей)
+                </div>
+                <div class="hole-item js-reveal">
+                    <span class="time-gold">16:00</span>
+                    Королевская Церемония
+                </div>
+                <div class="hole-item js-reveal">
+                    <span class="time-gold">18:00</span>
+                    Чаепитие с Шляпником (Банкет)
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Зазеркалье</h2>
+        <p>Замок Гарибальди, с. Хрящевка</p>
+        
+        <div class="keyhole-soft">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2303.468228227847!2d49.08375631587827!3d53.82362498008197!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x41687f0dc8d375d7%3A0x88057285557760c6!2z0JfQsNC80L7QuiDQk9Cw0YDQuNCx0LDQu9GM0LTQuA!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" frameborder="0" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <div style="display: flex; justify-content: center;">
+            <a href="https://t.me/durov" target="_blank" class="potion-btn">
+                <span>ВЫПЕЙ<br>МЕНЯ</span>
+            </a>
+        </div>
+    </section>
+
+    <script>
+        // --- 1. Плавные карты (JS Generator) ---
+        function createSoftCards() {
+            const container = document.getElementById('cards-container');
+            const suits = ['♥', '♠', '♦', '♣'];
+            
+            for(let i=0; i<15; i++) {
+                const card = document.createElement('div');
+                card.classList.add('card-shape');
+                card.innerText = suits[Math.floor(Math.random() * suits.length)];
+                
+                if(card.innerText === '♠' || card.innerText === '♣') {
+                    card.classList.add('c-black');
+                }
+
+                // Рандом
+                card.style.left = Math.random() * 100 + '%';
+                card.style.animationDuration = (Math.random() * 10 + 15) + 's'; // Медленно
+                card.style.animationDelay = (Math.random() * 5) + 's';
+                
+                container.appendChild(card);
+            }
+        }
+        createSoftCards();
+
+        // --- 2. Появление при скролле ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        });
+        document.querySelectorAll('.js-reveal').forEach(el => observer.observe(el));
+
+        // --- 3. Таймер ---
+        const target = new Date('July 15, 2026 15:00:00').getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
