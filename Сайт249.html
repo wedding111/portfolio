@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Марк & Ева | Mystic Wedding</title>
+    
+    <!-- Шрифты: Cinzel Decorative (Магический) и Cormorant Garamond -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:wght@300;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-night: #1a1025; /* Глубокий фиолетовый */
+            --gold: #d4af37;     /* Золото */
+            --card-bg: #2a1b3d;
+            --text: #e0d0ff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-night);
+            color: var(--text);
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            /* Текстура бархата (Шум) */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.07'/%3E%3C/svg%3E");
+        }
+
+        /* --- ЗВЕЗДЫ (Мерцание) --- */
+        .stars-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px);
+            background-size: 550px 550px, 350px 350px;
+            opacity: 0.5;
+            animation: twinkle 5s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.7; }
+        }
+
+        /* --- HEADER --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            padding: 20px;
+        }
+
+        /* Зодиакальный круг */
+        .zodiac-circle {
+            position: absolute;
+            width: 600px; height: 600px;
+            border: 1px dashed var(--gold);
+            border-radius: 50%;
+            opacity: 0.15;
+            animation: spin-slow 60s linear infinite;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0 L50 10 M50 90 L50 100 M0 50 L10 50 M90 50 L100 50' stroke='%23d4af37' stroke-width='1'/%3E%3C/svg%3E");
+        }
+
+        @keyframes spin-slow { to { transform: rotate(360deg); } }
+
+        h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 4.5rem;
+            color: var(--gold);
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .mystic-subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            border-top: 1px solid var(--gold);
+            border-bottom: 1px solid var(--gold);
+            padding: 10px 30px;
+            margin-top: 20px;
+        }
+
+        /* --- CARD SECTION (Интерактив) --- */
+        section {
+            padding: 80px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        h2 {
+            font-family: 'Cinzel Decorative';
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 40px;
+        }
+
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            perspective: 1000px; /* Для 3D переворота */
+        }
+
+        /* Карта */
+        .tarot-card {
+            background-color: transparent;
+            width: 250px;
+            height: 400px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* Класс для переворота (добавляется JS) */
+        .tarot-card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            border: 2px solid var(--gold);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Рубашка карты (Узор) */
+        .card-front {
+            background-color: var(--card-bg);
+            background-image: repeating-linear-gradient(45deg, rgba(212,175,55,0.1) 0, rgba(212,175,55,0.1) 1px, transparent 0, transparent 50%);
+            background-size: 20px 20px;
+        }
+
+        .card-front::after {
+            content: '❖';
+            font-size: 4rem;
+            color: var(--gold);
+        }
+        
+        .card-hint {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.8rem;
+            color: var(--gold);
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Лицо карты (Контент) */
+        .card-back {
+            background-color: #f4f1ea; /* Светлый пергамент */
+            color: #1a1a1a;
+            transform: rotateY(180deg);
+        }
+
+        .card-title {
+            font-family: 'Cinzel Decorative';
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+            border-bottom: 1px solid #1a1a1a;
+            padding-bottom: 5px;
+        }
+
+        .card-content-text {
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--bg-night);
+        }
+
+        /* --- ТАЙМЕР (Лунные фазы) --- */
+        .moon-timer {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .mt-circle {
+            width: 80px; height: 80px;
+            background: radial-gradient(circle at 30% 30%, var(--gold), #5e4b1f);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            color: #1a1025;
+            font-weight: bold;
+            font-size: 1.8rem;
+            font-family: 'Cinzel Decorative';
+        }
+
+        .mt-label { margin-top: 10px; color: var(--gold); font-size: 0.8rem; text-transform: uppercase; }
+
+        /* --- КАРТА (Magic Mirror) --- */
+        .map-mirror {
+            width: 300px;
+            height: 400px;
+            margin: 40px auto;
+            border-radius: 150px 150px 20px 20px; /* Форма зеркала */
+            border: 5px double var(--gold);
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+        }
+        
+        iframe { filter: hue-rotate(260deg) invert(90%) contrast(1.2); }
+
+        /* --- КНОПКА (Всевидящее око) --- */
+        .btn-eye {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 15px 50px;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            text-decoration: none;
+            font-family: 'Cinzel Decorative';
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: 0.4s;
+            position: relative;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .btn-eye:hover {
+            background: var(--gold);
+            color: var(--bg-night);
+            box-shadow: 0 0 20px var(--gold);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            .moon-timer { gap: 20px; flex-wrap: wrap; }
+            .zodiac-circle { width: 300px; height: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stars-overlay"></div>
+
+    <header>
+        <div class="zodiac-circle"></div>
+        <p style="color: var(--gold); letter-spacing: 3px; margin-bottom: 10px;">АРКАН VI: ВЛЮБЛЕННЫЕ</p>
+        <h1>Марк <br> & <br> Ева</h1>
+        <div class="mystic-subtitle">СУДЬБА СВЕЛА НАС</div>
+    </header>
+
+    <section>
+        <h2>Предсказание</h2>
+        <p style="margin-bottom: 40px; font-style: italic; opacity: 0.8;">Нажмите на карты, чтобы узнать своё будущее...</p>
+        
+        <div class="cards-container">
+            
+            <!-- Карта 1: Дата -->
+            <div class="tarot-card" onclick="this.classList.toggle('flipped')">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="card-hint">Нажми</div>
+                    </div>
+                    <div class="card-back">
+                        <div class="card-icon">☾</div>
+                        <div class="card-title">ДАТА</div>
+                        <div class="card-content-text">
+                            <strong>13 Сентября</strong><br>2026 года<br><br>Полнолуние
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Карта 2: Время -->
+            <div class="tarot-card" onclick="this.classList.toggle('flipped')">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="card-hint">Нажми</div>
+                    </div>
+                    <div class="card-back">
+                        <div class="card-icon">☀</div>
+                        <div class="card-title">ВРЕМЯ</div>
+                        <div class="card-content-text">
+                            <strong>16:00</strong><br>Сбор Гостей<br><br>
+                            <strong>17:00</strong><br>Ритуал
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Карта 3: Место -->
+            <div class="tarot-card" onclick="this.classList.toggle('flipped')">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="card-hint">Нажми</div>
+                    </div>
+                    <div class="card-back">
+                        <div class="card-icon">⛰</div>
+                        <div class="card-title">МЕСТО</div>
+                        <div class="card-content-text">
+                            <strong>Горный Алтай</strong><br>Чемал<br><br>База "Орел"
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section>
+        <h2>Время Магии</h2>
+        <div class="moon-timer" id="timer">
+            <div>
+                <div class="mt-circle" id="d">00</div>
+                <div class="mt-label">Дней</div>
+            </div>
+            <div>
+                <div class="mt-circle" id="h">00</div>
+                <div class="mt-label">Часов</div>
+            </div>
+            <div>
+                <div class="mt-circle" id="m">00</div>
+                <div class="mt-label">Минут</div>
+            </div>
+            <div>
+                <div class="mt-circle" id="s">00</div>
+                <div class="mt-label">Сек</div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Путь к Звездам</h2>
+        <p>Республика Алтай, Чемальский район</p>
+        
+        <div class="map-mirror">
+            <!-- Карта Алтай Чемал -->
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d178772.33375757723!2d85.93667254607752!3d51.40982798827727!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x42c50e33626e6e7f%3A0x6b4f730c45785a9f!2z0KfQtdC80LDQuywg0KDQtdGB0L8uINCQ0LvRgtCw0Lk!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <a href="https://t.me/durov" target="_blank" class="btn-eye">Исполнить Судьбу</a>
+    </section>
+
+    <script>
+        // Timer
+        const target = new Date('September 13, 2026 16:00:00').getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
