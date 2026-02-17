@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Максим & Ева | Fluid Wedding</title>
+    
+    <!-- Шрифты: Syne (Округлый Арт) и Cormorant (Засечки) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --text-main: #3e2738; /* Темный баклажан */
+            --blob-1: #ffc3a0; /* Персик */
+            --blob-2: #ffafbd; /* Розовый */
+            --blob-3: #c9afff; /* Лиловый */
+            --white-glass: rgba(255, 255, 255, 0.45);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Cormorant Garamond', serif; /* Основной текст с засечками */
+            color: var(--text-main);
+            background-color: #fdfbf7;
+            overflow-x: hidden;
+            font-size: 18px;
+        }
+
+        /* --- 1. АНИМИРОВАННЫЙ ФОН (Lava Lamp) --- */
+        .background-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: #fff0f5;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.8;
+            animation: float 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .b1 { width: 600px; height: 600px; background: var(--blob-1); top: -10%; left: -10%; animation-delay: 0s; }
+        .b2 { width: 500px; height: 500px; background: var(--blob-2); bottom: -10%; right: -10%; animation-delay: -5s; }
+        .b3 { width: 400px; height: 400px; background: var(--blob-3); top: 40%; left: 40%; animation-delay: -10s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        /* Текстура шума поверх всего */
+        .noise {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- ТИПОГРАФИКА --- */
+        h1, h2, h3 {
+            font-family: 'Syne', sans-serif; /* Заголовки округлые */
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 0.9;
+        }
+
+        /* --- HEADER --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .title-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Анимация заголовка */
+        .hero-line {
+            display: block;
+            font-size: 6rem;
+            overflow: hidden; /* Маска */
+        }
+
+        .hero-line span {
+            display: inline-block;
+            transform: translateY(100%);
+            animation: text-reveal 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero-line:nth-child(1) span { animation-delay: 0.2s; color: #5d3a5d; }
+        .hero-line:nth-child(2) span { animation-delay: 0.4s; font-size: 3rem; font-family: 'Cormorant Garamond'; font-style: italic; }
+        .hero-line:nth-child(3) span { animation-delay: 0.6s; color: #5d3a5d; }
+
+        @keyframes text-reveal {
+            from { transform: translateY(120%) rotate(5deg); }
+            to { transform: translateY(0) rotate(0deg); }
+        }
+
+        .date-badge {
+            margin-top: 40px;
+            border: 1px solid var(--text-main);
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-family: 'Syne';
+            font-weight: 700;
+            animation: fade-up 1s ease forwards 1.5s;
+            opacity: 0;
+        }
+
+        @keyframes fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- SECTIONS (Glass Cards) --- */
+        section {
+            max-width: 900px;
+            margin: 0 auto 80px auto;
+            padding: 80px 40px;
+            background: var(--white-glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(74, 43, 105, 0.05);
+            
+            /* Анимация появления при скролле */
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        h2 {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            color: #5d3a5d;
+        }
+
+        p {
+            font-size: 1.4rem;
+            max-width: 600px;
+            margin: 0 auto 20px auto;
+            line-height: 1.6;
+        }
+
+        /* --- MARQUEE (Бегущая строка) --- */
+        .marquee {
+            background: var(--text-main);
+            color: #fff;
+            padding: 15px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            margin: 60px 0;
+            transform: rotate(-2deg);
+            width: 105%;
+            margin-left: -2.5%;
+        }
+
+        .marquee span {
+            display: inline-block;
+            font-family: 'Syne';
+            font-size: 1.5rem;
+            padding-left: 50px;
+            animation: scroll 20s linear infinite;
+        }
+
+        @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+
+        /* --- ТАЙМЕР (Soft) --- */
+        .soft-timer {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .st-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .st-num {
+            font-family: 'Syne';
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #d57eeb, #fccb90);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .st-lbl {
+            font-family: 'Cormorant Garamond';
+            font-style: italic;
+            font-size: 1.2rem;
+        }
+
+        /* --- ПРОГРАММА (Круги) --- */
+        .bubble-list {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .b-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.6);
+            padding: 15px 20px;
+            border-radius: 60px;
+            transition: transform 0.3s;
+        }
+
+        .b-item:hover { transform: scale(1.02); background: rgba(255,255,255,0.9); }
+
+        .b-time {
+            background: var(--text-main);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-family: 'Syne';
+            font-weight: 700;
+            margin-right: 20px;
+        }
+
+        .b-text { font-size: 1.3rem; font-weight: 600; }
+
+        /* --- ДРЕСС-КОД (Палитра) --- */
+        .color-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .color-swatch {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .color-swatch:hover { transform: translateY(-5px); }
+
+        /* --- КАРТА (Blob) --- */
+        .map-blob {
+            border-radius: 40px;
+            overflow: hidden;
+            height: 450px;
+            margin-top: 40px;
+            box-shadow: 0 20px 40px rgba(62, 39, 56, 0.1);
+            border: 5px solid #fff;
+        }
+        
+        iframe { filter: saturate(0.8) hue-rotate(320deg); }
+
+        /* --- КНОПКА (Liquid) --- */
+        .btn-fluid {
+            display: inline-block;
+            margin-top: 50px;
+            padding: 25px 80px;
+            background: var(--text-main);
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Syne';
+            font-weight: 800;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .btn-fluid::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-fluid:hover { transform: scale(1.05); }
+        .btn-fluid:hover::before { left: 100%; }
+
+        @media (max-width: 768px) {
+            .hero-line { font-size: 4rem; }
+            .soft-timer { gap: 15px; }
+            .st-num { font-size: 2.5rem; }
+            section { padding: 50px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-container">
+        <div class="blob b1"></div>
+        <div class="blob b2"></div>
+        <div class="blob b3"></div>
+    </div>
+    <div class="noise"></div>
+
+    <header>
+        <div class="title-wrapper">
+            <div class="hero-line"><span>МАКСИМ</span></div>
+            <div class="hero-line"><span>&</span></div>
+            <div class="hero-line"><span>ЕВА</span></div>
+        </div>
+        <div class="date-badge date-pill">15 АВГУСТА 2026</div>
+    </header>
+
+    <div class="marquee">
+        <span>LOVE IS IN THE AIR — WEDDING DAY — SAVE THE DATE — LOVE IS IN THE AIR — WEDDING DAY —</span>
+        <span>LOVE IS IN THE AIR — WEDDING DAY — SAVE THE DATE — LOVE IS IN THE AIR — WEDDING DAY —</span>
+    </div>
+
+    <section class="js-scroll">
+        <h2>Момент Вечности</h2>
+        <p>Мы приглашаем вас стать частью нашей истории в этот теплый летний день.</p>
+        
+        <div class="soft-timer" id="timer">
+            <div class="st-col">
+                <span class="st-num" id="d">00</span>
+                <span class="st-lbl">дней</span>
+            </div>
+            <div class="st-col">
+                <span class="st-num" id="h">00</span>
+                <span class="st-lbl">часов</span>
+            </div>
+            <div class="st-col">
+                <span class="st-num" id="m">00</span>
+                <span class="st-lbl">минут</span>
+            </div>
+            <div class="st-col">
+                <span class="st-num" id="s">00</span>
+                <span class="st-lbl">секунд</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="js-scroll">
+        <h2>Детали</h2>
+        <div class="bubble-list">
+            <div class="b-item">
+                <span class="b-time">16:00</span>
+                <span class="b-text">Сбор Гостей</span>
+            </div>
+            <div class="b-item">
+                <span class="b-time">17:00</span>
+                <span class="b-text">Церемония</span>
+            </div>
+            <div class="b-item">
+                <span class="b-time">18:30</span>
+                <span class="b-text">Ужин</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="js-scroll">
+        <h2>Дресс-код</h2>
+        <p>Пастельные тона, легкие ткани, улыбки.</p>
+        <div class="color-row">
+            <div class="color-swatch" style="background: #ffc3a0;"></div>
+            <div class="color-swatch" style="background: #ffafbd;"></div>
+            <div class="color-swatch" style="background: #c9afff;"></div>
+            <div class="color-swatch" style="background: #e0e0e0;"></div>
+        </div>
+    </section>
+
+    <section class="js-scroll">
+        <h2>Локация</h2>
+        <p>Усадьба "Тайны Рублева", Москва</p>
+        <div class="map-blob">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2246.0628284589335!2d37.60309931593049!3d55.73977598055018!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z0KPRgdCw0LTRjNCx0LAg0KLQsNCy0L3RiyDQoNGD0LHQu9C10LLQsA!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+        <a href="https://t.me/durov" class="btn-fluid">Я буду с вами</a>
+    </section>
+
+    <script>
+        // --- 1. Анимация появления при скролле ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.js-scroll').forEach(el => observer.observe(el));
+
+        // --- 2. Таймер ---
+        const target = new Date('August 15, 2026 16:00:00').getTime();
+        
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+            
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
