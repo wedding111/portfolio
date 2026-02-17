@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Руслан & Ольга | Sunny Wedding</title>
+    
+    <!-- Шрифты: Abril Fatface (Яркий заголовок) и Montserrat (Текст) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-sunny: #fff9e6; /* Сливочно-желтый фон */
+            --yellow-light: #ffe66d;
+            --yellow-main: #ffcc00; /* Основной желтый */
+            --yellow-dark: #e6a800; /* Темно-желтый/Охра */
+            --text-warm: #5a4a42; /* Теплый коричневый (вместо черного) */
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-sunny);
+            color: var(--text-warm);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- ФОН (Вращающиеся солнца) --- */
+        .sun-background {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bg-sun {
+            position: absolute;
+            background-image: repeating-conic-gradient(from 0deg, var(--yellow-light) 0deg 10deg, transparent 10deg 20deg);
+            border-radius: 50%;
+            opacity: 0.2;
+            animation: spin-bg 60s linear infinite;
+        }
+
+        .s1 { width: 800px; height: 800px; top: -200px; left: -200px; }
+        .s2 { width: 600px; height: 600px; bottom: -100px; right: -100px; animation-direction: reverse; }
+
+        @keyframes spin-bg { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* --- HEADER --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .intro-text {
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: bold;
+            color: var(--yellow-dark);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Abril Fatface', cursive;
+            font-size: 6rem;
+            color: var(--yellow-main);
+            /* Обводка текста для контраста */
+            text-shadow: 2px 2px 0px var(--text-warm); 
+            line-height: 1.1;
+            margin: 0;
+            transform: scale(0.8);
+            opacity: 0;
+            animation: sun-rise 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .date-sun {
+            margin-top: 40px;
+            background: var(--white);
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 10px 30px rgba(255, 204, 0, 0.3);
+            border: 2px solid var(--yellow-main);
+            color: var(--text-warm);
+        }
+
+        @keyframes sun-rise {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* --- SECTIONS --- */
+        section {
+            padding: 80px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* Желтая карточка */
+        .yellow-card {
+            background: #fff;
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(230, 168, 0, 0.15);
+            border: 2px solid var(--yellow-light);
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            font-family: 'Abril Fatface';
+            font-size: 3rem;
+            color: var(--yellow-dark);
+            margin-bottom: 30px;
+        }
+
+        /* --- КАЛЕНДАРЬ (Солнечный) --- */
+        .calendar-sun {
+            margin-top: 30px;
+        }
+
+        .cal-month {
+            font-weight: bold;
+            text-transform: uppercase;
+            color: var(--yellow-dark);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .day { padding: 10px; border-radius: 50%; }
+        .day-head { font-weight: bold; color: #aaa; font-size: 0.8rem; }
+
+        /* Дата с сердечком */
+        .day.special {
+            background: var(--yellow-main);
+            color: var(--text-warm);
+            font-weight: bold;
+            position: relative;
+            animation: pulse-sun-heart 2s infinite;
+        }
+
+        .day.special::after {
+            content: '♥';
+            position: absolute;
+            top: -15px; left: 50%; transform: translateX(-50%);
+            color: var(--yellow-dark);
+            font-size: 1.2rem;
+        }
+
+        @keyframes pulse-sun-heart {
+            0% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 204, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0); }
+        }
+
+        /* --- ТАЙМЕР --- */
+        .timer-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            border-top: 2px dashed var(--yellow-light);
+            padding-top: 30px;
+        }
+
+        .t-num { font-family: 'Abril Fatface'; font-size: 2.5rem; color: var(--yellow-dark); }
+        .t-lbl { font-size: 0.7rem; text-transform: uppercase; font-weight: bold; }
+
+        /* --- ДРЕСС-КОД --- */
+        .palette {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .swatch {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* --- КАРТА-СОЛНЦЕ (Главная фишка) --- */
+        .map-sun-wrapper {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 60px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Лучи солнца (вращаются) */
+        .map-rays {
+            position: absolute;
+            width: 100%; height: 100%;
+            background: repeating-conic-gradient(
+                from 0deg, 
+                var(--yellow-main) 0deg 10deg, 
+                transparent 10deg 20deg
+            );
+            border-radius: 50%;
+            animation: spin-map 20s linear infinite;
+            z-index: 1;
+        }
+
+        /* Круглая карта (стоит на месте) */
+        .map-circle {
+            width: 300px; height: 300px;
+            border-radius: 50%;
+            overflow: hidden;
+            z-index: 2;
+            border: 5px solid #fff;
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.5);
+            background: #fff;
+        }
+
+        iframe { width: 100%; height: 100%; }
+
+        @keyframes spin-map { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* --- КНОПКА (Сияние) --- */
+        .btn-shine {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 20px 60px;
+            background: var(--yellow-main);
+            color: var(--text-warm);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            border-radius: 50px;
+            box-shadow: 0 0 20px var(--yellow-main);
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 10px var(--yellow-main); }
+            to { box-shadow: 0 0 30px var(--yellow-main), 0 0 10px #fff; }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 4rem; }
+            .map-sun-wrapper { width: 300px; height: 300px; }
+            .map-circle { width: 220px; height: 220px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sun-background">
+        <div class="bg-sun s1"></div>
+        <div class="bg-sun s2"></div>
+    </div>
+
+    <header>
+        <div class="intro-text">Sunny Wedding Day</div>
+        <h1>Руслан <br> & <br> Ольга</h1>
+        <div class="date-sun">25 ИЮЛЯ 2026</div>
+    </header>
+
+    <section>
+        <div class="yellow-card">
+            <h2>Наше Лето</h2>
+            <p>Мы хотим, чтобы наш день был наполнен светом, теплом и смехом. <br> Приглашаем вас на самую солнечную свадьбу года!</p>
+
+            <div class="calendar-sun">
+                <div class="cal-month">Июль 2026</div>
+                <div class="cal-grid">
+                    <div class="day-head">ПН</div><div class="day-head">ВТ</div><div class="day-head">СР</div><div class="day-head">ЧТ</div><div class="day-head">ПТ</div><div class="day-head">СБ</div><div class="day-head">ВС</div>
+                    
+                    <div class="day"></div><div class="day"></div><div class="day">1</div><div class="day">2</div><div class="day">3</div><div class="day">4</div><div class="day">5</div>
+                    <div class="day">6</div><div class="day">7</div><div class="day">8</div><div class="day">9</div><div class="day">10</div><div class="day">11</div><div class="day">12</div>
+                    <div class="day">13</div><div class="day">14</div><div class="day">15</div><div class="day">16</div><div class="day">17</div><div class="day">18</div><div class="day">19</div>
+                    <div class="day">20</div><div class="day">21</div><div class="day">22</div><div class="day">23</div><div class="day">24</div>
+                    
+                    <!-- ДАТА -->
+                    <div class="day special">25</div>
+                    
+                    <div class="day">26</div><div class="day">27</div><div class="day">28</div><div class="day">29</div><div class="day">30</div><div class="day">31</div>
+                </div>
+            </div>
+
+            <div class="timer-row" id="timer">
+                <div class="t-item"><span class="t-num" id="d">00</span><span class="t-lbl">Дней</span></div>
+                <div class="t-item"><span class="t-num" id="h">00</span><span class="t-lbl">Часов</span></div>
+                <div class="t-item"><span class="t-num" id="m">00</span><span class="t-lbl">Мин</span></div>
+                <div class="t-item"><span class="t-num" id="s">00</span><span class="t-lbl">Сек</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Дресс-код</h2>
+        <p>Яркие, солнечные, теплые оттенки.</p>
+        <div class="palette">
+            <div class="swatch" style="background: #ffcc00;" title="Желтый"></div>
+            <div class="swatch" style="background: #ffe66d;" title="Лимон"></div>
+            <div class="swatch" style="background: #e08e45;" title="Охра"></div>
+            <div class="swatch" style="background: #fffdf5;" title="Крем"></div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Локация</h2>
+        <p>Солнечный берег, Яхт-клуб "Победа"</p>
+        
+        <!-- КАРТА В ФОРМЕ СОЛНЦА -->
+        <div class="map-sun-wrapper">
+            <div class="map-rays"></div>
+            <div class="map-circle">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2235.856237234567!2d37.48256831596767!3d55.91724598085934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b53a3b0b0a0a0b%3A0x123456789abcdef!2sYacht%20Club%20Pobeda!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" frameborder="0" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+
+        <a href="https://t.me/durov" target="_blank" class="btn-shine">Я буду светить!</a>
+    </section>
+
+    <script>
+        // Timer
+        const target = new Date('July 25, 2026 15:00:00').getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
