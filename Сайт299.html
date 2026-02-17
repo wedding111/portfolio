@@ -1,0 +1,407 @@
+!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Константин & Эмилия | Rose Wedding</title>
+    
+    <!-- Шрифты: Pinyon Script (Вензеля) и Tenor Sans (Модный) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Tenor+Sans&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-powder: #fbf0f2; /* Очень нежный розовый */
+            --text-color: #5d4037; /* Шоколадный */
+            --gold: #d4a59a;       /* Розовое золото */
+            --white-glass: rgba(255, 255, 255, 0.7);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-powder);
+            color: var(--text-color);
+            font-family: 'Tenor Sans', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- ФОН (Летающие розы) --- */
+        #roses-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-rose {
+            position: absolute;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.6;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+            animation: fall-rose linear infinite;
+        }
+
+        /* Используем URL картинки розы */
+        .rose-img {
+            background-image: url('https://png.pngtree.com/png-vector/20230906/ourmid/pngtree-pink-rose-flower-png-image_10006472.png');
+        }
+
+        @keyframes fall-rose {
+            0% { transform: translateY(-100px) rotate(0deg) translateX(0); opacity: 0; }
+            10% { opacity: 0.8; }
+            100% { transform: translateY(110vh) rotate(360deg) translateX(50px); opacity: 0; }
+        }
+
+        /* --- HEADER --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* Рамка-виньетка */
+        .frame-ornament {
+            position: absolute;
+            top: 30px; left: 30px; right: 30px; bottom: 30px;
+            border: 1px solid var(--gold);
+            border-radius: 100px; /* Скругленные углы */
+            pointer-events: none;
+        }
+
+        .pre-title {
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 0.9rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 6rem;
+            color: var(--text-color);
+            line-height: 1.2;
+            margin: 0;
+            text-shadow: 2px 2px 0 rgba(255,255,255,0.8);
+            
+            /* Анимация появления */
+            opacity: 0;
+            transform: scale(0.9);
+            animation: bloom 2s ease-in-out forwards 0.5s;
+        }
+
+        @keyframes bloom {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .date-text {
+            margin-top: 30px;
+            font-size: 1.3rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-top: 1px solid var(--gold);
+            border-bottom: 1px solid var(--gold);
+            padding: 10px 40px;
+            background: rgba(255,255,255,0.5);
+        }
+
+        /* --- SECTIONS (Карточки) --- */
+        section {
+            padding: 100px 20px;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            position: relative;
+            z-index: 5;
+            
+            /* Эффект стекла */
+            background: var(--white-glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(100, 50, 50, 0.05);
+            border: 1px solid #fff;
+
+            /* Скролл-анимация */
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Анимация заголовка при наведении */
+        h2 {
+            font-family: 'Pinyon Script';
+            font-size: 3.5rem;
+            color: var(--text-color);
+            margin-bottom: 30px;
+            cursor: default;
+            transition: letter-spacing 0.5s ease, color 0.5s ease;
+        }
+
+        h2:hover {
+            letter-spacing: 5px; /* Расширение букв */
+            color: var(--gold);
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #6b5a55;
+            margin-bottom: 20px;
+        }
+
+        /* --- КАЛЕНДАРЬ --- */
+        .calendar-wrapper {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px; /* Скругленные углы внутри */
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .cal-month {
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .d-head { font-size: 0.8rem; font-weight: bold; color: #aaa; margin-bottom: 5px; }
+        .d-cell { padding: 10px; font-size: 1.1rem; color: var(--text-color); }
+
+        /* Дата с сердцем */
+        .d-cell.the-date {
+            position: relative;
+            color: #fff;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: pulse-date 2s infinite;
+        }
+
+        .d-cell.the-date::after {
+            content: '♥';
+            position: absolute;
+            top: -15px; left: 50%; transform: translateX(-50%);
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+
+        @keyframes pulse-date {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- ТАЙМЕР --- */
+        .timer-row {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .t-num { font-family: 'Pinyon Script'; font-size: 2.5rem; color: var(--text-color); }
+        .t-lbl { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: #999; }
+
+        /* --- КАРТА (В форме Цветка) --- */
+        .map-flower-shape {
+            width: 400px;
+            height: 400px;
+            margin: 40px auto;
+            /* SVG Path для формы цветка */
+            clip-path: path("M200,400 C89.5,400,0,310.5,0,200 C0,89.5,89.5,0,200,0 C310.5,0,400,89.5,400,200 C400,310.5,310.5,400,200,400 Z M200,380 C100.5,380,20,299.5,20,200 C20,100.5,100.5,20,200,20 C299.5,20,380,100.5,380,200 C380,299.5,299.5,380,200,380 Z");
+            /* Упрощенная форма (волнистый круг) для кроссбраузерности */
+            border-radius: 50%; 
+            box-shadow: 0 0 0 10px #fff; /* Белая рамка */
+            border: 5px solid #fff;
+            position: relative;
+            background: #fff;
+            animation: morph-flower 10s infinite alternate;
+        }
+
+        /* Делаем форму более интересной через border-radius */
+        .map-flower-container {
+            width: 100%;
+            height: 400px;
+            margin-top: 40px;
+            overflow: hidden;
+            /* Форма цветка через CSS */
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            border: 5px solid #fff;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: border-radius 1s;
+        }
+
+        .map-flower-container:hover {
+            border-radius: 50%;
+        }
+
+        iframe { width: 100%; height: 100%; filter: sepia(30%) saturate(0.8); }
+
+        /* --- КНОПКА --- */
+        .btn-rose {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 20px 60px;
+            background: var(--gold);
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 50px;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(212, 165, 154, 0.4);
+        }
+
+        .btn-rose:hover {
+            transform: translateY(-3px);
+            background: #c08e85;
+            box-shadow: 0 15px 30px rgba(212, 165, 154, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 4rem; }
+            .timer-row { gap: 15px; }
+            .t-num { font-size: 2rem; }
+            .frame-ornament { display: none; } /* Убираем рамку на маленьких экранах */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Контейнер для роз -->
+    <div id="roses-container"></div>
+
+    <header>
+        <div class="frame-ornament"></div>
+        <p class="pre-title">Свадебное торжество</p>
+        <h1>Константин <br> & <br> Эмилия</h1>
+        <div class="date-text">20 Августа 2026</div>
+    </header>
+
+    <section class="reveal">
+        <h2>История Любви</h2>
+        <p>Мы приглашаем вас в наш цветущий сад, где каждый момент наполнен любовью и нежностью.</p>
+        
+        <div class="calendar-wrapper">
+            <div class="cal-month">Август 2026</div>
+            <div class="cal-grid">
+                <div class="d-head">ПН</div><div class="d-head">ВТ</div><div class="d-head">СР</div><div class="d-head">ЧТ</div><div class="d-head">ПТ</div><div class="d-head">СБ</div><div class="d-head">ВС</div>
+                
+                <div class="d-cell"></div><div class="d-cell"></div><div class="d-cell"></div><div class="d-cell"></div><div class="d-cell"></div><div class="d-cell">1</div><div class="d-cell">2</div>
+                <div class="d-cell">3</div><div class="d-cell">4</div><div class="d-cell">5</div><div class="d-cell">6</div><div class="d-cell">7</div><div class="d-cell">8</div><div class="d-cell">9</div>
+                <div class="d-cell">10</div><div class="d-cell">11</div><div class="d-cell">12</div><div class="d-cell">13</div><div class="d-cell">14</div><div class="d-cell">15</div><div class="d-cell">16</div>
+                <div class="d-cell">17</div><div class="d-cell">18</div><div class="d-cell">19</div>
+                
+                <!-- Дата свадьбы -->
+                <div class="d-cell the-date">20</div>
+                
+                <div class="d-cell">21</div><div class="d-cell">22</div><div class="d-cell">23</div><div class="d-cell">24</div><div class="d-cell">25</div><div class="d-cell">26</div><div class="d-cell">27</div>
+                <div class="d-cell">28</div><div class="d-cell">29</div><div class="d-cell">30</div><div class="d-cell">31</div>
+            </div>
+
+            <div class="timer-row" id="timer">
+                <div style="text-align: center;"><span class="t-num" id="d">00</span><span class="t-lbl">Дней</span></div>
+                <div style="text-align: center;"><span class="t-num" id="h">00</span><span class="t-lbl">Часов</span></div>
+                <div style="text-align: center;"><span class="t-num" id="m">00</span><span class="t-lbl">Мин</span></div>
+                <div style="text-align: center;"><span class="t-num" id="s">00</span><span class="t-lbl">Сек</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>Локация</h2>
+        <p>Усадьба "Тайны Рублева", Москва</p>
+        
+        <!-- Карта в форме цветка -->
+        <div class="map-flower-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2246.0628284589335!2d37.60309931593049!3d55.73977598055018!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z0KPRgdCw0LTRjNCx0LAg0KLQsNCy0L3RiyDQoNGD0LHQu9C10LLQsA!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" frameborder="0" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <a href="https://t.me/durov" target="_blank" class="btn-rose">Подтвердить</a>
+    </section>
+
+    <script>
+        // --- 1. ЛЕТАЮЩИЕ РОЗЫ (JS Generator) ---
+        const container = document.getElementById('roses-container');
+
+        function createRose() {
+            const rose = document.createElement('div');
+            rose.classList.add('floating-rose');
+            rose.classList.add('rose-img');
+            
+            // Рандомный размер
+            const size = Math.random() * 40 + 20; // 20px - 60px
+            rose.style.width = size + 'px';
+            rose.style.height = size + 'px';
+            
+            // Рандомная позиция
+            rose.style.left = Math.random() * 100 + 'vw';
+            
+            // Рандомная скорость
+            const duration = Math.random() * 5 + 8; // 8-13 секунд
+            rose.style.animationDuration = duration + 's';
+            
+            container.appendChild(rose);
+
+            setTimeout(() => { rose.remove(); }, duration * 1000);
+        }
+
+        // Создаем розы постоянно
+        setInterval(createRose, 500);
+
+        // --- 2. SCROLL REVEAL (Появление) ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // --- 3. TIMER ---
+        const target = new Date('August 20, 2026 16:00:00').getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
