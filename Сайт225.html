@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Федор & Софья | Art Nouveau Wedding</title>
+    
+    <!-- Шрифты: Marck Script (Рукописный ретро) и Cormorant SC (Капитель) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@400;600&family=Marck+Script&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --cream: #f9f7f2;
+            --gold: #c5a059;
+            --olive: #8a9a5b; /* Фисташковый */
+            --rose: #dcb6b6; /* Пыльная роза */
+            --text: #4a4a4a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--cream);
+            color: var(--text);
+            font-family: 'Cormorant SC', serif;
+            overflow-x: hidden;
+            border: 10px double var(--gold); /* Двойная рама */
+            min-height: 100vh;
+        }
+
+        /* --- ФОН (Текстура холста) --- */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* --- АРКА (Главный элемент Модерна) --- */
+        .nouveau-arch {
+            border: 2px solid var(--gold);
+            border-bottom: none;
+            border-radius: 200px 200px 0 0; /* Форма арки */
+            padding: 60px 20px 0 20px;
+            max-width: 800px;
+            margin: 40px auto 0;
+            position: relative;
+            z-index: 1;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(197, 160, 89, 0.1);
+        }
+
+        /* Декор арки (Круг сверху) */
+        .nouveau-arch::before {
+            content: '';
+            position: absolute;
+            top: -25px; left: 50%;
+            transform: translateX(-50%);
+            width: 50px; height: 50px;
+            background: var(--cream);
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center;
+            padding-bottom: 60px;
+            position: relative;
+        }
+
+        /* Декоративные линии (Лоза) */
+        .vine-decor {
+            position: absolute;
+            width: 100px; height: 100px;
+            border: 1px solid var(--olive);
+            border-radius: 50%;
+            opacity: 0.5;
+            z-index: -1;
+        }
+        .v1 { top: 0; left: 0; border-right: none; border-bottom: none; }
+        .v2 { top: 0; right: 0; border-left: none; border-bottom: none; }
+
+        h1 {
+            font-family: 'Marck Script', cursive;
+            font-size: 5rem;
+            color: var(--gold);
+            line-height: 1.2;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        /* Большая буква */
+        h1::first-letter {
+            font-size: 7rem;
+            color: var(--olive);
+            margin-right: 10px;
+        }
+
+        .date-circle {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 150px; height: 150px;
+            border: 1px dashed var(--gold);
+            border-radius: 50%;
+            font-size: 1.2rem;
+            color: var(--text);
+            margin-top: 20px;
+            position: relative;
+        }
+        
+        /* Вращающийся текст вокруг даты */
+        .date-circle::after {
+            content: '';
+            position: absolute;
+            top: -5px; left: -5px; right: -5px; bottom: -5px;
+            border: 1px solid var(--rose);
+            border-radius: 50%;
+            animation: breathe 5s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+
+        /* --- SECTIONS --- */
+        section {
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Разделитель (Цветок) */
+        .flower-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+            color: var(--gold);
+        }
+        .flower-divider::before, .flower-divider::after {
+            content: '';
+            height: 1px;
+            width: 100px;
+            background: var(--gold);
+        }
+        .flower-icon { font-size: 1.5rem; color: var(--rose); }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            color: var(--olive);
+        }
+
+        p {
+            font-family: 'Marck Script';
+            font-size: 1.8rem;
+            line-height: 1.5;
+            color: #666;
+        }
+
+        /* --- ТАЙМЕР (Витраж) --- */
+        .stained-glass-timer {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .sg-panel {
+            border: 2px solid var(--gold);
+            border-radius: 50px 50px 0 0; /* Арочки */
+            padding: 20px 15px;
+            min-width: 80px;
+            background: linear-gradient(to bottom, rgba(220, 182, 182, 0.1), rgba(255,255,255,0));
+            position: relative;
+        }
+
+        /* Декор витража */
+        .sg-panel::before {
+            content: '';
+            position: absolute;
+            top: 5px; left: 50%; transform: translateX(-50%);
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--gold);
+        }
+
+        .sg-num { font-size: 2.5rem; display: block; color: var(--text); }
+        .sg-lbl { font-size: 0.7rem; letter-spacing: 1px; color: var(--olive); }
+
+        /* --- ПРОГРАММА (Ботаника) --- */
+        .botanical-list {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
+            border-left: 1px solid var(--olive);
+        }
+
+        .botanical-item {
+            padding: 20px 0 20px 40px;
+            position: relative;
+        }
+
+        /* Листик вместо точки */
+        .botanical-item::before {
+            content: '❧'; /* Флоральный символ */
+            position: absolute;
+            left: -10px; top: 20px;
+            background: var(--cream);
+            color: var(--olive);
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        .b-time { font-weight: bold; color: var(--gold); display: block; margin-bottom: 5px; }
+        .b-title { font-size: 1.4rem; font-family: 'Marck Script'; }
+
+        /* --- КАРТА (Овальная рама) --- */
+        .map-oval {
+            width: 100%;
+            height: 400px;
+            border-radius: 50%; /* Овал */
+            border: 10px double var(--gold);
+            overflow: hidden;
+            margin-top: 40px;
+            position: relative;
+        }
+        
+        iframe { filter: sepia(40%) opacity(0.8); }
+
+        /* --- КНОПКА (Vintage) --- */
+        .btn-vintage {
+            display: inline-block;
+            margin-top: 50px;
+            padding: 15px 50px;
+            border: 1px solid var(--gold);
+            color: var(--text);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 1;
+            transition: color 0.4s;
+        }
+
+        /* Заливка "чернилами" */
+        .btn-vintage::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 0; height: 100%;
+            background: var(--gold);
+            z-index: -1;
+            transition: width 0.4s ease;
+        }
+
+        .btn-vintage:hover { color: #fff; }
+        .btn-vintage:hover::before { width: 100%; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            .nouveau-arch { padding: 40px 10px; border-radius: 100px 100px 0 0; }
+            .map-oval { border-radius: 20px; height: 300px; border-width: 5px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nouveau-arch">
+        <header>
+            <div class="vine-decor v1"></div>
+            <div class="vine-decor v2"></div>
+            
+            <p style="letter-spacing: 4px; color: var(--olive); margin-bottom: 10px;">ЭСТЕТИКА МОДЕРНА</p>
+            <h1>Федор <br> <span style="font-size: 3rem; color: var(--rose);">&</span> <br> Софья</h1>
+            
+            <div class="date-circle">
+                <div>
+                    18.07<br>2026
+                </div>
+            </div>
+            <p style="margin-top: 20px; font-family: 'Cormorant SC'; font-size: 1rem;">ВЫБОРГ • МОНРЕПО</p>
+        </header>
+
+        <div class="flower-divider">
+            <span class="flower-icon">❀</span>
+        </div>
+
+        <section>
+            <h2>Приглашение</h2>
+            <p>
+                Любовь подобна искусству — она требует вдохновения и изящества. 
+                Мы приглашаем вас в старинный Выборг, чтобы вместе написать новую главу нашей истории.
+            </p>
+
+            <div class="stained-glass-timer" id="timer">
+                <div class="sg-panel">
+                    <span class="sg-num" id="d">00</span>
+                    <span class="sg-lbl">ДНЕЙ</span>
+                </div>
+                <div class="sg-panel">
+                    <span class="sg-num" id="h">00</span>
+                    <span class="sg-lbl">ЧАСОВ</span>
+                </div>
+                <div class="sg-panel">
+                    <span class="sg-num" id="m">00</span>
+                    <span class="sg-lbl">МИН</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="flower-divider">
+            <span class="flower-icon">❀</span>
+        </div>
+
+        <section>
+            <h2>Торжество</h2>
+            <div class="botanical-list">
+                <div class="botanical-item">
+                    <span class="b-time">14:00</span>
+                    <span class="b-title">Прогулка в парке Монрепо</span>
+                </div>
+                <div class="botanical-item">
+                    <span class="b-time">16:00</span>
+                    <span class="b-title">Церемония в Библиотеке</span>
+                </div>
+                <div class="botanical-item">
+                    <span class="b-time">18:00</span>
+                    <span class="b-title">Ужин в ресторане "Эспиля"</span>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Место</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 20px; font-family: 'Cormorant SC';">Ленинградская обл., г. Выборг</p>
+            
+            <div class="map-oval">
+                <!-- Карта Выборг -->
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31846.54924760447!2d28.71887346850239!3d60.70932298212133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4690c37734149809%3A0x6b4f730c45785a9f!2z0JLRi9Cx0L7RgNCz!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+
+            <a href="https://t.me/durov" target="_blank" class="btn-vintage">Принять Приглашение</a>
+        </section>
+        
+        <!-- Декор низа (Арка перевернутая) -->
+        <div style="height: 50px; border-top: 1px solid var(--gold); margin-top: 40px; display: flex; justify-content: center; align-items: center;">
+            <span class="flower-icon">❀</span>
+        </div>
+    </div>
+
+    <script>
+        // Timer
+        const target = new Date('July 18, 2026 14:00:00').getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+        }, 1000);
+    </script>
+</body>
+</html>
