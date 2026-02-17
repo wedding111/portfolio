@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Иван да Марья | Русская Сказка</title>
+    
+    <!-- Шрифты: Ruslan Display (Старославянский стиль) и Cormorant (Текст) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@400;600&family=Ruslan+Display&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --red: #8a1c1c; /* Брусничный */
+            --gold: #c5a059; /* Тусклое золото */
+            --bg: #f5f0e1; /* Лен / Пергамент */
+            --text: #4a3b32;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Cormorant Infant', serif;
+            overflow-x: hidden;
+            border: 15px solid var(--red);
+            min-height: 100vh;
+        }
+
+        /* --- ОРНАМЕНТ (Узор по периметру) --- */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 15px; left: 15px; right: 15px; bottom: 15px;
+            border: 2px solid var(--gold);
+            pointer-events: none;
+            z-index: 99;
+        }
+
+        /* Уголки */
+        body::after {
+            content: '✥';
+            position: fixed;
+            top: 5px; left: 5px;
+            color: var(--gold);
+            font-size: 2rem;
+            z-index: 100;
+        }
+
+        /* --- HEADER --- */
+        header {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Солярный символ (Вращающееся солнце) */
+        .sun-symbol {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border: 1px dashed var(--gold);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: spin 60s linear infinite;
+            opacity: 0.2;
+            z-index: -1;
+        }
+
+        .sun-symbol::before {
+            content: '';
+            position: absolute;
+            width: 70%; height: 70%;
+            border: 1px solid var(--red);
+            border-radius: 50%;
+            transform: rotate(45deg);
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        h1 {
+            font-family: 'Ruslan Display', cursive;
+            font-size: 5rem;
+            color: var(--red);
+            line-height: 1;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--gold);
+            margin-bottom: 30px;
+            border-top: 1px solid var(--gold);
+            border-bottom: 1px solid var(--gold);
+            padding: 10px 30px;
+        }
+
+        /* --- СЕКЦИИ --- */
+        section {
+            padding: 80px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        h2 {
+            font-family: 'Ruslan Display';
+            font-size: 3rem;
+            color: var(--text);
+            margin-bottom: 40px;
+        }
+
+        h2::before, h2::after {
+            content: ' ~ ';
+            color: var(--red);
+        }
+
+        p {
+            font-size: 1.4rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* --- ТАЙМЕР (Старорусский стиль) --- */
+        .rus-timer {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            background: rgba(138, 28, 28, 0.05);
+            padding: 30px;
+            border-radius: 50%; /* Круглая подложка */
+            border: 1px dashed var(--red);
+        }
+
+        .rt-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .rt-num {
+            font-family: 'Ruslan Display';
+            font-size: 3rem;
+            color: var(--red);
+        }
+
+        .rt-lbl {
+            font-size: 1rem;
+            text-transform: uppercase;
+            color: var(--text);
+        }
+
+        /* --- ПРОГРАММА (Свиток) --- */
+        .scroll-list {
+            list-style: none;
+            text-align: left;
+            margin: 0 auto;
+            display: inline-block;
+        }
+
+        .scroll-item {
+            font-size: 1.5rem;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.3);
+            display: flex;
+            align-items: center;
+        }
+
+        .scroll-item::before {
+            content: '♦';
+            color: var(--red);
+            margin-right: 20px;
+            font-size: 1rem;
+        }
+
+        .time-gold {
+            font-weight: bold;
+            color: var(--gold);
+            margin-right: 20px;
+            font-family: 'Ruslan Display';
+        }
+
+        /* --- КАРТА (Пергамент) --- */
+        .map-frame {
+            border: 10px double var(--gold);
+            height: 400px;
+            filter: sepia(80%) contrast(90%); /* Эффект старой бумаги */
+            margin-top: 40px;
+        }
+
+        /* --- КНОПКА (Печать) --- */
+        .btn-rus {
+            display: inline-block;
+            margin-top: 50px;
+            padding: 20px 60px;
+            background-color: var(--red);
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Ruslan Display';
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 50px;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(138, 28, 28, 0.3);
+        }
+
+        .btn-rus:hover {
+            background-color: var(--gold);
+            transform: translateY(-5px);
+            color: var(--red);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            body { border-width: 8px; }
+            .rus-timer { flex-wrap: wrap; border-radius: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Анимированный фон -->
+        <div class="sun-symbol"></div>
+        
+        <div class="subtitle">Сказание о любви</div>
+        <h1>Иван <br> да <br> Марья</h1>
+        <p style="font-size: 1.5rem; margin-top: 20px; color: var(--red);">14 Февраля 2026</p>
+        <p style="text-transform: uppercase; letter-spacing: 2px;">Град Суздаль</p>
+    </header>
+
+    <section>
+        <h2>Приглашение</h2>
+        <p>Дорогие наши! Приглашаем вас разделить с нами радость великую.</p>
+        <p>В старинном городе Суздале, среди белокаменных стен и звона колоколов, мы соединим наши судьбы.</p>
+
+        <div class="rus-timer" id="timer">
+            <div class="rt-item">
+                <span class="rt-num" id="d">00</span>
+                <span class="rt-lbl">Дней</span>
+            </div>
+            <div class="rt-item">
+                <span class="rt-num" id="h">00</span>
+                <span class="rt-lbl">Часов</span>
+            </div>
+            <div class="rt-item">
+                <span class="rt-num" id="m">00</span>
+                <span class="rt-lbl">Минут</span>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Пир на весь мир</h2>
+        <ul class="scroll-list">
+            <li class="scroll-item">
+                <span class="time-gold">14:00</span>
+                <span>Встреча гостей у ворот</span>
+            </li>
+            <li class="scroll-item">
+                <span class="time-gold">15:00</span>
+                <span>Таинство Венчания</span>
+            </li>
+            <li class="scroll-item">
+                <span class="time-gold">17:00</span>
+                <span>Праздничное застолье</span>
+            </li>
+            <li class="scroll-item">
+                <span class="time-gold">21:00</span>
+                <span>Гуляния и хороводы</span>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Путь-дорога</h2>
+        <p>Гостиничный комплекс «Пушкарская Слобода»</p>
+        <div class="map-frame">
+            <!-- Карта Суздаль -->
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2208.5630635465365!2d40.43577531595156!3d56.41913798073673!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x414c516315555555%3A0x1555555555555555!2z0J_Rg9GI0LrQsNGA0YHQutCw0Y8g0YHQu9C-0LHQvtC00LA!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <a href="https://t.me/durov" target="_blank" class="btn-rus">Послать весточку</a>
+    </section>
+
+    <script>
+        // Таймер
+        const target = new Date('February 14, 2026 14:00:00').getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+        }, 1000);
+    </script>
+</body>
+</html>
