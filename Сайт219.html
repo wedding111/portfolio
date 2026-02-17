@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Даниил & Елена | Cinematic Wedding</title>
+    
+    <!-- Шрифты: Изысканный антиква и чистый гротеск -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Mulish:wght@200;300;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #e8e8e8;
+            --text-main: #1a1a1a;
+            --text-light: #555;
+            --accent: #2c3e50;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Mulish', sans-serif;
+            overflow-x: hidden;
+            /* Эффект пленочного зерна (Noise) на весь сайт */
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* --- Плавный скролл контейнер --- */
+        .smooth-wrapper {
+            width: 100%;
+        }
+
+        /* --- HEADER (Parallax & Typography) --- */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #dbe6f6, #c5d8e6); /* Туманный градиент */
+        }
+
+        /* Абстрактные горы (CSS Clip-path) */
+        .mountain {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60vh;
+            background: #2c3e50;
+            clip-path: polygon(0% 100%, 0% 80%, 30% 30%, 50% 60%, 70% 20%, 100% 90%, 100% 100%);
+            opacity: 0.1;
+            z-index: 1;
+            transform: translateY(20px);
+            transition: transform 0.1s linear; /* Для JS параллакса */
+        }
+        
+        .mountain-2 {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 40vh;
+            background: #1a1a1a;
+            clip-path: polygon(0% 100%, 20% 50%, 40% 90%, 60% 40%, 100% 100%);
+            opacity: 0.05;
+            z-index: 2;
+        }
+
+        /* Заголовок с анимацией размытия */
+        h1 {
+            font-family: 'Italiana', serif;
+            font-size: 7vw;
+            font-weight: 400;
+            color: var(--text-main);
+            z-index: 10;
+            opacity: 0;
+            filter: blur(20px);
+            transform: translateY(50px);
+            animation: cinematicReveal 2.5s cubic-bezier(0.2, 1, 0.3, 1) forwards 0.5s;
+        }
+
+        .hero-date {
+            font-size: 1.2rem;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeIn 2s ease forwards 1.5s;
+            z-index: 10;
+        }
+
+        @keyframes cinematicReveal {
+            to { opacity: 1; filter: blur(0); transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            to { opacity: 0.7; }
+        }
+
+        /* --- SECTIONS (Reveal on Scroll) --- */
+        section {
+            padding: 150px 10%;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .reveal-text {
+            font-family: 'Italiana', serif;
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 50px;
+            
+            /* Маска для появления текста построчно */
+            background: linear-gradient(to right, currentColor 0%, currentColor 0%);
+            background-size: 0% 100%;
+            background-repeat: no-repeat;
+            -webkit-background-clip: text;
+            /* Цвет текста делаем прозрачным, чтобы видеть маску (в реальной сложной анимации), 
+               но здесь используем упрощенный reveal через класс .visible */
+            opacity: 0.2; 
+            transition: all 1s ease;
+            transform: translateY(20px);
+        }
+
+        .reveal-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+            max-width: 600px;
+        }
+
+        /* --- MINIMAL TIMER --- */
+        .timer-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+
+        .timer-block {
+            text-align: center;
+            position: relative;
+            flex: 1;
+        }
+
+        .timer-block:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            right: 0; top: 20%; bottom: 20%;
+            width: 1px;
+            background: #e0e0e0;
+        }
+
+        .t-digit {
+            display: block;
+            font-family: 'Italiana';
+            font-size: 4rem;
+            line-height: 1;
+        }
+        .t-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 10px;
+            color: #888;
+        }
+
+        /* --- PROGRAM (Hover Accordion) --- */
+        .program-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.5s ease;
+            position: relative;
+        }
+
+        .program-item:hover {
+            padding-left: 20px;
+            background: rgba(255,255,255,0.5);
+        }
+
+        .p-time { font-family: 'Italiana'; font-size: 2rem; }
+        .p-title { font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; }
+        .p-desc { 
+            font-size: 0.9rem; color: #888; 
+            opacity: 0; transform: translateX(-10px); 
+            transition: all 0.3s ease;
+        }
+
+        .program-item:hover .p-desc { opacity: 1; transform: translateX(0); }
+
+        /* --- MAP (Monochrome) --- */
+        .map-container {
+            width: 100%;
+            height: 60vh;
+            filter: grayscale(100%);
+            transition: filter 1s ease;
+        }
+        .map-container:hover { filter: grayscale(0%); }
+
+        /* --- BUTTON (Magnetic) --- */
+        .btn-magnetic {
+            display: inline-block;
+            margin-top: 50px;
+            padding: 25px 60px;
+            background: var(--text-main);
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: transform 0.2s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        /* Footer */
+        footer {
+            padding: 100px 0;
+            text-align: center;
+            background: #dbe6f6;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 15vw; }
+            .timer-line { flex-wrap: wrap; }
+            .timer-block { flex: 1 1 50%; border-bottom: 1px solid #eee; padding: 20px; }
+            .timer-block:nth-child(2)::after { display: none; }
+            .reveal-text { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="mountain" id="mount1"></div>
+        <div class="mountain-2" id="mount2"></div>
+        
+        <h1>Даниил & Елена</h1>
+        <div class="hero-date">10 . 09 . 2026 • КРАСНАЯ ПОЛЯНА</div>
+    </header>
+
+    <div class="smooth-wrapper">
+        <section>
+            <div class="reveal-text js-reveal">
+                История о любви,<br>
+                высоте чувств<br>
+                и тишине гор.
+            </div>
+            <div style="display: flex; justify-content: flex-end;">
+                <p>
+                    Мы выбрали это место не случайно. Здесь воздух чище, а мысли яснее. 
+                    Приглашаем вас разделить с нами момент, когда две линии жизни станут одной.
+                </p>
+            </div>
+
+            <div class="timer-line">
+                <div class="timer-block">
+                    <span class="t-digit" id="d">00</span>
+                    <span class="t-label">Дней</span>
+                </div>
+                <div class="timer-block">
+                    <span class="t-digit" id="h">00</span>
+                    <span class="t-label">Часов</span>
+                </div>
+                <div class="timer-block">
+                    <span class="t-digit" id="m">00</span>
+                    <span class="t-label">Минут</span>
+                </div>
+                <div class="timer-block">
+                    <span class="t-digit" id="s">00</span>
+                    <span class="t-label">Секунд</span>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="reveal-text js-reveal" style="font-size: 2.5rem; margin-bottom: 60px;">
+                Хронология
+            </div>
+            
+            <div class="program-item">
+                <div class="p-time">15:30</div>
+                <div class="p-title">Welcome</div>
+                <div class="p-desc">Аперитив на террасе</div>
+            </div>
+            <div class="program-item">
+                <div class="p-time">16:30</div>
+                <div class="p-title">Церемония</div>
+                <div class="p-desc">Обмен кольцами на закате</div>
+            </div>
+            <div class="program-item">
+                <div class="p-time">18:00</div>
+                <div class="p-title">Ужин</div>
+                <div class="p-desc">Гастрономический сет</div>
+            </div>
+            <div class="program-item">
+                <div class="p-time">22:00</div>
+                <div class="p-title">Тишина</div>
+                <div class="p-desc">Наблюдение за звездами</div>
+            </div>
+        </section>
+
+        <section style="padding: 0;">
+            <div class="map-container">
+                <!-- Карта Красная Поляна -->
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d45127.76562573229!2d40.15873216867761!3d43.68160408427976!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40f5a507cc3664d9%3A0x6b4f730c45785a9f!2z0JrRgNCw0YHQvdCw0Y8g0J_QvtC70Y_QvdCw!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </section>
+
+        <footer>
+            <div class="reveal-text js-reveal" style="font-size: 2rem; margin-bottom: 30px;">
+                Ваше присутствие —<br>лучший подарок.
+            </div>
+            <a href="https://t.me/durov" class="btn-magnetic" id="magneticBtn">Подтвердить (R.S.V.P.)</a>
+        </footer>
+    </div>
+
+    <script>
+        // --- 1. Cinematic Scroll Reveal (Появление при скролле) ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.js-reveal').forEach(el => observer.observe(el));
+
+        // --- 2. Parallax Effect (Движение гор) ---
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const mount1 = document.getElementById('mount1');
+            const mount2 = document.getElementById('mount2');
+            
+            // Двигаем горы с разной скоростью для объема
+            mount1.style.transform = `translateY(${scrolled * 0.2}px)`;
+            mount2.style.transform = `translateY(${scrolled * 0.1}px)`;
+        });
+
+        // --- 3. Magnetic Button Effect (Кнопка тянется за мышкой) ---
+        const btn = document.getElementById('magneticBtn');
+        
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            
+            // Легкое смещение кнопки (магнетизм)
+            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        });
+
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'translate(0, 0)';
+        });
+
+        // --- 4. Timer ---
+        const target = new Date('September 10, 2026 15:30:00').getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
