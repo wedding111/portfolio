@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анастасия & Константин | Wedding in Ruskeala</title>
+    <!-- Элитные шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #b08d55; /* Античное золото */
+            --bg-light: #f9f7f2; /* Молочный */
+            --bg-dark: #ebe6df; /* Бежевый камень */
+            --text: #4a4a4a; /* Графит (не черный) */
+            --accent: #d4a373;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- Глобальная анимация частиц (лепестки) --- */
+        #particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        .petal {
+            position: absolute;
+            background: linear-gradient(135deg, #ffd1dc, #b08d55);
+            opacity: 0.6;
+            border-radius: 50% 0 50% 50%;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg) translateX(0); opacity: 0; }
+            10% { opacity: 0.8; }
+            100% { transform: translateY(110vh) rotate(360deg) translateX(50px); opacity: 0; }
+        }
+
+        /* --- Типографика --- */
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            color: var(--text);
+            line-height: 1.1;
+            margin-bottom: 10px;
+        }
+        .script-font {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 6rem;
+            color: var(--primary);
+            line-height: 1;
+            display: block;
+            margin: 20px 0;
+            text-shadow: 2px 2px 5px rgba(176, 141, 85, 0.2);
+        }
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+        }
+        h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 2px;
+            background: var(--primary);
+            margin: 15px auto 0;
+        }
+
+        /* --- HERO SCREEN --- */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #fffcf5 0%, #ebe6df 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            z-index: 2;
+            opacity: 0;
+            transform: scale(0.9);
+            animation: majesticAppear 2s ease-out forwards 0.5s;
+        }
+
+        .decorative-border {
+            position: absolute;
+            top: 30px; left: 30px; right: 30px; bottom: 30px;
+            border: 1px solid var(--primary);
+            z-index: 1;
+        }
+        
+        .decorative-border::before {
+            content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border: 1px solid rgba(176, 141, 85, 0.3);
+        }
+
+        @keyframes majesticAppear {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* --- Секции --- */
+        section {
+            padding: 100px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- История (Story) --- */
+        .story-section {
+            background-color: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 4px; /* Чуть мягче углы */
+            padding: 60px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+        }
+        .story-text {
+            font-size: 1.2rem;
+            line-height: 2;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .quote {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-top: 30px;
+        }
+
+        /* --- Таймер --- */
+        .timer-wrapper {
+            background: var(--bg-dark);
+            padding: 80px 0;
+        }
+        .timer {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        .timer-box {
+            text-align: center;
+        }
+        .timer-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            color: var(--primary);
+        }
+        .timer-label {
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #888;
+        }
+
+        /* --- Программа дня --- */
+        .timeline {
+            max-width: 700px;
+            margin: 50px auto;
+            position: relative;
+            border-left: 1px solid var(--primary);
+            padding-left: 40px;
+            text-align: left;
+        }
+        .event {
+            margin-bottom: 50px;
+            position: relative;
+        }
+        .event::before {
+            content: '';
+            position: absolute;
+            left: -46px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 4px solid #fff;
+        }
+        .event-time {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        .event-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin: 5px 0;
+        }
+
+        /* --- Карта (Рускеала) --- */
+        .map-section {
+            padding: 0;
+            height: 500px;
+            width: 100%;
+            filter: sepia(20%) contrast(90%); /* Кинематографичный цвет карты */
+        }
+
+        /* --- Telegram Button --- */
+        .btn-container {
+            padding: 80px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 20px 60px;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 1rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 0%; height: 100%;
+            background: var(--primary);
+            z-index: -1;
+            transition: all 0.4s ease;
+        }
+        .btn:hover {
+            color: #fff;
+            letter-spacing: 4px; /* Разъезжаются буквы */
+        }
+        .btn:hover::before {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .script-font { font-size: 4rem; }
+            .timer { gap: 15px; }
+            .timer-num { font-size: 2.5rem; }
+            .story-section { padding: 30px; margin: 20px; }
+            .timeline { padding-left: 20px; }
+            .event::before { left: -26px; }
+            .decorative-border { top: 15px; left: 15px; right: 15px; bottom: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Слой с падающими лепестками -->
+    <div id="particles"></div>
+
+    <header>
+        <div class="decorative-border"></div>
+        <div class="hero-content">
+            <p style="letter-spacing: 5px; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 20px;">Save the Date</p>
+            <h1>Анастасия</h1>
+            <span class="script-font">&</span>
+            <h1>Константин</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px; color: var(--primary);">25 Июля 2026</p>
+            <p style="margin-top: 10px; font-style: italic;">Горный парк Рускеала, Карелия</p>
+        </div>
+    </header>
+
+    <section class="story-section scroll-reveal">
+        <h2>О нас</h2>
+        <div class="story-text">
+            <p>Всё началось со случайной встречи, которая изменила нашу жизнь навсегда. Мы верим, что настоящая любовь способна преодолеть любые расстояния и преграды.</p>
+            <br>
+            <p>Мы выбрали Карелию местом нашей свадьбы не случайно. Величие мраморных скал и тишина северной природы — лучшее отражение того, как мы чувствуем этот мир вместе.</p>
+        </div>
+        <div class="quote">"Любовь — это когда весь мир затихает..."</div>
+    </section>
+
+    <section class="timer-wrapper scroll-reveal">
+        <h2>До торжества осталось</h2>
+        <div class="timer" id="timer">
+            <div class="timer-box">
+                <div class="timer-num" id="d">00</div>
+                <div class="timer-label">Дней</div>
+            </div>
+            <div class="timer-box">
+                <div class="timer-num" id="h">00</div>
+                <div class="timer-label">Часов</div>
+            </div>
+            <div class="timer-box">
+                <div class="timer-num" id="m">00</div>
+                <div class="timer-label">Минут</div>
+            </div>
+            <div class="timer-box">
+                <div class="timer-num" id="s">00</div>
+                <div class="timer-label">Секунд</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="scroll-reveal">
+        <h2>Программа дня</h2>
+        <div class="timeline">
+            <div class="event">
+                <div class="event-time">15:00</div>
+                <div class="event-title">Сбор гостей</div>
+                <p>Welcome-зона с шампанским на пирсе</p>
+            </div>
+            <div class="event">
+                <div class="event-time">16:00</div>
+                <div class="event-title">Церемония</div>
+                <p>Выездная регистрация в Мраморном каньоне</p>
+            </div>
+            <div class="event">
+                <div class="event-time">17:30</div>
+                <div class="event-title">Банкет</div>
+                <p>Ужин в панорамном ресторане</p>
+            </div>
+            <div class="event">
+                <div class="event-time">22:00</div>
+                <div class="event-title">Салют</div>
+                <p>Завершение вечера над озером</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Карта Рускеала -->
+    <div class="map-section scroll-reveal">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1796.883906232537!2d30.584340316132646!3d61.94939798263548!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4697079a40590a31%3A0xc397b971a8123e43!2z0JPRgNC90YvQuSDQv9Cw0YDQug!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+
+    <section class="btn-container scroll-reveal">
+        <h2>RSVP</h2>
+        <p style="margin-bottom: 30px;">Пожалуйста, подтвердите присутствие до 1 июня</p>
+        <a href="https://t.me/durov" target="_blank" class="btn">Написать в Telegram</a>
+    </section>
+
+    <script>
+        // --- 1. Логика Таймера (Живой отсчет) ---
+        const weddingDate = new Date('July 25, 2026 16:00:00').getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = weddingDate - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+
+        // --- 2. Scroll Reveal (Плавное появление блоков) ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+
+        // --- 3. Генератор частиц (Лепестки) ---
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 20; // Количество лепестков на экране
+
+            for(let i=0; i<particleCount; i++){
+                let span = document.createElement('span');
+                span.classList.add('petal');
+                
+                // Рандомная позиция
+                span.style.left = Math.random() * 100 + '%';
+                // Рандомный размер
+                let size = Math.random() * 10 + 5; 
+                span.style.width = size + 'px';
+                span.style.height = size + 'px';
+                // Рандомная задержка и скорость
+                span.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                span.style.animationDelay = (Math.random() * 5) + 's';
+                
+                container.appendChild(span);
+            }
+        }
+        createParticles();
+    </script>
+</body>
+</html>
