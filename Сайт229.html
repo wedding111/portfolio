@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Георгий & Вероника | The Wedding Times</title>
+    
+    <!-- Шрифты: UnifrakturMaguntia (Готический заголовок) и Playfair Display (Статьи) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=UnifrakturMaguntia&family=Merriweather:wght@300;400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --paper: #f4f1ea;
+            --ink: #1a1a1a;
+            --line: #2f2f2f;
+            --red-stamp: #b33939;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #333; /* Темный фон за газетой */
+            font-family: 'Merriweather', serif;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 0;
+            overflow-x: hidden;
+        }
+
+        /* --- ГАЗЕТНЫЙ ЛИСТ --- */
+        .newspaper {
+            background-color: var(--paper);
+            color: var(--ink);
+            width: 100%;
+            max-width: 1000px;
+            padding: 40px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            position: relative;
+            /* Текстура газетной бумаги */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E");
+            
+            /* Анимация появления (Вращение) */
+            animation: newspaper-spin 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            transform-origin: center center;
+        }
+
+        @keyframes newspaper-spin {
+            0% { transform: scale(0) rotate(-720deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        /* --- ШАПКА ГАЗЕТЫ (Masthead) --- */
+        header {
+            text-align: center;
+            border-bottom: 4px double var(--line);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .meta-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--line);
+            border-top: 1px solid var(--line);
+            padding: 5px 0;
+            margin: 10px 0;
+            font-family: 'Playfair Display';
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-family: 'UnifrakturMaguntia', cursive;
+            font-size: 5rem;
+            margin: 10px 0;
+            line-height: 1;
+        }
+
+        .headline {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 1;
+            text-align: center;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .sub-headline {
+            font-family: 'Playfair Display';
+            font-size: 1.5rem;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        /* --- СЕТКА (Columns) --- */
+        .news-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* Две колонки: широкая и узкая */
+            gap: 40px;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 40px;
+        }
+
+        /* Левая колонка (Статья) */
+        .article-col {
+            column-count: 2; /* Текст в две колонки как в газете */
+            column-gap: 30px;
+            text-align: justify;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .article-col p { margin-bottom: 15px; }
+
+        /* Буквица (Drop Cap) */
+        .drop-cap {
+            float: left;
+            font-family: 'UnifrakturMaguntia';
+            font-size: 4rem;
+            line-height: 0.8;
+            margin-right: 10px;
+            margin-top: 5px;
+        }
+
+        /* Правая колонка (Инфо) */
+        .info-col {
+            border-left: 1px solid var(--line);
+            padding-left: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* --- ТАЙМЕР (Box) --- */
+        .timer-box {
+            border: 2px solid var(--line);
+            padding: 15px;
+            text-align: center;
+            background: #e8e4dc;
+        }
+
+        .tb-title {
+            font-family: 'Playfair Display';
+            font-weight: bold;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--line);
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+        }
+
+        .timer-nums {
+            font-family: 'Playfair Display';
+            font-size: 2rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-around;
+        }
+        .timer-labels {
+            display: flex;
+            justify-content: space-around;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+        }
+
+        /* --- WEATHER / PROGRAM --- */
+        .weather-box h3 {
+            font-family: 'Playfair Display';
+            border-bottom: 2px solid var(--line);
+            margin-bottom: 10px;
+        }
+
+        .event-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px dotted #999;
+        }
+
+        /* --- КАРТА (Grayscale) --- */
+        .map-section {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .map-frame {
+            border: 1px solid var(--line);
+            padding: 5px;
+            filter: grayscale(100%) contrast(1.2);
+        }
+
+        /* --- ШТАМП (Stamp) --- */
+        .stamp-btn {
+            display: inline-block;
+            margin-top: 30px;
+            color: var(--red-stamp);
+            border: 3px solid var(--red-stamp);
+            padding: 10px 30px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            text-decoration: none;
+            transform: rotate(-5deg);
+            transition: 0.3s;
+            mask-image: url("data:image/svg+xml,..."); /* Можно добавить гранж эффект */
+        }
+
+        .stamp-btn:hover {
+            transform: rotate(0deg) scale(1.1);
+            background: var(--red-stamp);
+            color: var(--paper);
+        }
+
+        @media (max-width: 900px) {
+            body { padding: 0; background: var(--paper); }
+            .newspaper { box-shadow: none; padding: 20px; animation: none; }
+            h1 { font-size: 3.5rem; }
+            .headline { font-size: 2.5rem; }
+            .news-grid { grid-template-columns: 1fr; }
+            .article-col { column-count: 1; }
+            .info-col { border-left: none; border-top: 1px solid var(--line); padding-left: 0; padding-top: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="newspaper">
+        <header>
+            <div class="meta-header">
+                <span>Vol. 1, No. 1</span>
+                <span>Калининград, Россия</span>
+                <span>Цена: Одна улыбка</span>
+            </div>
+            <h1>The Wedding Times</h1>
+            <div class="meta-header" style="border-top: none; border-bottom: 4px double var(--line);">
+                <span>Суббота, 12 Сентября 2026</span>
+                <span>Специальный Выпуск</span>
+                <span>Эксклюзив</span>
+            </div>
+        </header>
+
+        <div class="headline">ОФИЦИАЛЬНО: ОНИ СКАЗАЛИ "ДА"!</div>
+        <div class="sub-headline">Георгий и Вероника объединяют свои судьбы в историческом центре</div>
+
+        <div class="news-grid">
+            <!-- Левая колонка: Текст статьи -->
+            <div class="article-col">
+                <p><span class="drop-cap">Э</span>то событие, которого ждали все светские хроники города. В сердце старого Кенигсберга, среди брусчатки и красного кирпича, состоится торжество любви и верности.</p>
+                <p>Пара решила отказаться от традиционных банкетов в пользу атмосферного вечера в стиле "Старой Европы". Ожидается живая музыка, винтажные наряды и искренние эмоции.</p>
+                <p>Как сообщают наши инсайдеры, церемония пройдет на острове Канта, под звуки органа, после чего гости отправятся на прогулку по району Амалиенау.</p>
+                <p><strong>Дресс-код мероприятия:</strong> Винтаж, Твид, Ретро-шик. Леди в шляпках, джентльмены в бабочках.</p>
+                <p>Мы будем вести прямой репортаж с места событий. Оставайтесь с нами и следите за обновлениями.</p>
+            </div>
+
+            <!-- Правая колонка: Инфоблоки -->
+            <div class="info-col">
+                <!-- Таймер -->
+                <div class="timer-box">
+                    <div class="tb-title">Обратный отсчет</div>
+                    <div id="timer">
+                        <div class="timer-nums">
+                            <span id="d">00</span>:<span id="h">00</span>:<span id="m">00</span>
+                        </div>
+                        <div class="timer-labels">
+                            <span>Дни</span><span>Часы</span><span>Мин</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Программа -->
+                <div class="weather-box">
+                    <h3>Программа Дня</h3>
+                    <div class="event-row">
+                        <span>15:00</span> <strong>Венчание</strong>
+                    </div>
+                    <div class="event-row">
+                        <span>16:30</span> <strong>Фотосессия</strong>
+                    </div>
+                    <div class="event-row">
+                        <span>18:00</span> <strong>Ужин в Амалиенау</strong>
+                    </div>
+                </div>
+
+                <!-- Цитата -->
+                <div style="font-style: italic; border-top: 1px solid #000; padding-top: 10px;">
+                    "Любовь — это единственная новость, которая всегда остается актуальной."
+                </div>
+            </div>
+        </div>
+
+        <!-- Карта -->
+        <div class="map-section">
+            <h3 style="font-family: 'Playfair Display'; font-size: 2rem; margin-bottom: 20px;">Место События</h3>
+            <div class="map-frame">
+                <!-- Карта Остров Канта -->
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2320.366687445774!2d20.51034231586526!3d54.70648798028646!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46e33d8d4b7c25a9%3A0x28974554b2075253!2z0JrQsNGE0LXQtNGA0LDQu9GM0L3Ri9C5 Ñ0L7QsdC-0YAg0KdCw!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+
+            <a href="https://t.me/durov" target="_blank" class="stamp-btn">ПОДТВЕРДИТЬ</a>
+        </div>
+    </div>
+
+    <script>
+        // Timer Logic
+        const target = new Date('September 12, 2026 15:00:00').getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+        }, 1000);
+    </script>
+</body>
+</html>
