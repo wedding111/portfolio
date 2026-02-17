@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сергей & Виктория | Champagne Wedding</title>
+    
+    <!-- Шрифты: Cinzel (Роскошный) и Great Vibes (Рукописный) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Great+Vibes&family=Raleway:wght@300;400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-cream: #f9f7f2;
+            --gold: #d4af37;
+            --gold-light: #f3e5ab;
+            --text: #4a4a4a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-cream);
+            color: var(--text);
+            font-family: 'Raleway', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- ФОН (Пузырьки Шампанского) --- */
+        #bubbles-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- ТЕКСТУРА БУМАГИ --- */
+        .paper-texture {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* --- ЗОЛОТАЯ РАМКА (Art Deco) --- */
+        .deco-frame {
+            position: fixed;
+            top: 20px; left: 20px; right: 20px; bottom: 20px;
+            border: 2px solid var(--gold);
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .deco-frame::before, .deco-frame::after {
+            content: ''; position: absolute; width: 100px; height: 100px;
+            border: 2px solid var(--gold);
+            transition: all 0.5s;
+        }
+        
+        /* Уголки */
+        .deco-frame::before { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+        .deco-frame::after { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+        /* --- HEADER --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .monogram {
+            width: 120px; height: 120px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Great Vibes';
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.8);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+            animation: pulse-gold 3s infinite alternate;
+        }
+
+        @keyframes pulse-gold {
+            from { box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); transform: scale(1); }
+            to { box-shadow: 0 0 40px rgba(212, 175, 55, 0.5); transform: scale(1.05); }
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 5rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin: 0;
+            /* Золотой градиент на тексте */
+            background: linear-gradient(45deg, #bfa37c, #f9e29c, #bfa37c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .script-font {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4rem;
+            color: var(--gold);
+            display: block;
+            margin: -10px 0;
+            -webkit-text-fill-color: var(--gold);
+        }
+
+        .date-line {
+            margin-top: 40px;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            border-top: 1px solid var(--gold);
+            border-bottom: 1px solid var(--gold);
+            padding: 10px 40px;
+            text-transform: uppercase;
+        }
+
+        /* --- SECTIONS --- */
+        section {
+            padding: 100px 40px;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        h2 {
+            font-family: 'Cinzel';
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        p {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        /* --- ТАЙМЕР (Изящный) --- */
+        .gold-timer {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .gt-box {
+            position: relative;
+            min-width: 80px;
+        }
+
+        /* Декоративная линия */
+        .gt-box::after {
+            content: '';
+            position: absolute;
+            bottom: -10px; left: 20%; width: 60%; height: 1px;
+            background: var(--gold);
+        }
+
+        .gt-num { font-family: 'Cinzel'; font-size: 3.5rem; color: var(--text); }
+        .gt-lbl { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: #888; }
+
+        /* --- ДРЕСС-КОД (Палитра) --- */
+        .dress-code-panel {
+            background: #fff;
+            padding: 40px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
+            margin-top: 40px;
+        }
+
+        .palette {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .color-dot {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            border: 3px solid #f9f7f2;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .color-dot:hover { transform: scale(1.2); }
+
+        /* --- КАРТА (В рамке) --- */
+        .map-deco {
+            border: 10px solid #fff;
+            outline: 1px solid var(--gold);
+            height: 400px;
+            margin-top: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        iframe { filter: sepia(20%) opacity(0.9); }
+
+        /* --- КНОПКА (Золотой слиток) --- */
+        .btn-gold {
+            display: inline-block;
+            margin-top: 50px;
+            padding: 20px 60px;
+            background: linear-gradient(45deg, #d4af37, #f3e5ab, #d4af37);
+            background-size: 200% auto;
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Cinzel';
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 2px;
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.4);
+            transition: 0.5s;
+            animation: shine-btn 3s infinite linear;
+        }
+
+        @keyframes shine-btn {
+            to { background-position: 200% center; }
+        }
+
+        .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(212, 175, 55, 0.6); }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            .gold-timer { gap: 20px; }
+            .deco-frame { top: 10px; left: 10px; right: 10px; bottom: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Текстура бумаги -->
+    <div class="paper-texture"></div>
+    
+    <!-- Анимация пузырьков -->
+    <canvas id="bubbles-canvas"></canvas>
+
+    <!-- Рамка -->
+    <div class="deco-frame"></div>
+
+    <header>
+        <div class="monogram">S&V</div>
+        <h1>Сергей</h1>
+        <span class="script-font">and</span>
+        <h1>Виктория</h1>
+        <div class="date-line">20 Сентября 2026 • Москва</div>
+    </header>
+
+    <section>
+        <h2>Приглашение</h2>
+        <p>
+            Дорогие друзья! Мы приглашаем вас разделить с нами этот сияющий день.
+            Пусть шампанское льется рекой, а музыка звучит до утра.
+        </p>
+
+        <div class="gold-timer" id="timer">
+            <div class="gt-box">
+                <span class="gt-num" id="d">00</span>
+                <span class="gt-lbl">Дней</span>
+            </div>
+            <div class="gt-box">
+                <span class="gt-num" id="h">00</span>
+                <span class="gt-lbl">Часов</span>
+            </div>
+            <div class="gt-box">
+                <span class="gt-num" id="m">00</span>
+                <span class="gt-lbl">Мин</span>
+            </div>
+            <div class="gt-box">
+                <span class="gt-num" id="s">00</span>
+                <span class="gt-lbl">Сек</span>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Дресс-код</h2>
+        <div class="dress-code-panel">
+            <p><strong>Black Tie / Cocktail</strong></p>
+            <p style="font-size: 1rem; color: #777; margin-bottom: 20px;">
+                Будем благодарны, если вы поддержите цветовую гамму нашего вечера.
+            </p>
+            <div class="palette">
+                <div class="color-dot" style="background: #e3dcd2;" title="Кремовый"></div>
+                <div class="color-dot" style="background: #d4af37;" title="Золотой"></div>
+                <div class="color-dot" style="background: #cbbfa8;" title="Бежевый"></div>
+                <div class="color-dot" style="background: #000000;" title="Черный (Смокинг)"></div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Торжество</h2>
+        <div style="text-align: left; max-width: 600px; margin: 0 auto; border-left: 1px solid var(--gold); padding-left: 30px;">
+            <div style="margin-bottom: 30px;">
+                <span style="font-family: 'Cinzel'; font-size: 1.5rem; color: var(--gold);">16:00</span>
+                <h3 style="margin: 5px 0;">Welcome-коктейль</h3>
+                <p style="font-size: 1rem; margin: 0;">Живая музыка и легкие закуски в лобби</p>
+            </div>
+            <div style="margin-bottom: 30px;">
+                <span style="font-family: 'Cinzel'; font-size: 1.5rem; color: var(--gold);">17:00</span>
+                <h3 style="margin: 5px 0;">Церемония</h3>
+                <p style="font-size: 1rem; margin: 0;">В Золотом зале</p>
+            </div>
+            <div style="margin-bottom: 30px;">
+                <span style="font-family: 'Cinzel'; font-size: 1.5rem; color: var(--gold);">18:30</span>
+                <h3 style="margin: 5px 0;">Ужин</h3>
+                <p style="font-size: 1rem; margin: 0;">Изысканная кухня и танцы</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Локация</h2>
+        <p>The Ritz-Carlton, Тверская ул., 3</p>
+        
+        <div class="map-deco">
+            <!-- Карта Ритц Москва -->
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2244.973347067817!2d37.61064631593106!3d55.75887298055497!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a50b315e573%3A0x406a68d6e3c0a50!2sThe%20Ritz-Carlton%2C%20Moscow!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <a href="https://t.me/durov" target="_blank" class="btn-gold">Я буду!</a>
+    </section>
+
+    <script>
+        // --- 1. Анимация Пузырьков (Champagne Bubbles) ---
+        const canvas = document.getElementById('bubbles-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height, bubbles = [];
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Bubble {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                this.x = Math.random() * width;
+                this.y = height + Math.random() * 100; // Начинаем снизу
+                this.size = Math.random() * 4 + 1; // Маленькие пузырьки
+                this.speed = Math.random() * 1 + 0.5;
+                this.wobble = Math.random() * 2; // Покачивание
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+
+            update() {
+                this.y -= this.speed; // Вверх
+                this.x += Math.sin(this.y * 0.02) * 0.5; // Легкое покачивание
+
+                if (this.y < -10) {
+                    this.init(); // Перезапуск снизу
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`; // Золотой цвет
+                ctx.fill();
+            }
+        }
+
+        // Создаем много пузырьков
+        for (let i = 0; i < 150; i++) {
+            bubbles.push(new Bubble());
+            bubbles[i].y = Math.random() * height; // Распределяем по экрану сразу
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            bubbles.forEach(b => {
+                b.update();
+                b.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+
+        // --- 2. Таймер ---
+        const target = new Date('September 20, 2026 16:00:00').getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
