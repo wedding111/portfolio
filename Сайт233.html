@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Андрей & Юлия | Botanical Wedding</title>
+    
+    <!-- Шрифты: Yeseva One (Заголовки с засечками) и Montserrat (Текст) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Yeseva+One&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --dark-green: #1a3c34;
+            --light-green: #4a7c59;
+            --gold: #d4af37;
+            --glass: rgba(255, 255, 255, 0.7);
+            --bg: #fdfdfd;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--dark-green);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- ФОНОВЫЕ ЭЛЕМЕНТЫ (Параллакс Листья) --- */
+        /* Мы рисуем листья через CSS (border-radius), чтобы не грузить картинки */
+        .leaf {
+            position: fixed;
+            background: linear-gradient(135deg, var(--light-green), var(--dark-green));
+            border-radius: 0 50% 0 50%;
+            opacity: 0.8;
+            z-index: -1;
+            box-shadow: 10px 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Листья разного размера и положения */
+        .l-1 { width: 300px; height: 300px; top: -50px; left: -100px; transform: rotate(45deg); z-index: 10; opacity: 0.9; }
+        .l-2 { width: 200px; height: 200px; top: 20%; right: -50px; transform: rotate(-45deg); z-index: -1; opacity: 0.4; }
+        .l-3 { width: 400px; height: 400px; bottom: -100px; left: -50px; transform: rotate(30deg); z-index: 10; opacity: 0.9; }
+        .l-4 { width: 150px; height: 150px; bottom: 30%; left: 10%; transform: rotate(10deg); z-index: -2; opacity: 0.2; }
+
+        /* --- РАМКА ОРАНЖЕРЕИ --- */
+        .glass-frame {
+            position: fixed;
+            top: 20px; left: 20px; right: 20px; bottom: 20px;
+            border: 1px solid var(--dark-green);
+            pointer-events: none;
+            z-index: 50;
+        }
+        
+        /* Уголки рамки */
+        .glass-frame::before, .glass-frame::after {
+            content: ''; position: absolute; width: 20px; height: 20px;
+            border: 4px solid var(--gold);
+            transition: all 0.3s;
+        }
+        .glass-frame::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .glass-frame::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+        /* --- HEADER --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Yeseva One', serif;
+            font-size: 5rem;
+            line-height: 1.1;
+            color: var(--dark-green);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        /* Эффект прозрачного текста на листьях */
+        h1 span {
+            background: linear-gradient(to bottom, var(--dark-green), #000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .date-badge {
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+            border-top: 1px solid var(--dark-green);
+            border-bottom: 1px solid var(--dark-green);
+            padding: 10px 40px;
+            margin-top: 30px;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        /* --- GLASS CARD (Секции) --- */
+        section {
+            padding: 100px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .glass-panel {
+            background: var(--glass);
+            backdrop-filter: blur(10px); /* Эффект матового стекла */
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.8);
+            padding: 60px;
+            border-radius: 20px; /* Скругленные углы */
+            box-shadow: 0 10px 40px rgba(26, 60, 52, 0.1);
+        }
+
+        h2 {
+            font-family: 'Yeseva One';
+            font-size: 3rem;
+            margin-bottom: 30px;
+            color: var(--dark-green);
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        /* --- ТАЙМЕР (Цветочный) --- */
+        .botanical-timer {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .bt-leaf {
+            width: 100px;
+            height: 120px;
+            background: #fff;
+            border-radius: 50px 50px 20px 20px; /* Форма лепестка */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid var(--light-green);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .bt-num { font-family: 'Yeseva One'; font-size: 2.5rem; color: var(--dark-green); }
+        .bt-lbl { font-size: 0.7rem; text-transform: uppercase; color: var(--light-green); margin-top: 5px; }
+
+        /* --- РАСПИСАНИЕ (Веточка) --- */
+        .stem-timeline {
+            position: relative;
+            padding-left: 40px;
+            margin-top: 40px;
+        }
+        
+        /* Стебель */
+        .stem-timeline::before {
+            content: '';
+            position: absolute;
+            left: 19px; top: 0; bottom: 0;
+            width: 2px;
+            background: var(--light-green);
+        }
+
+        .stem-event {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        /* Листик на стебле */
+        .stem-event::before {
+            content: '';
+            position: absolute;
+            left: -40px; top: 5px;
+            width: 20px; height: 10px;
+            background: var(--light-green);
+            border-radius: 0 50% 0 50%;
+        }
+
+        .time-b { font-weight: bold; font-size: 1.2rem; color: var(--gold); }
+        .title-b { font-family: 'Yeseva One'; font-size: 1.5rem; }
+
+        /* --- КАРТА --- */
+        .map-glass {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 5px solid #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            height: 400px;
+        }
+
+        iframe { filter: saturate(1.2) hue-rotate(80deg) brightness(0.9); } /* Зеленоватый оттенок */
+
+        /* --- КНОПКА --- */
+        .btn-grow {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 20px 50px;
+            background: var(--dark-green);
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Montserrat';
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 0 20px 0 20px;
+            transition: 0.3s;
+        }
+
+        .btn-grow:hover {
+            border-radius: 20px 0 20px 0;
+            background: var(--light-green);
+            transform: translateY(-5px);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            .glass-panel { padding: 30px; }
+            .glass-frame { top: 10px; bottom: 10px; left: 10px; right: 10px; }
+            .bt-leaf { width: 80px; height: 100px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Параллакс Листья (Pure CSS Shapes) -->
+    <div class="leaf l-1" id="l1"></div>
+    <div class="leaf l-2" id="l2"></div>
+    <div class="leaf l-3" id="l3"></div>
+    <div class="leaf l-4" id="l4"></div>
+
+    <!-- Декоративная рамка -->
+    <div class="glass-frame"></div>
+
+    <header>
+        <p style="text-transform: uppercase; letter-spacing: 3px; color: var(--light-green); margin-bottom: 10px;">Приглашение</p>
+        <h1><span>Андрей</span> <br> <span style="font-size: 2rem; vertical-align: middle; color: var(--gold);">&</span> <br> <span>Юлия</span></h1>
+        <div class="date-badge">15 АВГУСТА 2026</div>
+    </header>
+
+    <section>
+        <div class="glass-panel">
+            <h2>Сад Любви</h2>
+            <p>Мы верим, что семья — это сад, который нужно возделывать с любовью. 
+            Приглашаем вас в нашу оранжерею чувств.</p>
+            <p>Среди зелени, света и близких людей мы скажем главные слова.</p>
+
+            <div class="botanical-timer" id="timer">
+                <div class="bt-leaf">
+                    <span class="bt-num" id="d">00</span>
+                    <span class="bt-lbl">Дней</span>
+                </div>
+                <div class="bt-leaf">
+                    <span class="bt-num" id="h">00</span>
+                    <span class="bt-lbl">Часов</span>
+                </div>
+                <div class="bt-leaf">
+                    <span class="bt-num" id="m">00</span>
+                    <span class="bt-lbl">Минут</span>
+                </div>
+                <div class="bt-leaf">
+                    <span class="bt-num" id="s">00</span>
+                    <span class="bt-lbl">Сек</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="glass-panel">
+            <h2>Хронология</h2>
+            <div class="stem-timeline">
+                <div class="stem-event">
+                    <span class="time-b">15:00</span>
+                    <div class="title-b">Сбор в Саду</div>
+                    <p>Прогулка по оранжерее под звуки арфы</p>
+                </div>
+                <div class="stem-event">
+                    <span class="time-b">16:30</span>
+                    <div class="title-b">Регистрация</div>
+                    <p>Под куполом зимнего сада</p>
+                </div>
+                <div class="stem-event">
+                    <span class="time-b">18:00</span>
+                    <div class="title-b">Ужин</div>
+                    <p>Среди пальм и папоротников</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="glass-panel" style="text-align: center;">
+            <h2>Локация</h2>
+            <p>Оранжерея Таврического сада, Санкт-Петербург</p>
+            
+            <div class="map-glass">
+                <!-- Карта Оранжерея СПБ -->
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1998.1884631435213!2d30.372554316101147!3d59.94565398187884!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696319808405021%3A0x33718f0227183d2e!2z0J7RgNCw0L3QttC10Y010Y8g0KLQsNCy0YDQuNGH0LXRgdC60L7Qs9C-INGB0LDQtNCw!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+
+            <a href="https://t.me/durov" target="_blank" class="btn-grow">Я буду с вами</a>
+        </div>
+    </section>
+
+    <script>
+        // --- 1. Parallax Effect (Движение листьев) ---
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+
+            // Листья двигаются с разной скоростью и вращаются
+            document.getElementById('l1').style.transform = `translateY(${scrollY * 0.5}px) rotate(45deg)`;
+            document.getElementById('l2').style.transform = `translateY(${scrollY * 0.2}px) rotate(-45deg)`;
+            document.getElementById('l3').style.transform = `translateY(${scrollY * -0.1}px) rotate(30deg)`; // Едет вверх
+            document.getElementById('l4').style.transform = `translateY(${scrollY * 0.3}px) rotate(10deg)`;
+        });
+
+        // --- 2. Timer (Рабочий) ---
+        const target = new Date('August 15, 2026 15:00:00').getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
