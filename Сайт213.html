@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Артем & Диана | Cosmic Wedding</title>
+    
+    <!-- Шрифты: Exo 2 (Футуристичный, но мягкий) и Comfortaa (Округлый) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;700&family=Exo+2:wght@200;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --space-bg-top: #0f0c29;
+            --space-bg-mid: #302b63;
+            --space-bg-bot: #24243e;
+            --accent: #b983ff; /* Светло-фиолетовый */
+            --text: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(to bottom, var(--space-bg-top), var(--space-bg-mid), var(--space-bg-bot));
+            color: var(--text);
+            font-family: 'Exo 2', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- Canvas для Звезд --- */
+        #starfield {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* --- Контент (поверх звезд) --- */
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* --- HEADER --- */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Планета (CSS Gradient) */
+        .planet {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #a770ef, #cf8bf3, #fdb99b);
+            box-shadow: 0 0 60px rgba(167, 112, 239, 0.4);
+            margin-bottom: 40px;
+            animation: float-planet 10s ease-in-out infinite;
+            position: relative;
+        }
+
+        /* Кольцо планеты */
+        .planet::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 220px; height: 60px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) rotate(-20deg);
+        }
+
+        @keyframes float-planet {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        h1 {
+            font-family: 'Comfortaa', cursive;
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(185, 131, 255, 0.8);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        /* --- Секции --- */
+        section {
+            padding: 100px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* Стеклянные карточки (Glassmorphism Dark) */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+        }
+
+        .glass-card:hover {
+            transform: scale(1.02);
+            border-color: rgba(185, 131, 255, 0.4);
+        }
+
+        h2 {
+            font-family: 'Comfortaa';
+            color: var(--accent);
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        /* --- Таймер (Созвездие) --- */
+        .constellation-timer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .star-point {
+            width: 10px; height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff;
+            margin: 0 auto 10px;
+        }
+
+        .timer-unit { position: relative; }
+        
+        /* Линии между звездами (псевдо-элементы) */
+        .timer-unit:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 5px; right: -25px;
+            width: 30px; height: 1px;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .t-num { font-size: 2.5rem; font-weight: bold; }
+        .t-lbl { font-size: 0.9rem; opacity: 0.7; }
+
+        /* --- Карта (Космос) --- */
+        .map-wrapper {
+            border-radius: 50% 50% 0 0; /* Арочная форма */
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.2);
+            height: 450px;
+            box-shadow: 0 0 30px rgba(185, 131, 255, 0.2);
+        }
+        
+        iframe { filter: invert(90%) hue-rotate(240deg) brightness(0.8); }
+
+        /* --- Кнопка (Rocket) --- */
+        .btn-space {
+            background: linear-gradient(90deg, #9400d3, #4b0082);
+            color: white;
+            padding: 15px 50px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            display: inline-block;
+            margin-top: 30px;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .btn-space::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 0%; height: 100%;
+            background: #fff;
+            opacity: 0.1;
+            z-index: -1;
+            transition: 0.3s;
+        }
+
+        .btn-space:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px #9400d3;
+        }
+        .btn-space:hover::before { width: 100%; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .constellation-timer { gap: 15px; }
+            .timer-unit:not(:last-child)::after { display: none; } /* Скрыть линии на мобильном */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Звездный фон -->
+    <canvas id="starfield"></canvas>
+
+    <div class="content-wrapper">
+        <header>
+            <div class="planet"></div>
+            <div class="subtitle">Наша Вселенная</div>
+            <h1>Артем & Диана</h1>
+            <p style="margin-top: 20px; font-size: 1.2rem;">22 Августа 2026 • Архыз</p>
+        </header>
+
+        <section>
+            <div class="glass-card">
+                <h2>Гравитация Любви</h2>
+                <p>Звезды сошлись так, что мы нашли друг друга. Мы приглашаем вас в астрофизическую обсерваторию, чтобы загадать желание под самым чистым небом в стране.</p>
+                <br>
+                <p>Дресс-код: Midnight Blue & Silver.</p>
+
+                <div class="constellation-timer" id="timer">
+                    <div class="timer-unit">
+                        <div class="star-point"></div>
+                        <div class="t-num" id="d">00</div>
+                        <div class="t-lbl">Дней</div>
+                    </div>
+                    <div class="timer-unit">
+                        <div class="star-point"></div>
+                        <div class="t-num" id="h">00</div>
+                        <div class="t-lbl">Часов</div>
+                    </div>
+                    <div class="timer-unit">
+                        <div class="star-point"></div>
+                        <div class="t-num" id="m">00</div>
+                        <div class="t-lbl">Минут</div>
+                    </div>
+                    <div class="timer-unit">
+                        <div class="star-point"></div>
+                        <div class="t-num" id="s">00</div>
+                        <div class="t-lbl">Сек</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Координаты</h2>
+            <p style="margin-bottom: 20px;">Специальная астрофизическая обсерватория РАН</p>
+            <div class="map-wrapper">
+                <!-- Карта Архыз Обсерватория -->
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2874.5244585141235!2d41.44265431550596!3d43.64966797912141!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4058f27863584825%3A0x7d28761c5722168!2z0KHQv9C10YbQuNCw0LvRjNC90LDRjyDQkNGB0YLRgNC-0YTQuNC30LjRh9C10YHQutCw0Y8g0J7QsdGB0LXRgNCy0LDRgtC-0YDQuNGPINCg0JDQYQ!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+
+            <a href="https://t.me/durov" target="_blank" class="btn-space">Полетели с нами! 🚀</a>
+        </section>
+    </div>
+
+    <script>
+        // --- 1. Canvas Stars Animation (Звездное небо) ---
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+
+        let width, height, stars;
+
+        function init() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+
+            stars = [];
+            // Создаем 200 звезд
+            for (let i = 0; i < 200; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 1.5,
+                    vx: Math.floor(Math.random() * 50) - 25,
+                    vy: Math.floor(Math.random() * 50) - 25
+                });
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.globalCompositeOperation = "lighter";
+            
+            for (let i = 0, x, y; i < stars.length; i++) {
+                x = stars[i].x;
+                y = stars[i].y;
+                
+                ctx.beginPath();
+                ctx.fillStyle = "#fff";
+                ctx.arc(x, y, stars[i].radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Движение звезд (очень медленное)
+                stars[i].x += stars[i].vx / 1000; 
+                stars[i].y += stars[i].vy / 1000;
+
+                // Если улетела за экран, вернуть назад
+                if (stars[i].x < 0 || stars[i].x > width) stars[i].vx = -stars[i].vx;
+                if (stars[i].y < 0 || stars[i].y > height) stars[i].vy = -stars[i].vy;
+            }
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', init);
+        init();
+        draw();
+
+
+        // --- 2. Timer Logic ---
+        const target = new Date('August 22, 2026 18:00:00').getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
