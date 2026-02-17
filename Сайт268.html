@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Роман & Ева | Masterpiece Wedding</title>
+    
+    <!-- Шрифты: Pinyon Script (Королевский курсив) и Cormorant (Тонкий и дорогой) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-pink: #fdf5f7; /* Очень светлый розовый */
+            --text-main: #5d4037; /* Трюфельный (вместо черного) */
+            --gold: #d4af37;
+            --white-glass: rgba(255, 255, 255, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-pink);
+            color: var(--text-main);
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- ФОН (Живопись) --- */
+        .painting-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            /* Текстура неба и облаков */
+            background: url('https://images.unsplash.com/photo-1579783902614-a3fb39279c23?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+            z-index: -5;
+            filter: saturate(0.8) brightness(1.1); /* Делаем нежнее */
+            animation: zoom-slow 60s infinite alternate;
+        }
+
+        @keyframes zoom-slow {
+            from { transform: scale(1); }
+            to { transform: scale(1.15); }
+        }
+
+        /* --- ЦВЕТОЧНАЯ РАМА (Параллакс) --- */
+        .flower-frame {
+            position: fixed;
+            width: 100%; height: 100%;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .flower-img {
+            position: absolute;
+            background-size: contain;
+            background-repeat: no-repeat;
+            filter: drop-shadow(0 10px 20px rgba(93, 64, 55, 0.15));
+            transition: transform 0.1s ease-out;
+        }
+
+        /* Пионы по углам */
+        .f-top-left {
+            top: -50px; left: -50px; width: 400px; height: 400px;
+            background-image: url('https://png.pngtree.com/png-vector/20220706/ourmid/pngtree-watercolor-peony-flower-png-image_5706857.png');
+            transform: rotate(180deg);
+            z-index: 2;
+        }
+
+        .f-bottom-right {
+            bottom: -50px; right: -50px; width: 500px; height: 500px;
+            background-image: url('https://png.pngtree.com/png-vector/20230906/ourmid/pngtree-pink-rose-flower-png-image_10006472.png');
+            z-index: 2;
+        }
+
+        .f-blur-1 {
+            top: 20%; right: -50px; width: 200px; height: 200px;
+            background-image: url('https://png.pngtree.com/png-vector/20240125/ourmid/pngtree-rose-petal-ai-generated-png-image_11546877.png');
+            filter: blur(4px);
+            opacity: 0.7;
+            z-index: 1;
+        }
+
+        /* --- ТЕКСТУРА БУМАГИ (Сверху) --- */
+        .paper-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.3'/%3E%3C/svg%3E");
+            z-index: 99;
+            pointer-events: none;
+            mix-blend-mode: soft-light;
+        }
+
+        /* --- HEADER --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* Овальная рамка для имен */
+        .oval-frame {
+            border: 1px solid var(--gold);
+            padding: 60px 40px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; /* Красивый овал */
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.15);
+            position: relative;
+            animation: breathe 6s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 6rem;
+            color: var(--text-main);
+            line-height: 1.1;
+            margin: 0;
+            text-shadow: 2px 2px 0 rgba(255,255,255,0.8);
+        }
+
+        .wedding-date {
+            font-size: 1.5rem;
+            letter-spacing: 5px;
+            margin-top: 20px;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        /* --- SECTIONS (Soft Glass) --- */
+        section {
+            padding: 120px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* Карточка с контентом - очень мягкая */
+        .soft-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 60px;
+            border-radius: 200px 200px 20px 20px; /* Арочная форма */
+            box-shadow: 0 30px 60px rgba(180, 150, 150, 0.1);
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+        h2 {
+            font-family: 'Pinyon Script';
+            font-size: 4rem;
+            margin-bottom: 30px;
+            color: var(--text-main);
+        }
+
+        p {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            color: #6d5e5e;
+        }
+
+        /* --- ТАЙМЕР (Жемчужины) --- */
+        .pearl-timer {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .pearl {
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #fff, #f0e6e6);
+            box-shadow: 
+                0 10px 20px rgba(100, 80, 80, 0.1), 
+                inset -5px -5px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #fff;
+        }
+
+        .p-num { font-family: 'Cormorant Garamond'; font-size: 2.5rem; font-style: italic; color: var(--text-main); }
+        .p-lbl { font-size: 0.7rem; text-transform: uppercase; color: var(--gold); letter-spacing: 1px; }
+
+        /* --- РАСПИСАНИЕ (Акварель) --- */
+        .watercolor-timeline {
+            text-align: left;
+            margin-top: 40px;
+            padding-left: 20px;
+        }
+
+        .w-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.7), transparent);
+            border-radius: 50px;
+            transition: transform 0.3s;
+        }
+
+        .w-item:hover { transform: translateX(10px); background: rgba(255,255,255,0.9); }
+
+        .w-time { font-family: 'Pinyon Script'; font-size: 2.5rem; color: var(--gold); margin-right: 20px; min-width: 80px; }
+        .w-title { font-size: 1.3rem; font-weight: bold; }
+
+        /* --- КАРТА (Виньетка) --- */
+        .map-vignette {
+            height: 400px;
+            width: 100%;
+            border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%; /* Мягкая форма */
+            overflow: hidden;
+            margin-top: 40px;
+            box-shadow: 0 20px 50px rgba(93, 64, 55, 0.1);
+            border: 5px solid #fff;
+        }
+        
+        iframe { filter: sepia(20%) saturate(0.8); }
+
+        /* --- КНОПКА (Золотая Нить) --- */
+        .btn-elegant {
+            display: inline-block;
+            margin-top: 50px;
+            padding: 20px 80px;
+            background: transparent;
+            color: var(--text-main);
+            text-decoration: none;
+            font-family: 'Cormorant Garamond';
+            font-size: 1.5rem;
+            font-style: italic;
+            border: 1px solid var(--text-main);
+            border-radius: 100px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s;
+        }
+
+        /* Заливка при наведении */
+        .btn-elegant::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 0%; height: 100%;
+            background: var(--text-main);
+            transition: width 0.5s;
+            z-index: -1;
+        }
+
+        .btn-elegant:hover { color: #fff; border-color: transparent; }
+        .btn-elegant:hover::before { width: 100%; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 4.5rem; }
+            .f-top-left { width: 250px; height: 250px; }
+            .f-bottom-right { width: 300px; height: 300px; }
+            .pearl-timer { gap: 15px; }
+            .pearl { width: 70px; height: 70px; }
+            .p-num { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Текстура бумаги -->
+    <div class="paper-overlay"></div>
+
+    <!-- Живописный фон (Небо) -->
+    <div class="painting-bg"></div>
+
+    <!-- Цветы по углам (Параллакс) -->
+    <div class="flower-frame">
+        <div class="flower-img f-top-left" id="f1"></div>
+        <div class="flower-img f-blur-1" id="f2"></div>
+        <div class="flower-img f-bottom-right" id="f3"></div>
+    </div>
+
+    <header>
+        <div class="oval-frame">
+            <p style="text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem; margin-bottom: 10px;">Свадебное Торжество</p>
+            <h1>Роман <br> <span style="font-size: 3rem; color: var(--gold);">&</span> <br> Ева</h1>
+            <div class="wedding-date">25 Июля 2026</div>
+        </div>
+    </header>
+
+    <section>
+        <div class="soft-card">
+            <h2>История Любви</h2>
+            <p>
+                Как лепестки роз раскрываются навстречу солнцу, так и наши сердца открылись друг другу. 
+                В окружении цветущих садов и близких людей мы хотим начать нашу вечность.
+            </p>
+            
+            <div class="pearl-timer" id="timer">
+                <div class="pearl">
+                    <span class="p-num" id="d">00</span>
+                    <span class="p-lbl">Дней</span>
+                </div>
+                <div class="pearl">
+                    <span class="p-num" id="h">00</span>
+                    <span class="p-lbl">Часов</span>
+                </div>
+                <div class="pearl">
+                    <span class="p-num" id="m">00</span>
+                    <span class="p-lbl">Мин</span>
+                </div>
+                <div class="pearl">
+                    <span class="p-num" id="s">00</span>
+                    <span class="p-lbl">Сек</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="soft-card" style="border-radius: 20px 20px 200px 200px;">
+            <h2>День Счастья</h2>
+            <div class="watercolor-timeline">
+                <div class="w-item">
+                    <span class="w-time">15:00</span>
+                    <span class="w-title">Встреча в Розовом Саду</span>
+                </div>
+                <div class="w-item">
+                    <span class="w-time">16:00</span>
+                    <span class="w-title">Церемония Венчания</span>
+                </div>
+                <div class="w-item">
+                    <span class="w-time">18:00</span>
+                    <span class="w-title">Праздничный Ужин</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="soft-card" style="border-radius: 200px;">
+            <h2>Место</h2>
+            <p>Усадьба Мураново, Московская область</p>
+            
+            <div class="map-vignette">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2228.627768234567!2d37.90256831596767!3d56.17724598085934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b4d6b6b6b6b6b7%3A0x123456789abcdef!2sMuranovo%20Estate!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+
+            <a href="https://t.me/durov" target="_blank" class="btn-elegant">С Радостью Приду</a>
+        </div>
+    </section>
+
+    <script>
+        // --- 1. Плавный параллакс цветов ---
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth - e.pageX) / 100;
+            const y = (window.innerHeight - e.pageY) / 100;
+
+            // Сдвигаем цветы плавно
+            document.getElementById('f1').style.transform = `translate(${x * 3}px, ${y * 3}px) rotate(180deg)`;
+            document.getElementById('f2').style.transform = `translate(${x * -2}px, ${y * -2}px)`;
+            document.getElementById('f3').style.transform = `translate(${x * 1}px, ${y * 5}px)`;
+        });
+
+        // --- 2. Таймер ---
+        const target = new Date('July 25, 2026 15:00:00').getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
