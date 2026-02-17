@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Александр & Екатерина | Floral Luxury</title>
+    
+    <!-- Шрифты: Pinyon Script (Рукописный люкс) и Cormorant (Антиква) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-cream: #fdfbf7;
+            --text-gold: #bfa37c;
+            --text-dark: #4a4a4a;
+            --soft-pink: #f2e6e6;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-cream);
+            color: var(--text-dark);
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- ФОН (Размытый сад) --- */
+        .garden-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+            filter: blur(15px); /* Сильное размытие для глубины */
+            opacity: 0.4;
+            z-index: -10;
+            transform: scale(1.1); /* Чтобы края не белели при блюре */
+        }
+
+        /* --- ПАРЯЩИЕ ЦВЕТЫ (3D Parallax Layer) --- */
+        .flower-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .flower {
+            position: absolute;
+            background-size: contain;
+            background-repeat: no-repeat;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15)); /* Реалистичная тень */
+            transition: transform 0.1s linear; /* Плавность для JS */
+        }
+
+        /* Роза (Крупная, близко) */
+        .f-rose {
+            width: 300px; height: 300px;
+            background-image: url('https://png.pngtree.com/png-vector/20230906/ourmid/pngtree-pink-rose-flower-png-image_10006472.png');
+            bottom: -50px; left: -50px;
+            z-index: 5;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.2));
+        }
+
+        /* Пион (Справа, средний план) */
+        .f-peony {
+            width: 250px; height: 250px;
+            background-image: url('https://png.pngtree.com/png-vector/20220706/ourmid/pngtree-watercolor-peony-flower-png-image_5706857.png');
+            top: 10%; right: -50px;
+            z-index: 2;
+            transform: rotate(45deg);
+        }
+
+        /* Лепестки (Дальний план) */
+        .f-petal-1 {
+            width: 50px; height: 50px;
+            background-image: url('https://png.pngtree.com/png-vector/20240125/ourmid/pngtree-rose-petal-ai-generated-png-image_11546877.png');
+            top: 20%; left: 20%;
+            opacity: 0.8;
+            filter: blur(2px); /* Размытие дали */
+        }
+        
+        .f-petal-2 {
+            width: 40px; height: 40px;
+            background-image: url('https://png.pngtree.com/png-vector/20240125/ourmid/pngtree-rose-petal-ai-generated-png-image_11546877.png');
+            bottom: 30%; right: 30%;
+            opacity: 0.6;
+            filter: blur(4px);
+            transform: rotate(90deg);
+        }
+
+        /* --- ПЫЛЬЦА (Canvas Particles) --- */
+        #pollenCanvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* --- HEADER --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Золотая рамка-арка */
+        .gold-arch {
+            position: absolute;
+            width: 80%; height: 80%;
+            border: 1px solid var(--text-gold);
+            border-radius: 50% 50% 0 0; /* Арка */
+            top: 10%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .gold-arch::after {
+            content: '';
+            position: absolute;
+            top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border: 1px solid rgba(191, 163, 124, 0.3);
+            border-radius: 50% 50% 0 0;
+        }
+
+        h1 {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 6rem;
+            color: var(--text-dark);
+            line-height: 1.2;
+            margin-bottom: 10px;
+            z-index: 2;
+            text-shadow: 0 5px 15px rgba(255,255,255,0.8);
+        }
+
+        .ampersand {
+            font-size: 3rem;
+            color: var(--text-gold);
+            vertical-align: middle;
+        }
+
+        .header-date {
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--text-gold);
+            margin-top: 30px;
+            background: rgba(255,255,255,0.8);
+            padding: 10px 30px;
+            border-radius: 50px;
+            z-index: 2;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        /* --- SECTIONS (Карточки из бумаги) --- */
+        section {
+            padding: 100px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .paper-card {
+            background: #fff;
+            padding: 60px;
+            box-shadow: 0 20px 60px rgba(100, 80, 60, 0.1);
+            position: relative;
+            /* Эффект рваного края (неровности) - упрощенно через border-radius */
+            border-radius: 2px; 
+        }
+
+        /* Золотая скрепка */
+        .paper-card::before {
+            content: '';
+            position: absolute;
+            top: -15px; left: 50%; transform: translateX(-50%);
+            width: 15px; height: 40px;
+            border: 2px solid var(--text-gold);
+            border-radius: 10px;
+            background: transparent;
+        }
+
+        h2 {
+            font-family: 'Pinyon Script';
+            font-size: 3.5rem;
+            color: var(--text-gold);
+            margin-bottom: 30px;
+        }
+
+        p {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #666;
+        }
+
+        /* --- ТАЙМЕР (Элегантный) --- */
+        .floral-timer {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 50px;
+            border-top: 1px solid #eee;
+            padding-top: 30px;
+        }
+
+        .ft-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .ft-num {
+            font-family: 'Cormorant Garamond';
+            font-size: 3rem;
+            font-style: italic;
+            color: var(--text-dark);
+        }
+
+        .ft-lbl {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-gold);
+            margin-top: 5px;
+        }
+
+        /* --- ПРОГРАММА (С веточками) --- */
+        .garden-timeline {
+            margin-top: 40px;
+            text-align: left;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .garden-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 10px; bottom: 10px;
+            width: 1px;
+            background: var(--text-gold);
+        }
+
+        .gt-event {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        /* Цветок на линии */
+        .gt-event::before {
+            content: '✿';
+            position: absolute;
+            left: -38px; top: 0;
+            color: var(--text-gold);
+            font-size: 1.2rem;
+            background: #fff;
+            padding: 5px 0;
+        }
+
+        .gt-time { font-weight: bold; font-size: 1.2rem; color: #4a4a4a; }
+        .gt-title { font-family: 'Cormorant Garamond'; font-size: 1.5rem; font-style: italic; color: #8a7a6a; }
+
+        /* --- КАРТА (Акварельная рамка) --- */
+        .map-container {
+            margin-top: 40px;
+            padding: 10px;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+        }
+        
+        iframe { filter: sepia(30%) opacity(0.9); }
+
+        /* --- КНОПКА (Цветение) --- */
+        .btn-bloom {
+            display: inline-block;
+            margin-top: 50px;
+            padding: 20px 60px;
+            background: var(--text-gold);
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Cormorant Garamond';
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 50px; /* Овал */
+            box-shadow: 0 10px 20px rgba(191, 163, 124, 0.3);
+            transition: all 0.3s;
+        }
+
+        .btn-bloom:hover {
+            transform: translateY(-3px);
+            background: #a38865;
+            box-shadow: 0 15px 30px rgba(191, 163, 124, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 4rem; }
+            .f-rose { width: 150px; height: 150px; } /* Уменьшаем цветы на телефоне */
+            .f-peony { width: 120px; height: 120px; }
+            .floral-timer { gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Задний фон (Сад) -->
+    <div class="garden-bg"></div>
+
+    <!-- Canvas для пыльцы -->
+    <canvas id="pollenCanvas"></canvas>
+
+    <!-- 3D Цветы (Двигаются за мышкой) -->
+    <div class="flower-layer" id="flowers">
+        <!-- Роза (Передний план) -->
+        <div class="flower f-rose" data-speed="0.05"></div>
+        <!-- Пион (Средний план) -->
+        <div class="flower f-peony" data-speed="-0.03"></div>
+        <!-- Лепестки (Дальний план) -->
+        <div class="flower f-petal-1" data-speed="0.08"></div>
+        <div class="flower f-petal-2" data-speed="-0.06"></div>
+    </div>
+
+    <header>
+        <div class="gold-arch"></div>
+        <h1>Александр <br> <span class="ampersand">&</span> <br> Екатерина</h1>
+        <div class="header-date">5 ИЮЛЯ 2026 • МУРАНОВО</div>
+    </header>
+
+    <section>
+        <div class="paper-card">
+            <h2>Сад Нашей Любви</h2>
+            <p>
+                Любовь, как и сад, требует заботы, времени и тепла. 
+                Мы приглашаем вас разделить с нами этот цветущий день в старинной усадьбе.
+            </p>
+            <p style="margin-top: 20px; color: var(--text-gold);">
+                DRESS CODE: PASTEL & FLORAL
+            </p>
+
+            <div class="floral-timer" id="timer">
+                <div class="ft-item">
+                    <span class="ft-num" id="d">00</span>
+                    <span class="ft-lbl">Дней</span>
+                </div>
+                <div class="ft-item">
+                    <span class="ft-num" id="h">00</span>
+                    <span class="ft-lbl">Часов</span>
+                </div>
+                <div class="ft-item">
+                    <span class="ft-num" id="m">00</span>
+                    <span class="ft-lbl">Мин</span>
+                </div>
+                <div class="ft-item">
+                    <span class="ft-num" id="s">00</span>
+                    <span class="ft-lbl">Сек</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="paper-card">
+            <h2>Программа Дня</h2>
+            <div class="garden-timeline">
+                <div class="gt-event">
+                    <div class="gt-time">15:00</div>
+                    <div class="gt-title">Прогулка в Саду</div>
+                    <p>Шампанское и струнный квартет</p>
+                </div>
+                <div class="gt-event">
+                    <div class="gt-time">16:00</div>
+                    <div class="gt-title">Церемония</div>
+                    <p>В ротонде у пруда</p>
+                </div>
+                <div class="gt-event">
+                    <div class="gt-time">17:30</div>
+                    <div class="gt-title">Ужин при свечах</div>
+                    <p>Изысканные блюда и теплые слова</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="paper-card">
+            <h2>Как добраться</h2>
+            <p>Музей-усадьба "Мураново"</p>
+            
+            <div class="map-container">
+                <!-- Карта Мураново -->
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2228.627768234567!2d37.90256831596767!3d56.17724598085934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b4d6b6b6b6b6b7%3A0x123456789abcdef!2sMuranovo%20Estate!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+
+            <a href="https://t.me/durov" target="_blank" class="btn-bloom">Подтвердить</a>
+        </div>
+    </section>
+
+    <script>
+        // --- 1. Цветочный Параллакс (Mouse Move) ---
+        const flowersLayer = document.getElementById('flowers');
+        const flowers = document.querySelectorAll('.flower');
+
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth - e.pageX) / 100;
+            const y = (window.innerHeight - e.pageY) / 100;
+
+            flowers.forEach(flower => {
+                const speed = flower.getAttribute('data-speed');
+                const xPos = x * speed * 100;
+                const yPos = y * speed * 100;
+                
+                // Двигаем цветы в разные стороны
+                flower.style.transform = `translate(${xPos}px, ${yPos}px)`;
+            });
+        });
+
+        // --- 2. Золотая Пыльца (Canvas) ---
+        const canvas = document.getElementById('pollenCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if(this.x < 0) this.x = width;
+                if(this.x > width) this.x = 0;
+                if(this.y < 0) this.y = height;
+                if(this.y > height) this.y = 0;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 215, 0, ${this.opacity})`; // Золото
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+                ctx.fill();
+            }
+        }
+
+        for(let i=0; i<100; i++) particles.push(new Particle());
+
+        function animatePollen() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animatePollen);
+        }
+        animatePollen();
+
+        // --- 3. Таймер ---
+        const target = new Date('July 05, 2026 15:00:00').getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
