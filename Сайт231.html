@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Роман & Вера | Avant-Garde Wedding</title>
+    
+    <!-- Шрифт: Montserrat (Геометричный гротеск) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #f4f1ea; /* Цвет холста */
+            --red: #d93025;
+            --black: #1a1a1a;
+            --blue: #1a3c6e;
+            --yellow: #e8c547;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--black);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- ГЕОМЕТРИЧЕСКИЕ ФИГУРЫ (Декор) --- */
+        .shape {
+            position: fixed;
+            z-index: -1;
+            opacity: 0.9;
+            transition: transform 0.1s linear; /* Для параллакса */
+        }
+
+        /* Красный круг */
+        .circle-red {
+            width: 400px; height: 400px;
+            background: var(--red);
+            border-radius: 50%;
+            top: -100px; right: -100px;
+            mix-blend-mode: multiply;
+        }
+
+        /* Черная линия */
+        .bar-black {
+            width: 800px; height: 20px;
+            background: var(--black);
+            bottom: 20%; left: -200px;
+            transform: rotate(-15deg);
+        }
+
+        /* Синий квадрат */
+        .square-blue {
+            width: 150px; height: 150px;
+            background: var(--blue);
+            top: 40%; left: 10%;
+            animation: spin 20s linear infinite;
+        }
+
+        /* Желтый треугольник (CSS border trick) */
+        .tri-yellow {
+            width: 0; height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 100px solid var(--yellow);
+            bottom: 10%; right: 20%;
+            transform: rotate(15deg);
+        }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* --- HEADER --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start; /* Асимметрия влево */
+            padding: 50px 10%;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 6rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 0.9;
+            z-index: 1;
+        }
+
+        /* Сдвиг второй строки */
+        .h1-shift {
+            display: block;
+            margin-left: 150px;
+            color: var(--bg); /* Текст цвета фона */
+            background-color: var(--black); /* На черной плашке */
+            padding: 0 20px;
+            width: fit-content;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 40px;
+            border-left: 10px solid var(--red);
+            padding-left: 20px;
+            max-width: 400px;
+        }
+
+        /* --- SECTIONS --- */
+        section {
+            padding: 100px 10%;
+            position: relative;
+            background: rgba(244, 241, 234, 0.8); /* Полупрозрачный фон для читаемости */
+            margin: 50px 0;
+            border-top: 2px solid var(--black);
+        }
+
+        h2 {
+            font-size: 4rem;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+            display: inline-block;
+            background: var(--blue);
+            color: var(--bg);
+            padding: 10px 30px;
+            transform: rotate(-2deg);
+        }
+
+        p {
+            font-size: 1.4rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            max-width: 700px;
+        }
+
+        /* --- ТАЙМЕР (Конструктивизм) --- */
+        .avant-timer {
+            display: flex;
+            gap: 20px;
+            margin-top: 60px;
+            font-weight: 900;
+        }
+
+        .at-block {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 4px solid var(--black);
+            background: #fff;
+            box-shadow: 10px 10px 0 var(--red); /* Жесткая тень */
+            transition: transform 0.2s;
+        }
+
+        .at-block:hover { transform: translate(-5px, -5px); box-shadow: 15px 15px 0 var(--red); }
+
+        .at-num { font-size: 2.5rem; line-height: 1; }
+        .at-lbl { font-size: 0.8rem; text-transform: uppercase; margin-top: 5px; }
+
+        /* --- ПРОГРАММА (Ступени) --- */
+        .step-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            background: var(--black);
+            color: var(--bg);
+            padding: 20px;
+            width: fit-content;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+
+        /* Лесенка */
+        .step-item:nth-child(1) { margin-left: 0; background: var(--black); }
+        .step-item:nth-child(2) { margin-left: 10%; background: var(--blue); }
+        .step-item:nth-child(3) { margin-left: 20%; background: var(--red); }
+        .step-item:nth-child(4) { margin-left: 30%; background: var(--yellow); color: var(--black); }
+
+        .step-item:hover { transform: scale(1.1) translateX(20px); }
+
+        .s-time { font-size: 1.5rem; font-weight: bold; margin-right: 20px; border-right: 2px solid currentColor; padding-right: 20px; }
+        .s-name { font-size: 1.2rem; text-transform: uppercase; }
+
+        /* --- КАРТА (Ч/Б Графика) --- */
+        .map-graphic {
+            border: 4px solid var(--black);
+            filter: grayscale(100%) contrast(150%);
+            margin-top: 50px;
+            box-shadow: -20px 20px 0 var(--black);
+        }
+
+        /* --- КНОПКА (Акцент) --- */
+        .btn-avant {
+            display: inline-block;
+            margin-top: 60px;
+            background: var(--red);
+            color: #fff;
+            padding: 25px 60px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            position: relative;
+        }
+
+        /* Декор кнопки */
+        .btn-avant::after {
+            content: '';
+            position: absolute;
+            top: 10px; left: 10px;
+            width: 100%; height: 100%;
+            border: 2px solid var(--black);
+            z-index: -1;
+            transition: top 0.2s, left 0.2s;
+        }
+
+        .btn-avant:hover::after { top: 0; left: 0; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            .h1-shift { margin-left: 0; }
+            .circle-red { width: 200px; height: 200px; }
+            .step-item { width: 100%; margin-left: 0 !important; }
+            .avant-timer { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Фоновые фигуры (Параллакс) -->
+    <div class="shape circle-red" id="s1"></div>
+    <div class="shape bar-black" id="s2"></div>
+    <div class="shape square-blue" id="s3"></div>
+    <div class="shape tri-yellow" id="s4"></div>
+
+    <header>
+        <h1>Роман <br> <span class="h1-shift">и Вера</span></h1>
+        
+        <div class="subtitle">
+            СУПРЕМАТИЗМ ЧУВСТВ<br>
+            24 ОКТЯБРЯ 2026<br>
+            МОСКВА
+        </div>
+    </header>
+
+    <section>
+        <h2>Манифест</h2>
+        <p>
+            Мы строим новую семью по законам композиции и гармонии.
+            Приглашаем вас стать свидетелями рождения нашего союза.
+        </p>
+        <p><strong>Форма одежды:</strong> Строгие линии, чистые цвета, авангард.</p>
+
+        <div class="avant-timer" id="timer">
+            <div class="at-block">
+                <span class="at-num" id="d">00</span>
+                <span class="at-lbl">ДН</span>
+            </div>
+            <div class="at-block">
+                <span class="at-num" id="h">00</span>
+                <span class="at-lbl">ЧАС</span>
+            </div>
+            <div class="at-block">
+                <span class="at-num" id="m">00</span>
+                <span class="at-lbl">МИН</span>
+            </div>
+            <div class="at-block">
+                <span class="at-num" id="s">00</span>
+                <span class="at-lbl">СЕК</span>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Композиция Дня</h2>
+        <div class="step-container">
+            <div class="step-item">
+                <span class="s-time">15:00</span>
+                <span class="s-name">Сбор (Фойе)</span>
+            </div>
+            <div class="step-item">
+                <span class="s-time">16:00</span>
+                <span class="s-name">Роспись (Зал №1)</span>
+            </div>
+            <div class="step-item">
+                <span class="s-time">17:30</span>
+                <span class="s-name">Арт-Экскурсия</span>
+            </div>
+            <div class="step-item">
+                <span class="s-time">19:00</span>
+                <span class="s-name">Банкет</span>
+            </div>
+        </div>
+    </section>
+
+    <section style="border-bottom: none;">
+        <h2>Координаты</h2>
+        <p>Новая Третьяковка, Крымский Вал, 10</p>
+        
+        <div class="map-graphic">
+            <!-- Карта Третьяковка -->
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2246.0628284589335!2d37.60309931593049!3d55.73977598055018!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54b0362243d93%3A0xe963507d391054c2!2z0J3QvtCy0LDRjyDQotGA0LXRgtGM0Y3QutC-0LLQutCw!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <a href="https://t.me/durov" target="_blank" class="btn-avant">Я В ИГРЕ</a>
+    </section>
+
+    <script>
+        // --- 1. Параллакс геометрических фигур ---
+        // Фигуры двигаются с разной скоростью при скролле
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            
+            document.getElementById('s1').style.transform = `translateY(${scrollY * 0.2}px)`; // Круг
+            document.getElementById('s2').style.transform = `translateY(${scrollY * -0.3}px) rotate(-15deg)`; // Линия (едет вверх)
+            document.getElementById('s3').style.transform = `translateY(${scrollY * 0.5}px) rotate(${scrollY * 0.1}deg)`; // Квадрат (вращается)
+            document.getElementById('s4').style.transform = `translateY(${scrollY * 0.1}px) rotate(15deg)`; // Треугольник
+        });
+
+        // --- 2. Таймер ---
+        const target = new Date('October 24, 2026 15:00:00').getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
