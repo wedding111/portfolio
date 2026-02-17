@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Андрей & Полина | Sochi Wedding</title>
+    
+    <!-- Шрифты: Prata (Элегантный заголовок) и Raleway (Легкий текст) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prata&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --deep-blue: #0f4c75; /* Глубокий морской */
+            --light-blue: #bbe1fa; /* Небесный */
+            --white: #ffffff;
+            --sand: #fffcf5;
+            --accent: #3282b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--sand);
+            color: var(--deep-blue);
+            font-family: 'Raleway', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- Типографика --- */
+        h1 {
+            font-family: 'Prata', serif;
+            font-size: 4rem;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: var(--white);
+            text-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            font-family: 'Prata', serif;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: var(--deep-blue);
+            text-align: center;
+        }
+
+        .subtitle {
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 1rem;
+            color: var(--light-blue);
+            margin-bottom: 20px;
+        }
+
+        /* --- HEADER с Волнами --- */
+        header {
+            height: 100vh;
+            background: linear-gradient(180deg, #3282b8 0%, #0f4c75 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Анимированные волны (SVG) */
+        .waves-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            line-height: 0; /* Убирает отступы */
+        }
+
+        .waves {
+            position: relative;
+            width: 100%;
+            height: 15vh;
+            margin-bottom: -7px; /* Фикс зазоров */
+            min-height: 100px;
+            max-height: 150px;
+        }
+
+        /* Анимация движения волн */
+        .parallax > use {
+            animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite;
+        }
+        .parallax > use:nth-child(1) { animation-delay: -2s; animation-duration: 7s; fill: rgba(255,252,245,0.7); }
+        .parallax > use:nth-child(2) { animation-delay: -3s; animation-duration: 10s; fill: rgba(255,252,245,0.5); }
+        .parallax > use:nth-child(3) { animation-delay: -4s; animation-duration: 13s; fill: rgba(255,252,245,0.3); }
+        .parallax > use:nth-child(4) { animation-delay: -5s; animation-duration: 20s; fill: #fffcf5; }
+
+        @keyframes move-forever {
+            0% { transform: translate3d(-90px,0,0); }
+            100% { transform: translate3d(85px,0,0); }
+        }
+
+        /* --- Контент (Поплавок) --- */
+        .float-content {
+            z-index: 10;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* --- Секции --- */
+        section {
+            padding: 80px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .text-block {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #555;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* --- Круглый таймер --- */
+        .timer-row {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .timer-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: white;
+            box-shadow: 0 10px 20px rgba(15, 76, 117, 0.1);
+        }
+
+        /* Эффект "ряби" на таймере */
+        .timer-circle::before {
+            content: '';
+            position: absolute;
+            top: -5px; left: -5px; right: -5px; bottom: -5px;
+            border-radius: 50%;
+            border: 1px solid var(--light-blue);
+            animation: ripple 2s infinite;
+            z-index: -1;
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.2); opacity: 0; }
+        }
+
+        .t-digit { font-family: 'Prata'; font-size: 2.5rem; color: var(--deep-blue); }
+        .t-text { font-size: 0.7rem; text-transform: uppercase; color: var(--accent); }
+
+        /* --- Программа (Карточки с тенью) --- */
+        .timeline-flex {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .event-card-sea {
+            background: white;
+            padding: 30px;
+            width: 250px;
+            border-radius: 10px;
+            box-shadow: 0 15px 30px rgba(15, 76, 117, 0.05);
+            transition: transform 0.3s;
+            border-top: 4px solid var(--accent);
+        }
+
+        .event-card-sea:hover {
+            transform: translateY(-10px);
+        }
+
+        .event-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+        .event-time { font-weight: bold; color: var(--accent); display: block; margin-bottom: 5px; }
+
+        /* --- Карта --- */
+        .map-box {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 5px solid white;
+            height: 450px;
+        }
+
+        /* --- Кнопка (Жидкая) --- */
+        .btn-liquid {
+            display: inline-block;
+            position: relative;
+            width: 240px;
+            height: 60px;
+            border-radius: 30px;
+            text-align: center;
+            line-height: 60px;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            overflow: hidden;
+            background: var(--deep-blue);
+            z-index: 1;
+            margin-top: 40px;
+            box-shadow: 0 10px 20px rgba(15, 76, 117, 0.3);
+        }
+        
+        .btn-liquid span { position: relative; z-index: 2; text-transform: uppercase; letter-spacing: 2px; }
+
+        .btn-liquid::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 200%; height: 200%;
+            background: var(--accent);
+            border-radius: 40%;
+            z-index: 1;
+            transition: transform 0.5s;
+            transform: translateY(100%) rotate(0deg);
+        }
+
+        .btn-liquid:hover::after {
+            transform: translateY(-20%) rotate(20deg);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8rem; }
+            .timer-circle { width: 80px; height: 80px; }
+            .t-digit { font-size: 1.5rem; }
+            .t-text { font-size: 0.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="float-content">
+            <div class="subtitle">17 Июля 2026 • Сочи</div>
+            <h1>Андрей <br> & <br> Полина</h1>
+        </div>
+
+        <!-- Анимированные волны (SVG) -->
+        <div class="waves-container">
+            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                <defs>
+                    <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                </defs>
+                <g class="parallax">
+                    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
+                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+                    <use xlink:href="#gentle-wave" x="48" y="7" fill="#fffcf5" />
+                </g>
+            </svg>
+        </div>
+    </header>
+
+    <section>
+        <h2>Море Любви</h2>
+        <div class="text-block">
+            <p>Мы приглашаем вас на побережье Черного моря, чтобы разделить с нами этот солнечный день.</p>
+            <p>Шум волн, крики чаек и теплый бриз — лучшие свидетели нашей клятвы.</p>
+        </div>
+
+        <div class="timer-row" id="timer">
+            <div class="timer-circle">
+                <span class="t-digit" id="d">00</span>
+                <span class="t-text">Дней</span>
+            </div>
+            <div class="timer-circle">
+                <span class="t-digit" id="h">00</span>
+                <span class="t-text">Часов</span>
+            </div>
+            <div class="timer-circle">
+                <span class="t-digit" id="m">00</span>
+                <span class="t-text">Минут</span>
+            </div>
+            <div class="timer-circle">
+                <span class="t-digit" id="s">00</span>
+                <span class="t-text">Сек</span>
+            </div>
+        </div>
+    </section>
+
+    <section style="background-color: #f0f8ff;">
+        <h2>Расписание</h2>
+        <div class="timeline-flex">
+            <div class="event-card-sea">
+                <span class="event-icon">⚓</span>
+                <span class="event-time">15:00</span>
+                <h3>Сбор гостей</h3>
+                <p>Grand Marina, Пирс №5</p>
+            </div>
+            <div class="event-card-sea">
+                <span class="event-icon">💍</span>
+                <span class="event-time">16:00</span>
+                <h3>Церемония</h3>
+                <p>На верхней палубе</p>
+            </div>
+            <div class="event-card-sea">
+                <span class="event-icon">🥂</span>
+                <span class="event-time">17:30</span>
+                <h3>Фуршет</h3>
+                <p>Шампанское и закат</p>
+            </div>
+            <div class="event-card-sea">
+                <span class="event-icon">🎆</span>
+                <span class="event-time">22:00</span>
+                <h3>Вечеринка</h3>
+                <p>Танцы под звездами</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Локация</h2>
+        <p style="margin-bottom: 20px;">Сочи, Морской вокзал</p>
+        <div class="map-box">
+            <!-- Карта Сочи Морпорт -->
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2890.366431988896!2d39.71386531549463!3d43.578051979124!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40f5cb98760252ad%3A0x62840675207d5706!2z0JzQvtGA0YHQutC-0Lkg0LLQvtC60LfQsNC7!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <a href="https://t.me/durov" class="btn-liquid"><span>Я буду!</span></a>
+    </section>
+
+    <script>
+        // --- Таймер ---
+        const target = new Date('July 17, 2026 15:00:00').getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
