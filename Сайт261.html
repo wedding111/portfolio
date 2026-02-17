@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Максим & Ксения | Crystal Winter</title>
+    
+    <!-- Шрифты: Cormorant (Элегантный) и Montserrat (Современный) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --dark-blue: #152238;
+            --ice-blue: #e8f4f8;
+            --gold: #c5a059;
+            --text-main: #1a1a1a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #000;
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- ФОН (Эпичные Горы) --- */
+        .mountain-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            /* Очень красивое, качественное фото гор */
+            background: url('https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+        }
+
+        /* Градиент снизу, чтобы текст читался на белом */
+        .overlay-gradient {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 40%, rgba(255,255,255,0.9) 80%, #fff 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- CANVAS SNOW (Узорчатые снежинки) --- */
+        #snowCanvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* --- HEADER --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 6rem;
+            font-weight: 400;
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.6);
+            padding: 15px 40px;
+            margin-top: 30px;
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(5px);
+            border-radius: 50px;
+        }
+
+        /* --- SECTIONS (Стекло) --- */
+        section {
+            padding: 100px 20px;
+            max-width: 900px;
+            margin: 0 auto 60px auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(20px); /* Сильное размытие фона */
+            -webkit-backdrop-filter: blur(20px);
+            padding: 70px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.8);
+            text-align: center;
+        }
+
+        h2 {
+            font-family: 'Cormorant Garamond';
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            color: var(--dark-blue);
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        /* --- ТАЙМЕР (Кристаллы) --- */
+        .crystal-timer {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .ct-block {
+            min-width: 80px;
+            padding: 10px;
+            border-right: 1px solid rgba(0,0,0,0.1);
+        }
+        .ct-block:last-child { border-right: none; }
+
+        .ct-num {
+            font-family: 'Cormorant Garamond';
+            font-size: 3rem;
+            color: var(--dark-blue);
+            display: block;
+            line-height: 1;
+        }
+        .ct-lbl {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        /* --- ПРОГРАММА (Тонкая линия) --- */
+        .timeline-clean {
+            text-align: left;
+            margin-top: 50px;
+            border-left: 1px solid var(--gold);
+            padding-left: 30px;
+        }
+
+        .tc-item {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .tc-item::before {
+            content: '❄'; /* Снежинка как маркер */
+            position: absolute;
+            left: -38px; top: 0;
+            color: var(--gold);
+            background: #f7f9fa; /* Цвет фона карточки (примерно) */
+            padding: 5px 0;
+        }
+
+        .tc-time { font-size: 1.5rem; font-family: 'Cormorant Garamond'; color: var(--gold); font-weight: bold; }
+        .tc-title { font-size: 1.2rem; font-weight: 600; margin: 5px 0; }
+
+        /* --- КАРТА --- */
+        .map-box {
+            border-radius: 20px;
+            overflow: hidden;
+            height: 450px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 40px;
+        }
+        iframe { width: 100%; height: 100%; filter: saturate(0.8) brightness(1.05); }
+
+        /* --- КНОПКА (Ледяная) --- */
+        .btn-ice {
+            display: inline-block;
+            margin-top: 50px;
+            padding: 20px 60px;
+            background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%);
+            color: var(--dark-blue);
+            text-decoration: none;
+            font-family: 'Cormorant Garamond';
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: 1px solid #fff;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(176, 212, 230, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-ice:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(176, 212, 230, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 4rem; }
+            .crystal-timer { gap: 10px; }
+            .ct-num { font-size: 2.2rem; }
+            .glass-card { padding: 40px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Реалистичный фон гор -->
+    <div class="mountain-bg"></div>
+    <div class="overlay-gradient"></div>
+
+    <!-- Canvas для снега -->
+    <canvas id="snowCanvas"></canvas>
+
+    <header>
+        <p style="letter-spacing: 3px; font-size: 0.9rem; text-transform: uppercase;">Зимняя Сказка</p>
+        <h1>Максим <br> & <br> Ксения</h1>
+        <div class="subtitle">20 ЯНВАРЯ 2027 • КРАСНАЯ ПОЛЯНА</div>
+    </header>
+
+    <section>
+        <div class="glass-card">
+            <h2>Хрустальная Любовь</h2>
+            <p>
+                Мы приглашаем вас в сердце гор, где воздух чист, а вершины сверкают на солнце. 
+                Давайте согреем этот зимний день теплом наших сердец.
+            </p>
+            <p style="margin-top: 20px; color: #666; font-style: italic;">
+                Rixos Krasnaya Polyana Sochi
+            </p>
+
+            <div class="crystal-timer" id="timer">
+                <div class="ct-block">
+                    <span class="ct-num" id="d">00</span>
+                    <span class="ct-lbl">Дней</span>
+                </div>
+                <div class="ct-block">
+                    <span class="ct-num" id="h">00</span>
+                    <span class="ct-lbl">Часов</span>
+                </div>
+                <div class="ct-block">
+                    <span class="ct-num" id="m">00</span>
+                    <span class="ct-lbl">Мин</span>
+                </div>
+                <div class="ct-block">
+                    <span class="ct-num" id="s">00</span>
+                    <span class="ct-lbl">Сек</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="glass-card">
+            <h2>Программа</h2>
+            <div class="timeline-clean">
+                <div class="tc-item">
+                    <div class="tc-time">15:00</div>
+                    <div class="tc-title">Welcome-глинтвейн</div>
+                    <div>На террасе с видом на пики</div>
+                </div>
+                <div class="tc-item">
+                    <div class="tc-time">16:00</div>
+                    <div class="tc-title">Церемония</div>
+                    <div>В зале "Royal Hall"</div>
+                </div>
+                <div class="tc-item">
+                    <div class="tc-time">18:00</div>
+                    <div class="tc-title">Гала-ужин</div>
+                    <div>И танцы до утра</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="glass-card">
+            <h2>Локация</h2>
+            <p>Отель Rixos, Курорт Красная Поляна, Уровень 960</p>
+            
+            <div class="map-box">
+                <!-- Карта Риксос Красная Поляна -->
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2890.570622324624!2d40.26356731549446!3d43.67397797912066!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40f5a60c60555555%3A0x7b5a5b5b5b5b5b5b!2sRixos%20Krasnaya%20Polyana%20Sochi!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+
+            <a href="https://t.me/durov" target="_blank" class="btn-ice">Я буду с вами</a>
+        </div>
+    </section>
+
+    <script>
+        // --- 1. Узорчатые Снежинки (Canvas) ---
+        const canvas = document.getElementById('snowCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let flakes = [];
+        
+        // Массив красивых символов снежинок
+        const snowflakeSymbols = ['❄', '❅', '❆', '✻', '✼'];
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Flake {
+            constructor() {
+                this.init(true);
+            }
+
+            init(firstRun = false) {
+                this.x = Math.random() * width;
+                // Если первый запуск - распределяем по всему экрану, иначе - только сверху
+                this.y = firstRun ? Math.random() * height : -20;
+                
+                this.size = Math.random() * 15 + 10; // Размер шрифта
+                this.speed = Math.random() * 1 + 0.5;
+                this.symbol = snowflakeSymbols[Math.floor(Math.random() * snowflakeSymbols.length)];
+                
+                this.angle = Math.random() * 360; // Текущий угол поворота
+                this.spinSpeed = (Math.random() - 0.5) * 2; // Скорость вращения
+                this.sway = Math.random() * 0.5; // Амплитуда покачивания
+                
+                this.opacity = Math.random() * 0.5 + 0.4;
+            }
+
+            update() {
+                this.y += this.speed;
+                this.x += Math.sin(this.y * 0.01) * this.sway;
+                this.angle += this.spinSpeed; // Вращаем снежинку
+
+                if (this.y > height + 20) {
+                    this.init();
+                }
+            }
+
+            draw() {
+                ctx.save(); // Сохраняем состояние контекста
+                ctx.translate(this.x, this.y); // Переносим точку отсчета в центр снежинки
+                ctx.rotate(this.angle * Math.PI / 180); // Вращаем
+                
+                ctx.font = `${this.size}px Arial`;
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                // Рисуем символ
+                ctx.fillText(this.symbol, 0, 0);
+                
+                ctx.restore(); // Восстанавливаем состояние
+            }
+        }
+
+        // Создаем 60 красивых снежинок
+        for (let i = 0; i < 60; i++) {
+            flakes.push(new Flake());
+        }
+
+        function animateSnow() {
+            ctx.clearRect(0, 0, width, height);
+            flakes.forEach(f => {
+                f.update();
+                f.draw();
+            });
+            requestAnimationFrame(animateSnow);
+        }
+        animateSnow();
+
+
+        // --- 2. Таймер (20.01.2027) ---
+        const target = new Date('January 20, 2027 15:00:00').getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
