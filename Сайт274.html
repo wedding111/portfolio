@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Даниил & Кристина | Love Story</title>
+    
+    <!-- Шрифты: Great Vibes (Завитушки) и Alice (Текст) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alice&family=Great+Vibes&family=Marck+Script&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --pink-light: #fff0f5;
+            --pink-dark: #e6a8d7;
+            --gold: #d4af37;
+            --text: #5e4b56;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--pink-light);
+            color: var(--text);
+            font-family: 'Alice', serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- ФОНОВЫЕ ЦВЕТЫ (Картинки по углам) --- */
+        .floral-corner {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: -1;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        /* Используем красивые PNG с прозрачным фоном */
+        .fc-top-left {
+            top: 0; left: 0;
+            background-image: url('https://png.pngtree.com/png-vector/20220926/ourmid/pngtree-pink-flowers-watercolor-floral-corner-decoration-png-image_6216892.png');
+        }
+
+        .fc-bottom-right {
+            bottom: 0; right: 0;
+            background-image: url('https://png.pngtree.com/png-vector/20220926/ourmid/pngtree-pink-flowers-watercolor-floral-corner-decoration-png-image_6216892.png');
+            transform: rotate(180deg);
+        }
+
+        /* --- КОНТЕЙНЕР ДЛЯ СЕРДЕЦ (Во весь экран) --- */
+        #heart-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            pointer-events: none;
+            z-index: 0; /* Под текстом, но над фоном */
+            overflow: visible; /* Чтобы не обрезались */
+        }
+
+        /* Стиль самого сердечка */
+        .heart {
+            position: absolute;
+            bottom: -50px; /* Начинают ниже экрана */
+            font-size: 20px;
+            animation: floatUp linear forwards;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-110vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- HEADER --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* Большая рамка-сердце с фото */
+        .photo-heart {
+            width: 280px; height: 250px;
+            position: relative;
+            margin-bottom: 30px;
+            animation: heartbeat 3s infinite ease-in-out;
+        }
+
+        .photo-heart::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'); /* Романтичное фото */
+            background-size: cover;
+            background-position: center;
+            /* Форма сердца через CSS */
+            clip-path: path('M140 250 C 140 250, 0 160, 0 75 C 0 20, 70 0, 140 70 C 210 0, 280 20, 280 75 C 280 160, 140 250, 140 250 Z');
+            box-shadow: 0 0 20px rgba(230, 168, 215, 0.8);
+        }
+
+        /* Золотая обводка (дубликат сзади) */
+        .photo-heart::after {
+            content: '';
+            position: absolute;
+            top: -5px; left: -5px; width: 100%; height: 100%;
+            background-color: var(--gold);
+            clip-path: path('M140 250 C 140 250, 0 160, 0 75 C 0 20, 70 0, 140 70 C 210 0, 280 20, 280 75 C 280 160, 140 250, 140 250 Z');
+            z-index: -1;
+            transform: scale(1.05);
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 5rem;
+            color: #8e44ad; /* Глубокий фиолетовый */
+            line-height: 1.2;
+            text-shadow: 2px 2px 0px #fff, 0 0 15px rgba(224, 195, 252, 0.8);
+            margin: 10px 0;
+        }
+
+        .subtitle {
+            font-family: 'Marck Script', cursive;
+            font-size: 2rem;
+            color: var(--text);
+            margin-top: 10px;
+        }
+
+        .date-box {
+            margin-top: 30px;
+            background: #fff;
+            padding: 10px 30px;
+            border-radius: 50px;
+            border: 2px solid var(--gold);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            font-size: 1.3rem;
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        /* --- SECTIONS --- */
+        section {
+            padding: 80px 20px;
+            max-width: 800px;
+            margin: 0 auto 50px auto;
+            text-align: center;
+            position: relative;
+            z-index: 5;
+            background: rgba(255, 255, 255, 0.8); /* Полупрозрачный белый */
+            backdrop-filter: blur(5px);
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(230, 168, 215, 0.2);
+            border: 1px solid #fff;
+        }
+
+        h2 {
+            font-family: 'Great Vibes';
+            font-size: 3.5rem;
+            color: #d17fb8;
+            margin-bottom: 30px;
+        }
+
+        p {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #666;
+        }
+
+        /* --- ТАЙМЕР (Сердечки) --- */
+        .love-timer {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .lt-heart {
+            width: 90px; height: 80px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+        }
+
+        .lt-heart::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #ffe4e1; /* Misty Rose */
+            clip-path: path('M45 80 C 45 80, 0 50, 0 25 C 0 5, 25 0, 45 25 C 65 0, 90 5, 90 25 C 90 50, 45 80, 45 80 Z');
+            z-index: -1;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        .lt-num { font-family: 'Marck Script'; font-size: 2rem; color: #8e44ad; line-height: 1; margin-top: -5px; }
+        .lt-lbl { font-size: 0.7rem; text-transform: uppercase; color: #555; }
+
+        /* --- ПРОГРАММА (Рисунки) --- */
+        .story-list {
+            margin-top: 40px;
+            text-align: left;
+        }
+
+        .story-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .story-item:hover { transform: scale(1.03); }
+
+        .story-icon {
+            font-size: 2.5rem;
+            margin-right: 20px;
+            background: #fdf0f6;
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .story-time { font-weight: bold; color: var(--gold); font-size: 1.2rem; }
+        .story-title { font-size: 1.3rem; font-family: 'Marck Script'; }
+
+        /* --- КАРТА (Мягкие края) --- */
+        .map-cloud {
+            border-radius: 30px;
+            overflow: hidden;
+            border: 5px solid #fff;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            height: 400px;
+            margin-top: 40px;
+        }
+
+        /* --- КНОПКА (Любовь) --- */
+        .btn-love {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 20px 60px;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Marck Script';
+            font-size: 1.8rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(255, 154, 158, 0.4);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-love:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 154, 158, 0.6);
+        }
+
+        /* Блики на кнопке */
+        .btn-love::after {
+            content: '♥';
+            position: absolute;
+            right: 20px; top: 50%; transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 4rem; }
+            .floral-corner { width: 150px; height: 150px; }
+            .love-timer { gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Цветочные углы -->
+    <div class="floral-corner fc-top-left"></div>
+    <div class="floral-corner fc-bottom-right"></div>
+
+    <!-- Контейнер для сердец (не обрезаются!) -->
+    <div id="heart-container"></div>
+
+    <header>
+        <div class="photo-heart"></div> <!-- Сюда вставится фото в форме сердца -->
+        
+        <div class="subtitle">Приглашаем на свадьбу</div>
+        <h1>Даниил <br> & <br> Кристина</h1>
+        <div class="date-box">18 Июля 2026</div>
+    </header>
+
+    <section>
+        <h2>Самая Важная История</h2>
+        <p>Любовь — это когда весь мир становится ярче. Мы хотим поделиться этим светом с вами.</p>
+        <p>Ждем вас в нашей сказке!</p>
+
+        <div class="love-timer" id="timer">
+            <div class="lt-heart">
+                <span class="lt-num" id="d">00</span>
+                <span class="lt-lbl">Дней</span>
+            </div>
+            <div class="lt-heart">
+                <span class="lt-num" id="h">00</span>
+                <span class="lt-lbl">Часов</span>
+            </div>
+            <div class="lt-heart">
+                <span class="lt-num" id="m">00</span>
+                <span class="lt-lbl">Минут</span>
+            </div>
+            <div class="lt-heart">
+                <span class="lt-num" id="s">00</span>
+                <span class="lt-lbl">Сек</span>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Программа Дня</h2>
+        <div class="story-list">
+            <div class="story-item">
+                <div class="story-icon">🥂</div>
+                <div>
+                    <div class="story-time">15:00</div>
+                    <div class="story-title">Сбор гостей и Фуршет</div>
+                </div>
+            </div>
+            <div class="story-item">
+                <div class="story-icon">💍</div>
+                <div>
+                    <div class="story-time">16:00</div>
+                    <div class="story-title">Трогательная Церемония</div>
+                </div>
+            </div>
+            <div class="story-item">
+                <div class="story-icon">🍰</div>
+                <div>
+                    <div class="story-time">18:00</div>
+                    <div class="story-title">Ужин и Торт</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Место Встречи</h2>
+        <p>Усадьба "Тайны Рублева", Москва</p>
+        
+        <div class="map-cloud">
+            <!-- Карта -->
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2246.0628284589335!2d37.60309931593049!3d55.73977598055018!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z0KPRgdCw0LTRjNCx0LAg0KLQsNC50L3RiyDQoNGD0LHQu9C10LLQsA!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <a href="https://t.me/durov" target="_blank" class="btn-love">Я Приду!</a>
+    </section>
+
+    <script>
+        // --- 1. ГЕНЕРАТОР СЕРДЕЦ (Исправленный, без обрезки) ---
+        const heartContainer = document.getElementById('heart-container');
+        // Набор цветов для сердечек
+        const colors = ['#ff9a9e', '#fad0c4', '#a18cd1', '#fbc2eb', '#e6a8d7'];
+        // Набор символов
+        const shapes = ['❤', '❥', '❦', '❧'];
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            
+            // Случайный символ и цвет
+            heart.innerText = shapes[Math.floor(Math.random() * shapes.length)];
+            heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+            
+            // Случайная позиция по горизонтали
+            heart.style.left = Math.random() * 100 + 'vw';
+            
+            // Случайный размер
+            heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+            
+            // Случайная скорость
+            heart.style.animationDuration = Math.random() * 3 + 4 + 's'; // 4-7 секунд
+            
+            heartContainer.appendChild(heart);
+
+            // Удаляем после анимации, чтобы не забивать память
+            setTimeout(() => {
+                heart.remove();
+            }, 7000);
+        }
+
+        // Запускаем поток сердец
+        setInterval(createHeart, 300);
+
+
+        // --- 2. Таймер ---
+        const target = new Date('July 18, 2026 15:00:00').getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
