@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение | Лев и София</title>
+    <!-- Элитные шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* БЛАГОРОДНАЯ ПАЛИТРА (Без черного, белого, неона) */
+        :root {
+            --bg-cashmere: #d9cac5;    /* Теплый кашемир (фон) */
+            --text-aubergine: #362233; /* Глубокий баклажан (вместо черного) */
+            --berry: #8c3544;          /* Спелая ягода */
+            --moss: #465945;           /* Лесной мох */
+            --clay: #b56b5c;           /* Глиняный терракот */
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-cashmere);
+            color: var(--text-aubergine);
+            overflow-x: hidden;
+            cursor: crosshair; /* Утонченный курсор-крестик */
+        }
+
+        h1, h2, h3 { font-family: 'Cinzel', serif; margin: 0; }
+
+        /* ИЗЮМИНКА 1: Волшебный фонарь за мышкой */
+        .cursor-glow {
+            position: fixed;
+            top: 0; left: 0;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(140, 53, 68, 0.15) 0%, rgba(217, 202, 197, 0) 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none; /* Чтобы не мешал кликать */
+            z-index: 9999;
+            transition: width 0.3s, height 0.3s;
+        }
+
+        /* Главный экран */
+        .hero {
+            position: relative; height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        /* ИЗЮМИНКА 2: Вращающийся текст вокруг фото */
+        .circle-container {
+            position: relative; width: 350px; height: 350px;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 2;
+        }
+        
+        .circle-photo {
+            position: absolute; width: 220px; height: 220px;
+            border-radius: 50%;
+            background: url('https://images.unsplash.com/photo-1544078751-58fee2d8a03b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80') center/cover;
+            box-shadow: 0 20px 40px rgba(54, 34, 51, 0.2);
+            z-index: 2;
+        }
+
+        .circular-text {
+            position: absolute; width: 100%; height: 100%;
+            animation: rotateText 20s linear infinite;
+            z-index: 1;
+        }
+        
+        .circular-text path { fill: none; }
+        .circular-text text {
+            fill: var(--moss); font-family: 'Montserrat', sans-serif;
+            font-size: 14px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase;
+        }
+
+        @keyframes rotateText { 100% { transform: rotate(360deg); } }
+
+        /* ИЗЮМИНКА 3: Эффект проявления (Wipe) для имен */
+        .name {
+            position: absolute; font-size: 7vw; color: var(--berry);
+            z-index: 3; white-space: nowrap;
+            clip-path: inset(0 100% 0 0); /* Изначально спрятано */
+            transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        .name.revealed { clip-path: inset(0 0 0 0); } /* Проявляется */
+
+        .name-lev { top: 20%; left: 10%; }
+        .name-sofia { bottom: 20%; right: 10%; }
+
+        .date-stamp {
+            position: absolute; bottom: 5%; font-size: 1.2rem; font-weight: 600;
+            color: var(--text-aubergine); letter-spacing: 5px;
+            border-top: 1px solid var(--moss); border-bottom: 1px solid var(--moss); padding: 10px 0;
+        }
+
+        /* Секции */
+        section { padding: 100px 20px; max-width: 800px; margin: 0 auto; text-align: center; position: relative; z-index: 10; }
+        .section-title { font-size: 3.5rem; color: var(--moss); margin-bottom: 30px; }
+        .text-block { font-size: 1.2rem; line-height: 2; color: var(--text-aubergine); }
+
+        /* ИЗЮМИНКА 4: Дресс-код "Висячие ярлыки" */
+        .tags-container {
+            display: flex; justify-content: center; gap: 20px; margin-top: 50px; flex-wrap: wrap;
+        }
+
+        .tag {
+            width: 80px; height: 100px;
+            border-radius: 10px 10px 40px 40px;
+            display: flex; align-items: flex-end; justify-content: center;
+            padding-bottom: 20px; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(54, 34, 51, 0.1);
+            transform-origin: top center; /* Висит за верхний край */
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Пружинистый эффект */
+            position: relative;
+        }
+
+        /* "Ниточка", за которую висит ярлык */
+        .tag::before {
+            content: ''; position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+            width: 2px; height: 20px; background-color: var(--text-aubergine); opacity: 0.3;
+        }
+
+        .tag-name {
+            color: var(--bg-cashmere); font-weight: 600; font-size: 0.9rem;
+            writing-mode: vertical-rl; transform: rotate(180deg);
+            opacity: 0; transition: opacity 0.3s;
+        }
+
+        .tag:hover { transform: scaleY(1.6); z-index: 2; box-shadow: 0 15px 30px rgba(54, 34, 51, 0.2); }
+        .tag:hover .tag-name { opacity: 1; transition-delay: 0.2s; }
+
+        /* ИЗЮМИНКА 6: Таймер "Текст с живым градиентом внутри" */
+        .timer-grid { display: flex; justify-content: center; gap: 40px; margin-top: 50px; flex-wrap: wrap; }
+        .t-box { display: flex; flex-direction: column; align-items: center; }
+        
+        .t-box span {
+            font-family: 'Cinzel', serif; font-size: 5rem; font-weight: 800; line-height: 1;
+            /* Живой градиент внутри текста */
+            background: linear-gradient(90deg, var(--berry), var(--clay), var(--moss), var(--berry));
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientText 5s linear infinite;
+        }
+
+        @keyframes gradientText { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+
+        .t-box p { margin: 5px 0 0 0; font-size: 0.9rem; color: var(--text-aubergine); font-weight: 600; text-transform: uppercase; letter-spacing: 3px; }
+
+        /* ИЗЮМИНКА 5: Карта в виде "Билета с перфорацией" */
+        .map-ticket {
+            margin-top: 50px; height: 450px; position: relative;
+            background-color: var(--moss); padding: 10px; /* Рамка билета */
+            /* Сложный CSS Clip-path: отрезаем углы и делаем вырезы по бокам */
+            clip-path: polygon(
+                5% 0, 95% 0, 100% 5%, 100% 45%, 95% 50%, 100% 55%, 100% 95%, 
+                95% 100%, 5% 100%, 0 95%, 0 55%, 5% 50%, 0 45%, 0 5%
+            );
+            box-shadow: inset 0 0 0 2px var(--bg-cashmere);
+        }
+
+        .map-ticket iframe {
+            width: 100%; height: 100%; border: 0;
+            /* Превращаем зеленые/синие цвета гугл-карт в баклажаново-ягодные */
+            filter: sepia(80%) hue-rotate(280deg) saturate(180%) brightness(75%) contrast(110%);
+        }
+
+        /* ИЗЮМИНКА 7: Кнопка Telegram "Жидкая волна" */
+        .rsvp-section { padding-bottom: 120px; }
+        .liquid-btn {
+            position: relative; display: inline-flex; align-items: center; gap: 15px;
+            padding: 20px 50px; font-size: 1.2rem; font-weight: 600; letter-spacing: 2px;
+            color: var(--berry); text-transform: uppercase; text-decoration: none;
+            border: 2px solid var(--berry); border-radius: 50px;
+            overflow: hidden; transition: color 0.4s;
+            background: transparent;
+        }
+
+        /* Волна, которая поднимается снизу */
+        .liquid-btn::before {
+            content: ''; position: absolute; top: 100%; left: -50%;
+            width: 200%; height: 200%;
+            background-color: var(--berry);
+            border-radius: 40%; /* Создает форму волны при вращении */
+            transition: top 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: spinWave 4s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes spinWave { 100% { transform: rotate(360deg); } }
+
+        .liquid-btn:hover { color: var(--bg-cashmere); border-color: transparent; }
+        .liquid-btn:hover::before { top: -20%; } /* Волна затапливает кнопку */
+
+        .liquid-btn svg { width: 24px; height: 24px; fill: currentColor; z-index: 1; }
+
+        /* Появление блоков */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 1s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            .name { font-size: 12vw; }
+            .name-lev { top: 15%; }
+            .name-sofia { bottom: 15%; }
+            .circle-container { width: 250px; height: 250px; }
+            .circle-photo { width: 150px; height: 150px; }
+            .circular-text text { font-size: 18px; letter-spacing: 2px; }
+            .section-title { font-size: 2.8rem; }
+            .t-box span { font-size: 3.5rem; }
+            .map-ticket { clip-path: polygon(10% 0, 90% 0, 100% 10%, 100% 45%, 95% 50%, 100% 55%, 100% 90%, 90% 100%, 10% 100%, 0 90%, 0 55%, 5% 50%, 0 45%, 0 10%); }
+            .liquid-btn { font-size: 1rem; padding: 15px 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Волшебный фонарь за курсором -->
+    <div class="cursor-glow" id="glow"></div>
+
+    <!-- Главный экран -->
+    <header class="hero">
+        <h1 class="name name-lev" id="n1">Лев</h1>
+        
+        <div class="circle-container">
+            <!-- Вращающийся текст SVG -->
+            <svg viewBox="0 0 200 200" class="circular-text">
+                <path id="circlePath" d="M 100, 100 m -75, 0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0" />
+                <text>
+                    <textPath href="#circlePath" startOffset="0%">Торжество любви • Торжество любви •</textPath>
+                </text>
+            </svg>
+            <div class="circle-photo"></div>
+        </div>
+
+        <h1 class="name name-sofia" id="n2">София</h1>
+        
+        <div class="date-stamp">22 . 10 . 2026</div>
+    </header>
+
+    <!-- О свадьбе -->
+    <section class="reveal">
+        <h2 class="section-title">Изысканный вечер</h2>
+        <p class="text-block">
+            Мы приглашаем вас на камерное торжество, где каждая деталь имеет значение. 
+            Приглушенный свет, терпкое вино, искренние клятвы и музыка, которая трогает до глубины души. 
+            Разделите с нами этот особенный осенний день.
+        </p>
+    </section>
+
+    <!-- Дресс-код (Бирки) -->
+    <section class="reveal">
+        <h2 class="section-title">Оттенки Осени</h2>
+        <p class="text-block">Наведите на ярлыки, чтобы узнать палитру нашего вечера.</p>
+        
+        <div class="tags-container">
+            <div class="tag" style="background-color: var(--text-aubergine);"><span class="tag-name">Баклажан</span></div>
+            <div class="tag" style="background-color: var(--berry);"><span class="tag-name">Ягода</span></div>
+            <div class="tag" style="background-color: var(--clay);"><span class="tag-name">Терракот</span></div>
+            <div class="tag" style="background-color: var(--moss);"><span class="tag-name">Мох</span></div>
+        </div>
+    </section>
+
+    <!-- Таймер (Живой градиент) -->
+    <section class="reveal">
+        <h2 class="section-title">Время до чуда</h2>
+        
+        <div class="timer-grid" id="countdown">
+            <div class="t-box"><span id="days">00</span><p>Дней</p></div>
+            <div class="t-box"><span id="hours">00</span><p>Часов</p></div>
+            <div class="t-box"><span id="minutes">00</span><p>Минут</p></div>
+            <div class="t-box"><span id="seconds">00</span><p>Секунд</p></div>
+        </div>
+    </section>
+
+    <!-- Карта (Билет) -->
+    <section class="reveal">
+        <h2 class="section-title">Место встречи</h2>
+        <p class="text-block" style="font-weight: 600;">Шато "Вилла Роза"</p>
+        
+        <!-- Оформление карты в виде билета -->
+        <div class="map-ticket">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2244.430307459374!2d37.6092183159313!3d55.76839398055745!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a413d7890fb%3A0xcf953931be0bd4e3!2z0JzQvtGB0LrQstCw!5e0!3m2!1sru!2sru!4v1690000000000!5m2!1sru!2sru" 
+                allowfullscreen="" loading="lazy">
+            </iframe>
+        </div>
+    </section>
+
+    <!-- RSVP Кнопка "Жидкая волна" -->
+    <section class="rsvp-section reveal">
+        <h2 class="section-title" style="font-size: 2.5rem; margin-bottom: 40px;">Разделите этот вечер с нами</h2>
+        
+        <!-- ВСТАВЬТЕ ССЫЛКУ НА СВОЙ ТЕЛЕГРАМ -->
+        <a href="https://t.me/LevSofiaWedding" target="_blank" class="liquid-btn">
+            <span>Я с вами!</span>
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.12.03-1.99 1.25-5.61 3.67-.53.36-1.01.53-1.44.52-.47-.01-1.38-.27-2.05-.5-.82-.28-1.47-.43-1.41-.91.03-.25.38-.51 1.06-.78 4.15-1.8 6.92-2.99 8.31-3.57 3.95-1.65 4.77-1.93 5.3-1.94.12 0 .38.03.53.15.12.1.17.24.19.37.02.13.01.26-.01.4z"/>
+            </svg>
+        </a>
+    </section>
+
+    <!-- Скрипты -->
+    <script>
+        // --- 1. Анимация проявления имен (Wipe) при загрузке ---
+        window.onload = () => {
+            setTimeout(() => {
+                document.getElementById('n1').classList.add('revealed');
+                document.getElementById('n2').classList.add('revealed');
+            }, 300);
+        };
+
+        // --- 2. Волшебный фонарь за курсором (Только для ПК) ---
+        const glow = document.getElementById('glow');
+        document.addEventListener('mousemove', (e) => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+        });
+        
+        // Фонарь увеличивается, когда наводим на текст или кнопки
+        const interactives = document.querySelectorAll('.liquid-btn, .tag, h1, h2');
+        interactives.forEach(el => {
+            el.addEventListener('mouseenter', () => { glow.style.width = '450px'; glow.style.height = '450px'; });
+            el.addEventListener('mouseleave', () => { glow.style.width = '300px'; glow.style.height = '300px'; });
+        });
+
+        // --- 3. Таймер (Дата: 22 Октября 2026) ---
+        const weddingDate = new Date("October 22, 2026 17:00:00").getTime();
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+            if (distance < 0) { clearInterval(timer); return; }
+            document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+        }, 1000);
+
+        // --- 4. Появление секций при прокрутке ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
