@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ник & Алиса | Paint & Pencil</title>
+    
+    <!-- Шрифты: Amatic SC (Карандашный заголовок) и Caveat (Текст) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Caveat:wght@500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --paper: #f9f9f7; /* Цвет холста */
+            --pencil: #2b2b2b; /* Цвет грифеля */
+            
+            /* Цвета мазков (Яркие, художественные) */
+            --paint-yellow: #f4d35e;
+            --paint-pink: #ee964b;
+            --paint-blue: #1fb6ff;
+            --paint-purple: #9b51e0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--paper);
+            color: var(--pencil);
+            font-family: 'Caveat', cursive;
+            font-size: 24px;
+            overflow-x: hidden;
+            /* Текстура акварельной бумаги */
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.1'/%3E%3C/svg%3E");
+        }
+
+        /* --- ГЛОБАЛЬНЫЙ SVG ФИЛЬТР (Для рваных краев краски) --- */
+        .svg-filters { position: absolute; width: 0; height: 0; pointer-events: none; }
+
+        /* --- МАЗКИ КРАСКИ (Декор) --- */
+        .paint-stroke {
+            position: absolute;
+            z-index: -1;
+            filter: url(#rough-edges); /* Применяем рваный край */
+            opacity: 0.8;
+            transition: transform 0.2s;
+        }
+
+        /* --- ЗАГОЛОВОК (Карандашный стиль) --- */
+        h1, h2, h3 {
+            font-family: 'Amatic SC', cursive;
+            font-weight: 700;
+            line-height: 0.9;
+            color: var(--pencil);
+            /* Эффект дрожания линии */
+            animation: scribble 0.3s infinite;
+        }
+
+        /* Анимация "живой линии" */
+        @keyframes scribble {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(0.5px, 0.5px) rotate(0.2deg); }
+            50% { transform: translate(-0.5px, -0.5px) rotate(-0.2deg); }
+            75% { transform: translate(-0.5px, 0.5px) rotate(0.1deg); }
+            100% { transform: translate(0.5px, -0.5px) rotate(-0.1deg); }
+        }
+
+        /* --- HEADER --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* Мазок за именами */
+        .hero-paint {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px; height: 400px;
+            background: linear-gradient(135deg, var(--paint-yellow), var(--paint-pink));
+            z-index: -1;
+            /* Форма пятна */
+            clip-path: path("M150,50 Q250,0 350,50 T550,150 Q600,250 500,350 T200,380 Q50,350 20,250 T150,50 Z");
+            animation: morph 10s infinite alternate;
+        }
+
+        @keyframes morph {
+            0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) scale(1.1) rotate(5deg); }
+        }
+
+        h1 {
+            font-size: 8rem; /* ОГРОМНЫЙ размер */
+            margin: 0;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+        }
+
+        .ampersand {
+            font-size: 5rem;
+            color: #fff; /* Белый карандаш */
+            display: block;
+            margin: -20px 0;
+            text-shadow: 2px 2px 0 var(--pencil); /* Тень карандашом */
+        }
+
+        .date-scribble {
+            margin-top: 40px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            border: 3px solid var(--pencil);
+            padding: 10px 40px;
+            /* "Кривая" рамка */
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            background: #fff;
+            box-shadow: 5px 5px 0 var(--paint-blue);
+            transform: rotate(-2deg);
+        }
+
+        /* --- SECTIONS --- */
+        section {
+            padding: 100px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+        }
+
+        h2 {
+            font-size: 5rem;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+        }
+
+        /* Мазок за заголовком h2 */
+        h2::before {
+            content: '';
+            position: absolute;
+            top: 20px; left: -20px; right: -20px; bottom: 0;
+            background: var(--paint-blue);
+            z-index: -1;
+            transform: skewX(-10deg) rotate(-2deg);
+            opacity: 0.5;
+            filter: url(#rough-edges);
+        }
+
+        /* --- ТАЙМЕР (Нарисованные круги) --- */
+        .sketch-timer {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .st-item {
+            width: 120px; height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+            /* Неровный круг */
+            border: 3px solid var(--pencil);
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            animation: wobble 4s infinite ease-in-out;
+            box-shadow: 5px 5px 0 var(--paint-purple);
+        }
+
+        /* Разные формы для кругов */
+        .st-item:nth-child(2) { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; animation-delay: 1s; box-shadow: 5px 5px 0 var(--paint-yellow); }
+        .st-item:nth-child(3) { border-radius: 50% 50% 20% 80% / 25% 80% 20% 75%; animation-delay: 2s; box-shadow: 5px 5px 0 var(--paint-pink); }
+        .st-item:nth-child(4) { border-radius: 70% 30% 30% 70% / 60% 40% 60% 40%; animation-delay: 3s; box-shadow: 5px 5px 0 var(--paint-blue); }
+
+        @keyframes wobble {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.05) rotate(3deg); }
+        }
+
+        .st-num { font-family: 'Amatic SC'; font-size: 3.5rem; line-height: 1; }
+        .st-lbl { font-size: 1.2rem; font-weight: bold; }
+
+        /* --- ДРЕСС-КОД (Кляксы) --- */
+        .paint-splatters {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .splat {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            filter: url(#rough-edges);
+            position: relative;
+        }
+        
+        .splat::after {
+            content: ''; /* Тень от карандаша */
+            position: absolute; inset: 0;
+            border: 2px dashed var(--pencil);
+            border-radius: 50%;
+            opacity: 0.5;
+            transform: scale(1.2);
+        }
+
+        /* --- КАРТА (Вырванный лист) --- */
+        .map-sketch {
+            margin-top: 50px;
+            padding: 15px;
+            background: #fff;
+            /* Эффект рваной бумаги по краям */
+            clip-path: polygon(2% 0%, 98% 2%, 100% 98%, 0% 100%);
+            box-shadow: 10px 10px 0 var(--pencil);
+            transform: rotate(1deg);
+        }
+        
+        iframe { width: 100%; height: 450px; filter: contrast(1.2) sepia(20%); }
+
+        /* --- КНОПКА (Штриховка) --- */
+        .btn-pencil {
+            display: inline-block;
+            margin-top: 60px;
+            padding: 15px 50px;
+            font-family: 'Amatic SC';
+            font-size: 3rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: var(--pencil);
+            background: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Закрашенный фон маркером */
+        .btn-pencil::before {
+            content: '';
+            position: absolute;
+            top: 5px; left: -10px; width: 110%; height: 90%;
+            background: var(--paint-yellow);
+            z-index: -1;
+            transform: rotate(-2deg);
+            border-radius: 5px;
+            filter: url(#rough-edges);
+            transition: transform 0.2s;
+        }
+
+        .btn-pencil:hover::before { transform: rotate(1deg) scale(1.1); background: var(--paint-pink); }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 5rem; }
+            .hero-paint { width: 90vw; height: 60vh; }
+            .sketch-timer { gap: 15px; }
+            .st-item { width: 80px; height: 80px; }
+            .st-num { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SVG ФИЛЬТР (Для рваных краев краски) -->
+    <svg class="svg-filters">
+        <defs>
+            <filter id="rough-edges">
+                <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" />
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- Фоновые мазки по бокам -->
+    <div class="paint-stroke" style="top: 10%; left: -5%; width: 300px; height: 300px; background: var(--paint-blue); border-radius: 50%;"></div>
+    <div class="paint-stroke" style="top: 40%; right: -10%; width: 400px; height: 400px; background: var(--paint-purple); border-radius: 50%; opacity: 0.2;"></div>
+
+    <header>
+        <div class="hero-paint"></div> <!-- Центральное пятно -->
+        
+        <h1>НИК <span class="ampersand">&</span> АЛИСА</h1>
+        
+        <div class="date-scribble">20 ИЮНЯ 2026</div>
+    </header>
+
+    <section>
+        <h2>Наша История</h2>
+        <p>Мы решили раскрасить этот день самыми яркими красками!</p>
+        <p>Никаких правил, только творчество, смех и любовь.</p>
+
+        <div class="sketch-timer" id="timer">
+            <div class="st-item"><span class="st-num" id="d">00</span><span class="st-lbl">Дней</span></div>
+            <div class="st-item"><span class="st-num" id="h">00</span><span class="st-lbl">Часов</span></div>
+            <div class="st-item"><span class="st-num" id="m">00</span><span class="st-lbl">Мин</span></div>
+            <div class="st-item"><span class="st-num" id="s">00</span><span class="st-lbl">Сек</span></div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Палитра</h2>
+        <p>Ярко, смело, как на картине!</p>
+        <div class="paint-splatters">
+            <div class="splat" style="background: var(--paint-yellow);"></div>
+            <div class="splat" style="background: var(--paint-pink);"></div>
+            <div class="splat" style="background: var(--paint-blue);"></div>
+            <div class="splat" style="background: var(--paint-purple);"></div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Локация</h2>
+        <p>Арт-пространство "Хлебозавод"</p>
+        
+        <div class="map-sketch">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2243.6847879684343!2d37.585542315931985!3d55.78161598056086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a0a36927a71%3A0x6b4f631456789abc!2sFlacon%20Design%20Factory!5e0!3m2!1sru!2sru!4v1625000000000!5m2!1sru!2sru" frameborder="0" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <a href="https://t.me/durov" target="_blank" class="btn-pencil">Я В ТЕМЕ!</a>
+    </section>
+
+    <script>
+        // Timer
+        const target = new Date('June 20, 2026 16:00:00').getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = d;
+            document.getElementById('h').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('m').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('s').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
