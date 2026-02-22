@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Свадьба | Павел и Кристина</title>
+    <!-- Изящный шрифт для заголовков и чистый для текста -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ПАЛИТРА "ИЗУМРУД И ЛЕД" (Глубокий зеленый фон, чистый белый текст. Без красного/черного!) */
+        :root {
+            --bg-emerald: #072a1a;     /* Глубокий, насыщенный зеленый лес (Фон) */
+            --text-pure-white: #ffffff;/* Чистейший белый (Текст) */
+            
+            --accent-mint: #9ad4be;    /* Светло-мятный */
+            --accent-malachite: #167a50;/* Яркий малахит */
+            --accent-teal: #0d4a3b;    /* Глубокий тил */
+            --accent-pistachio: #c0d6a9;/* Фисташковый */
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-emerald);
+            color: var(--text-pure-white);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, .cinzel-font { font-family: 'Cinzel', serif; margin: 0; font-weight: 500; text-transform: uppercase; }
+
+        /* --- ИЗЮМИНКА 1: СИЛЬНАЯ АНИМАЦИЯ НА ФОНЕ --- */
+        .heavy-bg-anim {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 0; pointer-events: none; overflow: hidden;
+            background-color: var(--bg-emerald);
+        }
+
+        /* Огромные, яркие цветовые пятна, которые сильно двигаются */
+        .glow-blob {
+            position: absolute; border-radius: 50%; filter: blur(100px);
+            opacity: 0.6; /* Высокая непрозрачность для заметности */
+            animation: wildMove 20s infinite alternate ease-in-out;
+            mix-blend-mode: screen; /* Делает цвета ярче при пересечении */
+        }
+
+        .gb-1 { width: 70vw; height: 70vw; background-color: rgba(22, 122, 80, 0.5); top: -20%; left: -20%; }
+        .gb-2 { width: 60vw; height: 60vw; background-color: rgba(154, 212, 190, 0.3); bottom: -10%; right: -20%; animation-delay: -5s; animation-direction: alternate-reverse; }
+        .gb-3 { width: 50vw; height: 50vw; background-color: rgba(13, 74, 59, 0.8); top: 30%; left: 30%; animation-duration: 25s; }
+
+        @keyframes wildMove {
+            0% { transform: translate(0, 0) scale(0.8); }
+            50% { transform: translate(20vw, 15vh) scale(1.2); }
+            100% { transform: translate(-10vw, 20vh) scale(0.9); }
+        }
+
+        .content { position: relative; z-index: 10; }
+
+        /* --- ИЗЮМИНКА 2: Горизонтальные имена --- */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        .names-row {
+            display: flex; justify-content: center; align-items: center; gap: 40px;
+            width: 100%; white-space: nowrap;
+        }
+
+        .h-name {
+            font-size: 8vw; color: var(--text-pure-white);
+            letter-spacing: 10px; transition: transform 0.1s linear;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Чтобы белый текст 100% читался */
+        }
+
+        .h-amp { font-size: 6vw; color: var(--accent-mint); font-style: italic; }
+
+        .h-date {
+            margin-top: 50px; font-size: 1.3rem; font-weight: 300; letter-spacing: 12px;
+            color: var(--text-pure-white); border-top: 1px solid var(--accent-mint); padding-top: 15px;
+        }
+
+        /* Общие секции */
+        section { padding: 120px 20px; max-width: 900px; margin: 0 auto; text-align: center; }
+        .section-title { font-size: 4rem; color: var(--text-pure-white); margin-bottom: 40px; text-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .text-block { font-size: 1.3rem; line-height: 1.9; color: var(--text-pure-white); opacity: 0.9; max-width: 700px; margin: 0 auto; font-weight: 300; }
+
+        /* --- ИНТЕРАКТИВ 3: Дресс-код "Вращающиеся 3D-Кубы" --- */
+        .cubes-grid { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 60px; }
+        
+        .scene {
+            width: 130px; height: 130px;
+            perspective: 1000px; cursor: pointer;
+        }
+
+        .cube {
+            width: 100%; height: 100%; position: relative;
+            transform-style: preserve-3d;
+            /* ОЧЕНЬ МЕДЛЕННАЯ 3D-анимация (1.5 секунды) */
+            transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .cube-face {
+            position: absolute; width: 100px; height: 100px;
+            display: flex; justify-content: center; align-items: center;
+            font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 700;
+            backface-visibility: hidden; -webkit-backface-visibility: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); padding: 15px; text-align: center;
+        }
+
+        /* Передняя грань (пустая белая) */
+        .cube-front {
+            background-color: transparent; border: 2px solid var(--text-pure-white);
+            color: var(--text-pure-white); transform: rotateX(0deg) translateZ(65px);
+        }
+
+        /* Нижняя грань (с цветом, выезжает наверх) */
+        .cube-bottom {
+            color: var(--bg-emerald); transform: rotateX(-90deg) translateZ(65px);
+        }
+
+        /* Назначение цветов граням */
+        .c-1 .cube-bottom { background-color: var(--accent-mint); }
+        .c-2 .cube-bottom { background-color: var(--accent-malachite); color: var(--text-pure-white); }
+        .c-3 .cube-bottom { background-color: var(--accent-teal); color: var(--text-pure-white); }
+        .c-4 .cube-bottom { background-color: var(--accent-pistachio); }
+
+        /* При наведении: куб медленно переворачивается на 90 градусов вверх */
+        .scene:hover .cube { transform: rotateX(90deg); }
+
+        /* --- ИНТЕРАКТИВ 4: Тайминг "Флекс-Гармошка" --- */
+        .flex-accordion {
+            display: flex; width: 100%; height: 350px; gap: 5px; margin-top: 60px;
+            border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .flex-panel {
+            flex: 1; position: relative; background-color: rgba(255, 255, 255, 0.05);
+            border-right: 1px solid rgba(255,255,255,0.1); cursor: default;
+            /* ОЧЕНЬ МЕДЛЕННОЕ расширение (1.5 секунды) */
+            transition: flex 1.5s cubic-bezier(0.25, 1, 0.5, 1), background-color 1.5s;
+            display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start;
+            padding: 30px 20px; box-sizing: border-box; overflow: hidden;
+        }
+
+        .flex-panel:last-child { border-right: none; }
+
+        .flex-panel:hover { flex: 4; background-color: rgba(255, 255, 255, 0.15); border-bottom: 5px solid var(--accent-mint); }
+
+        .fp-time { font-family: 'Cinzel', serif; font-size: 2.5rem; color: var(--text-pure-white); margin-bottom: 10px; transition: color 1.5s; }
+        .fp-title { font-size: 1.4rem; font-weight: 600; color: var(--text-pure-white); white-space: nowrap; margin-bottom: 10px; }
+        
+        .fp-desc {
+            font-size: 1rem; color: var(--text-pure-white); opacity: 0;
+            transform: translateX(-30px); transition: all 1s ease; transition-delay: 0.3s;
+            width: 300px; text-align: left; font-weight: 300; line-height: 1.6;
+        }
+
+        .flex-panel:hover .fp-time { color: var(--accent-mint); }
+        .flex-panel:hover .fp-desc { opacity: 0.9; transform: translateX(0); }
+
+        /* --- ИНТЕРАКТИВ 5: Таймер "Вложенные Ромбы" --- */
+        .diamond-timer { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 60px; }
+        
+        .d-box {
+            position: relative; width: 140px; height: 140px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        /* Два ромба: один крутится по часовой, другой против */
+        .d-outer, .d-inner {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(255,255,255,0.3); transform: rotate(45deg);
+            transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1), border-color 1s;
+        }
+        .d-inner { width: 80%; height: 80%; top: 10%; left: 10%; border-color: rgba(255,255,255,0.1); }
+
+        .d-box:hover .d-outer { transform: rotate(135deg); border-color: var(--accent-mint); border-width: 2px; }
+        .d-box:hover .d-inner { transform: rotate(-45deg); border-color: var(--text-pure-white); border-width: 2px; }
+
+        .d-box span { font-family: 'Cinzel', serif; font-size: 3.5rem; color: var(--text-pure-white); line-height: 1; z-index: 2; text-shadow: 0 0 15px rgba(255,255,255,0.4); }
+        .d-box p { margin: 5px 0 0 0; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--text-pure-white); opacity: 0.7; z-index: 2; }
+
+        /* --- ИНТЕРАКТИВ 6: Карта "Диагональное Открытие" --- */
+        .map-diag-container {
+            margin: 60px auto 0 auto; width: 100%; max-width: 800px; height: 450px;
+            position: relative; overflow: hidden; border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .map-mask {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bg-emerald); z-index: 2;
+            display: flex; justify-content: center; align-items: center;
+            /* Косой срез маски */
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            /* МЕДЛЕННОЕ диагональное открытие (2 секунды) */
+            transition: clip-path 2s cubic-bezier(0.25, 1, 0.5, 1);
+            pointer-events: none;
+        }
+
+        .map-mask span {
+            font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--text-pure-white);
+            letter-spacing: 4px; border: 1px solid var(--text-pure-white); padding: 15px 30px;
+            transition: opacity 1s;
+        }
+
+        /* При наведении: Маска уезжает по диагонали вправо-вниз */
+        .map-diag-container:hover .map-mask { clip-path: polygon(100% 100%, 100% 100%, 100% 100%, 0 100%); }
+        .map-diag-container:hover .map-mask span { opacity: 0; }
+
+        .map-diag-container iframe {
+            width: 100%; height: 100%; border: 0; position: absolute; top: 0; left: 0; z-index: 1;
+            /* Зелено-изумрудный фильтр на карту */
+            filter: sepia(50%) hue-rotate(100deg) saturate(150%) brightness(80%) contrast(110%);
+        }
+
+        /* --- ИНТЕРАКТИВ 7: Telegram-кнопка "Заливка Белым" --- */
+        .rsvp-section { padding-bottom: 150px; }
+        
+        .btn-glow {
+            position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 15px;
+            padding: 25px 60px; margin-top: 40px; font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--text-pure-white); text-decoration: none;
+            border: 2px solid var(--text-pure-white); border-radius: 5px;
+            overflow: hidden; transition: color 1.5s ease;
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+
+        /* Белая волна, которая затапливает кнопку слева */
+        .btn-glow::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background-color: var(--text-pure-white);
+            /* Медленная заливка (1.5 секунды) */
+            transition: left 1.5s cubic-bezier(0.25, 1, 0.5, 1); z-index: 0;
+        }
+
+        .btn-glow:hover { color: var(--bg-emerald); box-shadow: 0 0 40px rgba(255,255,255,0.4); border-color: var(--text-pure-white); }
+        .btn-glow:hover::before { left: 0; }
+
+        .btn-glow span, .btn-glow svg { position: relative; z-index: 1; transition: transform 1.5s ease; }
+        .btn-glow svg { width: 24px; height: 24px; fill: currentColor; }
+        
+        .btn-glow:hover svg { transform: translateX(10px) scale(1.1); }
+        .btn-glow:hover span { transform: translateX(-5px); }
+
+        /* Плавное появление контента (Fade Up) */
+        .fade-up { opacity: 0; transform: translateY(50px); transition: all 1.5s ease-out; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            .names-row { flex-direction: column; gap: 10px; }
+            .h-name { font-size: 16vw; }
+            .h-amp { font-size: 10vw; margin: 10px 0; }
+            .section-title { font-size: 2.8rem; }
+            /* На мобильных аккордеон превращается в вертикальный список */
+            .flex-accordion { flex-direction: column; height: 500px; }
+            .flex-panel { padding: 20px; align-items: center; text-align: center; }
+            .flex-panel:hover { flex: 2; }
+            .fp-desc { text-align: center; width: auto; transform: translateY(20px) translateX(0); }
+            .flex-panel:hover .fp-desc { transform: translateY(0) translateX(0); }
+            .scene { width: 100px; height: 100px; }
+            .cube-face { width: 70px; height: 70px; font-size: 0.9rem; padding: 15px; }
+            .cube-front { transform: rotateX(0deg) translateZ(50px); }
+            .cube-bottom { transform: rotateX(-90deg) translateZ(50px); }
+            .d-box { width: 100px; height: 100px; }
+            .d-box span { font-size: 2.5rem; }
+            .btn-glow { padding: 20px 30px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ИЗЮМИНКА 1: СИЛЬНАЯ АНИМАЦИЯ НА ФОНЕ (Изумрудные и Мятные пятна) -->
+    <div class="heavy-bg-anim">
+        <div class="glow-blob gb-1"></div>
+        <div class="glow-blob gb-2"></div>
+        <div class="glow-blob gb-3"></div>
+    </div>
+
+    <!-- КОНТЕНТ ПОВЕРХ ФОНА -->
+    <div class="content">
+
+        <!-- СЕКЦИЯ 1: Главный экран (Горизонтальные имена) -->
+        <header class="hero">
+            <div class="names-row">
+                <!-- ID для скрипта разъезжания -->
+                <div class="cinzel-font h-name" id="nameLeft">Павел</div>
+                <div class="cinzel-font h-amp">&</div>
+                <div class="cinzel-font h-name" id="nameRight">Кристина</div>
+            </div>
+            <div class="h-date">14 Августа 2026</div>
+        </header>
+
+        <!-- СЕКЦИЯ 2: История -->
+        <section class="fade-up">
+            <h2 class="cinzel-font section-title">Чистота момента</h2>
+            <p class="text-block">
+                Мы приглашаем вас разделить с нами день, наполненный глубоким смыслом, искренностью и эстетикой. 
+                Ничего лишнего — только настоящие чувства, зеленый лес, близкие люди и наша история любви.
+            </p>
+        </section>
+
+        <!-- СЕКЦИЯ 3: Дресс-код (Вращающиеся 3D-Кубы) -->
+        <section class="fade-up">
+            <h2 class="cinzel-font section-title">Благородные Цвета</h2>
+            <p class="text-block" style="font-size: 1.1rem; opacity: 0.7;">Поддержите палитру нашего праздника.<br>(Наведите на белые квадраты)</p>
+            
+            <div class="cubes-grid">
+                <div class="scene c-1">
+                    <div class="cube">
+                        <div class="cube-face cube-front">Цвет 1</div>
+                        <div class="cube-face cube-bottom">Мята</div>
+                    </div>
+                </div>
+                <div class="scene c-2">
+                    <div class="cube">
+                        <div class="cube-face cube-front">Цвет 2</div>
+                        <div class="cube-face cube-bottom">Малахит</div>
+                    </div>
+                </div>
+                <div class="scene c-3">
+                    <div class="cube">
+                        <div class="cube-face cube-front">Цвет 3</div>
+                        <div class="cube-face cube-bottom">Тил</div>
+                    </div>
+                </div>
+                <div class="scene c-4">
+                    <div class="cube">
+                        <div class="cube-face cube-front">Цвет 4</div>
+                        <div class="cube-face cube-bottom">Фисташка</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 4: Тайминг (Флекс-Гармошка) -->
+        <section class="fade-up">
+            <h2 class="cinzel-font section-title">Расписание</h2>
+            <p class="text-block" style="font-size: 1.1rem; opacity: 0.7;">Наведите на колонну, чтобы раздвинуть её.</p>
+            
+            <div class="flex-accordion">
+                <div class="flex-panel">
+                    <div class="fp-time">16:00</div>
+                    <div class="fp-title">Сбор гостей</div>
+                    <div class="fp-desc">Встречаемся на террасе. Игристое, легкая музыка и предвкушение праздника.</div>
+                </div>
+                <div class="flex-panel">
+                    <div class="fp-time">17:00</div>
+                    <div class="fp-title">Церемония</div>
+                    <div class="fp-desc">Самые главные слова на фоне густого леса. Мы скажем "Да".</div>
+                </div>
+                <div class="flex-panel">
+                    <div class="fp-time">18:30</div>
+                    <div class="fp-title">Праздничный Ужин</div>
+                    <div class="fp-desc">Изысканные блюда, уютная атмосфера, смех и тосты от сердца.</div>
+                </div>
+                <div class="flex-panel">
+                    <div class="fp-time">21:00</div>
+                    <div class="fp-title">Вечеринка</div>
+                    <div class="fp-desc">Разрезаем торт, зажигаем огни и уходим в безумные танцы!</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 5: Таймер (Вложенные Ромбы) -->
+        <section class="fade-up">
+            <h2 class="cinzel-font section-title">Ожидание</h2>
+            
+            <div class="diamond-timer" id="countdown">
+                <div class="d-box">
+                    <div class="d-outer"></div><div class="d-inner"></div>
+                    <span id="days">00</span><p>Дней</p>
+                </div>
+                <div class="d-box">
+                    <div class="d-outer"></div><div class="d-inner"></div>
+                    <span id="hours">00</span><p>Часов</p>
+                </div>
+                <div class="d-box">
+                    <div class="d-outer"></div><div class="d-inner"></div>
+                    <span id="minutes">00</span><p>Минут</p>
+                </div>
+                <div class="d-box">
+                    <div class="d-outer"></div><div class="d-inner"></div>
+                    <span id="seconds">00</span><p>Секунд</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 6: Карта (Диагональное Открытие) -->
+        <section class="fade-up">
+            <h2 class="cinzel-font section-title">Секретный Лес</h2>
+            <p class="text-block" style="font-weight: 600; color: var(--accent-mint);">Резиденция "Малахит"</p>
+            
+            <div class="map-diag-container">
+                <!-- Маска, закрывающая карту -->
+                <div class="map-mask">
+                    <span>Наведите курсор</span>
+                </div>
+                <!-- Интерактивная карта -->
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2244.430307459374!2d37.6092183159313!3d55.76839398055745!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a413d7890fb%3A0xcf953931be0bd4e3!2z0JzQvtGB0LrQstCw!5e0!3m2!1sru!2sru!4v1690000000000!5m2!1sru!2sru" 
+                    allowfullscreen="" loading="lazy">
+                </iframe>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 7: RSVP (Кнопка Заливка Белым) -->
+        <section class="rsvp-section fade-up">
+            <h2 class="cinzel-font section-title" style="font-size: 3.5rem; margin-bottom: 40px;">Разделите этот день с нами</h2>
+            
+            <!-- ВСТАВЬТЕ ССЫЛКУ НА СВОЙ ТЕЛЕГРАМ -->
+            <a href="https://t.me/PavelKristinaWedding" target="_blank" class="btn-glow">
+                <span>Подтвердить в Telegram</span>
+                <!-- Иконка Телеграм -->
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.12.03-1.99 1.25-5.61 3.67-.53.36-1.01.53-1.44.52-.47-.01-1.38-.27-2.05-.5-.82-.28-1.47-.43-1.41-.91.03-.25.38-.51 1.06-.78 4.15-1.8 6.92-2.99 8.31-3.57 3.95-1.65 4.77-1.93 5.3-1.94.12 0 .38.03.53.15.12.1.17.24.19.37.02.13.01.26-.01.4z"/>
+                </svg>
+            </a>
+        </section>
+
+    </div>
+
+    <!-- Скрипты -->
+    <script>
+        // 1. Горизонтальный параллакс имен при скролле (ОЧЕНЬ ПЛАВНО)
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const nameLeft = document.getElementById('nameLeft');
+            const nameRight = document.getElementById('nameRight');
+            
+            // Имена медленно разъезжаются в стороны
+            nameLeft.style.transform = `translateX(${scrollY * -0.2}px)`;
+            nameRight.style.transform = `translateX(${scrollY * 0.2}px)`;
+        });
+
+        // 2. Таймер (Дата: 14 Августа 2026)
+        const weddingDate = new Date("August 14, 2026 16:00:00").getTime();
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+            
+            if (distance < 0) { clearInterval(timer); return; }
+            
+            document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+        }, 1000);
+
+        // 3. Медленное появление контента при скролле (1.5 секунды)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
