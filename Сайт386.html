@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Свадьба | Марк и Валерия</title>
+    <!-- Дорогие, изысканные шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ПАЛИТРА "СУМЕРЕЧНАЯ ОРХИДЕЯ" (Без черного, серого, красного и оранжевого!) */
+        :root {
+            /* Богатый темный фон */
+            --bg-blackberry: #2b1828;  /* Темная ежевика / Глубокий пурпур */
+            --bg-deep-ocean: #162233;  /* Темный океан / Глубокий синий */
+            
+            --text-pure: #ffffff;      /* Чистейший белый */
+            
+            /* Пастельные пыльные акценты */
+            --color-rose: #c48b9f;     /* Пыльная роза */
+            --color-sage: #769485;     /* Приглушенный шалфей */
+            --color-slate: #75879e;    /* Сланцево-синий */
+            --color-amethyst: #8e759e; /* Пыльный аметист */
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--bg-blackberry);
+            color: var(--text-pure);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, .elegant-font { font-family: 'Spectral', serif; margin: 0; font-weight: 400; }
+
+        /* Мягкое свечение для идеальной читаемости белого текста */
+        .glow-text { text-shadow: 0 4px 15px rgba(22, 34, 51, 0.8); }
+
+        /* --- ИЗЮМИНКА 1: ФОН "ГРАДИЕНТНЫЕ ВОЛНЫ" --- */
+        .ambient-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 0; pointer-events: none; overflow: hidden;
+            background: linear-gradient(135deg, var(--bg-blackberry), var(--bg-deep-ocean));
+        }
+
+        /* Огромные размытые сферы, которые плавно перетекают */
+        .blur-blob {
+            position: absolute; border-radius: 50%; filter: blur(120px);
+            opacity: 0.6; mix-blend-mode: screen;
+            animation: floatBlob 25s infinite alternate ease-in-out;
+        }
+
+        .bb-1 { width: 60vw; height: 60vw; background-color: var(--color-amethyst); top: -20%; left: -10%; }
+        .bb-2 { width: 70vw; height: 70vw; background-color: var(--color-slate); bottom: -10%; right: -20%; animation-delay: -10s; animation-direction: alternate-reverse; }
+        .bb-3 { width: 50vw; height: 50vw; background-color: var(--color-rose); top: 30%; left: 30%; animation-duration: 35s; opacity: 0.3; }
+
+        @keyframes floatBlob {
+            0% { transform: translate(0, 0) scale(0.9); }
+            100% { transform: translate(15vw, 10vh) scale(1.1); }
+        }
+
+        .content { position: relative; z-index: 10; }
+
+        /* --- ИЗЮМИНКА 2: ГОРИЗОНТАЛЬНЫЕ ИМЕНА "3D РАЗВЕРТЫВАНИЕ" --- */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            perspective: 1200px;
+        }
+
+        .names-row {
+            display: flex; justify-content: center; align-items: center; gap: 30px;
+            width: 100%; white-space: nowrap;
+        }
+
+        /* НОВАЯ АНИМАЦИЯ: Имена поднимаются из лежачего положения и расширяются */
+        .h-name {
+            font-size: 8vw; color: var(--text-pure);
+            text-transform: uppercase;
+            /* 2.5 секунды очень плавной анимации */
+            animation: unfold3D 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            transform-origin: bottom center;
+            opacity: 0; transform: rotateX(90deg); letter-spacing: -10px;
+        }
+
+        @keyframes unfold3D {
+            0% { transform: rotateX(90deg); opacity: 0; letter-spacing: -10px; filter: blur(10px); }
+            100% { transform: rotateX(0deg); opacity: 1; letter-spacing: 12px; filter: blur(0px); }
+        }
+
+        .h-amp { font-size: 6vw; color: var(--color-rose); font-style: italic; opacity: 0; animation: fadeAmp 2s ease forwards 1.5s; }
+        @keyframes fadeAmp { to { opacity: 1; } }
+
+        .h-date {
+            margin-top: 50px; font-size: 1.2rem; font-weight: 300; letter-spacing: 15px;
+            color: var(--text-pure); text-transform: uppercase;
+            border-bottom: 1px solid var(--color-sage); padding-bottom: 15px;
+            opacity: 0; animation: fadeAmp 2s ease forwards 2s;
+        }
+
+        /* Общие секции */
+        section { padding: 100px 20px; max-width: 900px; margin: 0 auto; text-align: center; }
+        .section-title { font-size: 4rem; color: var(--text-pure); margin-bottom: 40px; letter-spacing: 2px; }
+        .text-block { font-size: 1.2rem; line-height: 2; color: var(--text-pure); opacity: 0.9; max-width: 700px; margin: 0 auto; font-weight: 300; }
+
+        /* --- ИЗЮМИНКА 3: ДЕТСКИЕ ФОТО "ГОРИЗОНТАЛЬНЫЕ ЖАЛЮЗИ" (1.5 СЕКУНДЫ) --- */
+        .childhood-grid { display: flex; justify-content: center; gap: 40px; margin-bottom: 50px; }
+        
+        .photo-blinds {
+            width: 180px; height: 240px; position: relative; cursor: pointer;
+            box-shadow: 0 15px 40px rgba(22, 34, 51, 0.6); border-radius: 5px;
+            border: 2px solid rgba(255,255,255,0.2); perspective: 1000px;
+        }
+
+        /* Современное фото (Находится на дне) */
+        .adult-photo {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center; z-index: 1;
+        }
+
+        /* 4 горизонтальные полосы, образующие Детское фото (Сверху) */
+        .blind-slice {
+            position: absolute; left: 0; width: 100%; height: 25%;
+            background-size: 100% 400%; /* Увеличиваем фон, чтобы состыковалось */
+            background-position-x: center; z-index: 2;
+            filter: grayscale(80%) sepia(30%); /* Винтажный фильтр */
+            /* МЕДЛЕННЫЙ ПОВОРОТ ЖАЛЮЗИ (1.5 СЕК) */
+            transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+            transform-origin: top center; backface-visibility: hidden;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .bs-1 { top: 0; background-position-y: 0%; transition-delay: 0s; }
+        .bs-2 { top: 25%; background-position-y: 33.333%; transition-delay: 0.1s; }
+        .bs-3 { top: 50%; background-position-y: 66.666%; transition-delay: 0.2s; }
+        .bs-4 { top: 75%; background-position-y: 100%; transition-delay: 0.3s; border-bottom: none; }
+
+        /* При наведении: Полосы поворачиваются на 90 градусов и исчезают из виду */
+        .photo-blinds:hover .blind-slice { transform: rotateX(90deg); }
+
+        .photo-caption { position: absolute; bottom: -35px; left: 0; width: 100%; font-family: 'Spectral', serif; font-size: 1.4rem; color: var(--text-pure); text-align: center; font-style: italic; }
+
+        /* Фото жениха */
+        .groom-adult { background-image: url('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'); }
+        .groom-kid .blind-slice { background-image: url('https://images.unsplash.com/photo-1519689680058-324335c77eba?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'); }
+        /* Фото невесты */
+        .bride-adult { background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'); }
+        .bride-kid .blind-slice { background-image: url('https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'); }
+
+        /* --- КАЛЕНДАРЬ С СЕРДЦЕМ --- */
+        .calendar-box {
+            margin: 60px auto 0 auto; max-width: 400px;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 15px; padding: 40px; backdrop-filter: blur(10px);
+            box-shadow: 0 20px 50px rgba(22, 34, 51, 0.4);
+        }
+
+        .cal-month { font-family: 'Spectral', serif; font-size: 2.2rem; color: var(--text-pure); margin-bottom: 25px; letter-spacing: 2px; text-transform: uppercase; }
+        
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px; font-size: 1.2rem; color: var(--text-pure); }
+        .cal-day-name { font-weight: 600; opacity: 0.6; margin-bottom: 10px; font-size: 0.9rem; color: var(--color-rose); }
+        .cal-day { position: relative; display: flex; justify-content: center; align-items: center; height: 35px; z-index: 2; }
+        .cal-day.empty { opacity: 0; }
+        .cal-day.past { opacity: 0.4; font-weight: 300; }
+
+        .heart-date { color: var(--bg-blackberry); font-weight: 600; font-size: 1.3rem; text-shadow: none; }
+        .heart-svg {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 50px; height: 50px; fill: var(--color-rose); z-index: -1;
+            /* Плавная пульсация */
+            animation: heartPulse 1.5s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 15px rgba(196, 139, 159, 0.6));
+        }
+        @keyframes heartPulse { 0% { transform: translate(-50%, -50%) scale(0.9); } 100% { transform: translate(-50%, -50%) scale(1.15); } }
+
+        /* --- ИНТЕРАКТИВ 4: Дресс-код "Заливка из Угла" (2 СЕКУНДЫ) --- */
+        .corner-fill-grid { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 60px; }
+        
+        .cf-box {
+            width: 140px; height: 180px; position: relative; overflow: hidden;
+            border-radius: 15px; cursor: pointer; border: 1px solid rgba(255,255,255,0.3);
+            background-color: rgba(255,255,255,0.05); display: flex; justify-content: center; align-items: center;
+        }
+
+        /* Цветной круг, который будет расти из правого верхнего угла */
+        .cf-color {
+            position: absolute; top: -50px; right: -50px; width: 0; height: 0; border-radius: 50%;
+            /* ОЧЕНЬ МЕДЛЕННЫЙ РОСТ (2 СЕКУНДЫ) */
+            transition: width 2s cubic-bezier(0.25, 1, 0.5, 1), height 2s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 1;
+        }
+
+        .cf-1 .cf-color { background-color: var(--color-rose); }
+        .cf-2 .cf-color { background-color: var(--color-sage); }
+        .cf-3 .cf-color { background-color: var(--color-slate); }
+        .cf-4 .cf-color { background-color: var(--color-amethyst); }
+
+        .cf-box span {
+            position: relative; z-index: 2; font-family: 'Spectral', serif; font-size: 1.4rem; color: var(--text-pure);
+            opacity: 0; transform: translate(-20px, 20px); /* Выезжает по диагонали */
+            transition: all 1.5s ease 0.3s; font-style: italic; letter-spacing: 2px;
+        }
+
+        .cf-hint { position: absolute; font-size: 0.9rem; letter-spacing: 2px; opacity: 0.6; text-transform: uppercase; transition: opacity 0.5s; z-index: 2; }
+
+        /* При наведении: Круг из угла затапливает карточку, текст выезжает */
+        .cf-box:hover .cf-color { width: 400px; height: 400px; }
+        .cf-box:hover .cf-hint { opacity: 0; }
+        .cf-box:hover span { opacity: 1; transform: translate(0, 0); }
+
+        /* --- ИНТЕРАКТИВ 5: Тайминг "3D Кубики" (1.5 СЕКУНДЫ) --- */
+        .cube-timeline { display: flex; flex-direction: column; gap: 30px; margin-top: 60px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        
+        .cube-scene { width: 100%; height: 120px; perspective: 1500px; cursor: default; }
+
+        .cube-body {
+            width: 100%; height: 100%; position: relative;
+            transform-style: preserve-3d;
+            /* МЕДЛЕННЫЙ ПОВОРОТ КУБА (1.5 СЕКУНДЫ) */
+            transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Лицевая грань куба (Время) */
+        .cube-front {
+            position: absolute; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center; gap: 40px;
+            backface-visibility: hidden; transform: translateZ(60px);
+        }
+
+        /* Нижняя грань куба (Описание) */
+        .cube-bottom {
+            position: absolute; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.15); border: 1px solid var(--color-sage); border-radius: 10px;
+            display: flex; flex-direction: column; justify-content: center; padding: 0 40px; box-sizing: border-box; text-align: left;
+            backface-visibility: hidden; transform: rotateX(-90deg) translateZ(60px);
+        }
+
+        .cf-time { font-family: 'Spectral', serif; font-size: 3rem; color: var(--color-rose); }
+        .cf-title { font-size: 1.4rem; font-weight: 600; text-transform: uppercase; letter-spacing: 3px; }
+        
+        .cb-title { font-size: 1.2rem; font-weight: 600; color: var(--text-pure); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .cb-desc { font-size: 1rem; font-weight: 300; opacity: 0.9; }
+
+        /* При наведении: Куб поворачивается вверх на 90 градусов */
+        .cube-scene:hover .cube-body { transform: rotateX(90deg); }
+
+        /* --- ИНТЕРАКТИВ 6: Таймер "Вращающиеся Ромбы" --- */
+        .rhombus-timer { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 60px; }
+        
+        .r-box {
+            position: relative; width: 130px; height: 130px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        .r-border {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border: 2px solid rgba(255, 255, 255, 0.4); transform: rotate(45deg);
+            transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1), background-color 2s, border-radius 2s;
+        }
+
+        .r-box:hover .r-border { transform: rotate(225deg); background-color: rgba(255,255,255,0.1); border-radius: 50%; border-color: var(--color-rose); }
+
+        .r-box span { font-family: 'Spectral', serif; font-size: 3.5rem; color: var(--text-pure); line-height: 1; z-index: 2; }
+        .r-box p { margin: 5px 0 0 0; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--text-pure); opacity: 0.8; z-index: 2; }
+
+        /* --- ИНТЕРАКТИВ 7: Карта "Разрыв Экрана" (2 СЕКУНДЫ) --- */
+        .map-split-h-container {
+            margin: 60px auto 0 auto; width: 100%; max-width: 800px; height: 450px;
+            position: relative; overflow: hidden; border-radius: 15px;
+            box-shadow: 0 20px 50px rgba(22, 34, 51, 0.5); border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        /* Две горизонтальные маски (Верх и Низ) */
+        .mask-up, .mask-down {
+            position: absolute; left: 0; width: 100%; height: 50%;
+            background-color: var(--bg-deep-ocean); z-index: 2;
+            display: flex; justify-content: center; align-items: center;
+            /* ОЧЕНЬ МЕДЛЕННОЕ РАЗДВИГАНИЕ (2 СЕК) */
+            transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .mask-up { top: 0; border-bottom: 1px solid var(--text-pure); transform-origin: top; }
+        .mask-down { bottom: 0; transform-origin: bottom; }
+
+        .mask-up span { transform: translateY(20px); font-family: 'Spectral', serif; font-size: 1.5rem; letter-spacing: 4px; color: var(--text-pure); transition: opacity 1s; }
+        .mask-down span { transform: translateY(-20px); font-family: 'Spectral', serif; font-size: 1.5rem; letter-spacing: 4px; color: var(--text-pure); transition: opacity 1s; }
+
+        /* При наведении маски уезжают вверх и вниз */
+        .map-split-h-container:hover .mask-up { transform: translateY(-100%); }
+        .map-split-h-container:hover .mask-down { transform: translateY(100%); }
+        .map-split-h-container:hover span { opacity: 0; }
+
+        .map-split-h-container iframe {
+            width: 100%; height: 100%; border: 0; position: absolute; top: 0; left: 0; z-index: 1;
+            /* Пурпурно-синий фильтр */
+            filter: sepia(30%) hue-rotate(220deg) saturate(120%) brightness(85%) contrast(110%);
+        }
+
+        /* Реальная кнопка Карты */
+        .btn-real-map {
+            display: inline-block; margin-top: 30px; padding: 18px 50px; border-radius: 5px;
+            background-color: var(--text-pure); color: var(--bg-blackberry); font-weight: 600;
+            text-transform: uppercase; letter-spacing: 3px; text-decoration: none;
+            transition: transform 0.4s, box-shadow 0.4s;
+        }
+        .btn-real-map:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(255,255,255,0.2); }
+
+        /* --- ИНТЕРАКТИВ 8: Telegram-кнопка "Выталкивание текста" (1.5 СЕК) --- */
+        .rsvp-section { padding-bottom: 150px; }
+        
+        .push-btn {
+            position: relative; display: inline-flex; align-items: center; justify-content: center;
+            width: 350px; height: 80px; margin-top: 40px; font-family: 'DM Sans', sans-serif;
+            font-size: 1.2rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--text-pure); text-decoration: none; border: 2px solid var(--text-pure);
+            border-radius: 5px; overflow: hidden; transition: border-color 1.5s ease;
+        }
+
+        /* Цветная заливка, поднимающаяся снизу */
+        .push-btn::before {
+            content: ''; position: absolute; bottom: -100%; left: 0; width: 100%; height: 100%;
+            background-color: var(--color-slate);
+            transition: bottom 1.5s cubic-bezier(0.25, 1, 0.5, 1); z-index: 0;
+        }
+
+        /* Старый текст (Изначально видим) */
+        .pb-old { position: absolute; transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1); z-index: 1; }
+        
+        /* Новый текст с иконкой (Изначально спрятан внизу) */
+        .pb-new { position: absolute; transform: translateY(100px); display: flex; align-items: center; gap: 10px; transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1); z-index: 1; }
+        .pb-new svg { width: 24px; height: 24px; fill: currentColor; }
+
+        /* При наведении: Заливка поднимается, старый текст выталкивается вверх, новый встает на место */
+        .push-btn:hover { border-color: transparent; box-shadow: 0 15px 40px rgba(117, 135, 158, 0.5); }
+        .push-btn:hover::before { bottom: 0; }
+        .push-btn:hover .pb-old { transform: translateY(-100px); }
+        .push-btn:hover .pb-new { transform: translateY(0); }
+
+        /* Плавное появление контента при прокрутке */
+        .slow-fade { opacity: 0; transform: translateY(50px); transition: all 1.5s ease-out; }
+        .slow-fade.visible { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            .names-row { flex-direction: column; gap: 10px; }
+            .h-name { font-size: 15vw; letter-spacing: 5px; animation: unfoldMobile 2.5s forwards; }
+            @keyframes unfoldMobile { 0% { transform: rotateX(90deg); opacity: 0; letter-spacing: -5px; } 100% { transform: rotateX(0deg); opacity: 1; letter-spacing: 5px; } }
+            .h-amp { font-size: 8vw; margin: 10px 0; }
+            .section-title { font-size: 2.8rem; }
+            .childhood-grid { flex-direction: column; align-items: center; gap: 30px; }
+            .photo-blinds { width: 160px; height: 220px; }
+            .cube-scene { height: 160px; }
+            .cube-front { flex-direction: column; gap: 10px; padding: 20px; text-align: center; transform: translateZ(80px); }
+            .cf-time { font-size: 2.2rem; }
+            .cube-bottom { padding: 20px; text-align: center; transform: rotateX(-90deg) translateZ(80px); }
+            .map-split-h-container { height: 350px; }
+            .push-btn { width: 300px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ИЗЮМИНКА 1: ФОН "ГРАДИЕНТНЫЕ ВОЛНЫ" -->
+    <div class="ambient-bg">
+        <div class="blur-blob bb-1"></div>
+        <div class="blur-blob bb-2"></div>
+        <div class="blur-blob bb-3"></div>
+    </div>
+
+    <!-- КОНТЕНТ ПОВЕРХ ФОНА -->
+    <div class="content">
+
+        <!-- СЕКЦИЯ 1: Главный экран (Имена 3D-Развертывание) -->
+        <header class="hero">
+            <p class="elegant-font glow-text" style="font-size: 1.5rem; color: var(--color-rose); margin-bottom: 20px; letter-spacing: 3px; text-transform: uppercase;">История начинается здесь</p>
+            
+            <div class="names-row">
+                <div class="elegant-font h-name glow-text">Марк</div>
+                <div class="elegant-font h-amp glow-text">&</div>
+                <div class="elegant-font h-name glow-text">Валерия</div>
+            </div>
+            <div class="h-date glow-text">20 Ноября 2026</div>
+        </header>
+
+        <!-- СЕКЦИЯ 2: Детские фото (Горизонтальные Жалюзи) -->
+        <section class="slow-fade">
+            <h2 class="elegant-font section-title glow-text">Наш Путь</h2>
+            <p class="text-block glow-text" style="margin-bottom: 50px;">
+                От детских улыбок до самого важного дня. Мы приглашаем вас разделить с нами 
+                вечер, пропитанный нежностью, эстетикой и искренней любовью.
+                <br><br><span style="font-size: 0.9rem; opacity: 0.7; letter-spacing: 2px; text-transform: uppercase;">Наведите на фото, чтобы увидеть нас сейчас</span>
+            </p>
+            
+            <div class="childhood-grid">
+                <!-- Жених -->
+                <div class="photo-blinds groom-kid">
+                    <div class="adult-photo groom-adult"></div>
+                    <!-- 4 Полосы детского фото -->
+                    <div class="blind-slice bs-1"></div>
+                    <div class="blind-slice bs-2"></div>
+                    <div class="blind-slice bs-3"></div>
+                    <div class="blind-slice bs-4"></div>
+                    <div class="photo-caption glow-text">Он</div>
+                </div>
+                <!-- Невеста -->
+                <div class="photo-blinds bride-kid">
+                    <div class="adult-photo bride-adult"></div>
+                    <div class="blind-slice bs-1"></div>
+                    <div class="blind-slice bs-2"></div>
+                    <div class="blind-slice bs-3"></div>
+                    <div class="blind-slice bs-4"></div>
+                    <div class="photo-caption glow-text">Она</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 3: КАЛЕНДАРЬ С ПУЛЬСИРУЮЩИМ СЕРДЦЕМ -->
+        <section class="slow-fade">
+            <h2 class="elegant-font section-title glow-text">Сохраните Дату</h2>
+            <p class="text-block glow-text" style="font-size: 1.1rem; opacity: 0.8;">Обведите этот день в календаре.</p>
+            
+            <div class="calendar-box">
+                <div class="cal-month glow-text">Ноябрь 2026</div>
+                <div class="cal-grid">
+                    <div class="cal-day-name">ПН</div><div class="cal-day-name">ВТ</div><div class="cal-day-name">СР</div><div class="cal-day-name">ЧТ</div><div class="cal-day-name">ПТ</div><div class="cal-day-name">СБ</div><div class="cal-day-name">ВС</div>
+                    
+                    <div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div>
+                    <div class="cal-day past">1</div><div class="cal-day past">2</div><div class="cal-day past">3</div><div class="cal-day past">4</div><div class="cal-day past">5</div>
+                    <div class="cal-day past">6</div><div class="cal-day past">7</div><div class="cal-day past">8</div><div class="cal-day past">9</div><div class="cal-day past">10</div>
+                    <div class="cal-day past">11</div><div class="cal-day past">12</div><div class="cal-day past">13</div><div class="cal-day past">14</div><div class="cal-day past">15</div>
+                    <div class="cal-day past">16</div><div class="cal-day past">17</div><div class="cal-day past">18</div><div class="cal-day past">19</div>
+                    
+                    <!-- ДАТА СВАДЬБЫ (20 число) -->
+                    <div class="cal-day heart-date">
+                        <svg class="heart-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                        20
+                    </div>
+                    
+                    <div class="cal-day">21</div><div class="cal-day">22</div><div class="cal-day">23</div><div class="cal-day">24</div><div class="cal-day">25</div><div class="cal-day">26</div>
+                    <div class="cal-day">27</div><div class="cal-day">28</div><div class="cal-day">29</div><div class="cal-day">30</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 4: Дресс-код (Заливка из Угла) -->
+        <section class="slow-fade">
+            <h2 class="elegant-font section-title glow-text">Палитра Сумерек</h2>
+            <p class="text-block glow-text" style="font-size: 1.1rem;">Поддержите атмосферу глубокими, матовыми тонами.<br>(Наведите на карточки)</p>
+            
+            <div class="corner-fill-grid">
+                <div class="cf-box cf-1">
+                    <div class="cf-hint">Цвет 1</div>
+                    <div class="cf-color"></div>
+                    <span>Роза</span>
+                </div>
+                <div class="cf-box cf-2">
+                    <div class="cf-hint">Цвет 2</div>
+                    <div class="cf-color"></div>
+                    <span>Шалфей</span>
+                </div>
+                <div class="cf-box cf-3">
+                    <div class="cf-hint">Цвет 3</div>
+                    <div class="cf-color"></div>
+                    <span>Сланец</span>
+                </div>
+                <div class="cf-box cf-4">
+                    <div class="cf-hint">Цвет 4</div>
+                    <div class="cf-color"></div>
+                    <span>Аметист</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 5: Тайминг (3D Кубики) -->
+        <section class="slow-fade">
+            <h2 class="elegant-font section-title glow-text">Хронология</h2>
+            <p class="text-block glow-text" style="font-size: 1.1rem; opacity: 0.8;">Наведите курсор на панель.</p>
+            
+            <div class="cube-timeline">
+                <div class="cube-scene">
+                    <div class="cube-body">
+                        <!-- Лицевая сторона -->
+                        <div class="cube-front">
+                            <div class="cf-time">16:00</div>
+                            <div class="cf-title">Сбор Гостей</div>
+                        </div>
+                        <!-- Нижняя сторона (Описание) -->
+                        <div class="cube-bottom">
+                            <div class="cb-title">Начало вечера</div>
+                            <div class="cb-desc">Легкий фуршет, шампанское и звуки виолончели в фойе.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cube-scene">
+                    <div class="cube-body">
+                        <div class="cube-front">
+                            <div class="cf-time">17:00</div>
+                            <div class="cf-title">Церемония</div>
+                        </div>
+                        <div class="cube-bottom">
+                            <div class="cb-title">Таинство Клятв</div>
+                            <div class="cb-desc">Самые главные слова. Мы обменяемся кольцами в окружении свечей.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cube-scene">
+                    <div class="cube-body">
+                        <div class="cube-front">
+                            <div class="cf-time">18:30</div>
+                            <div class="cf-title">Ужин</div>
+                        </div>
+                        <div class="cube-bottom">
+                            <div class="cb-title">Званый Банкет</div>
+                            <div class="cb-desc">Изысканная подача блюд, звон хрусталя и душевные тосты.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cube-scene">
+                    <div class="cube-body">
+                        <div class="cube-front">
+                            <div class="cf-time">22:00</div>
+                            <div class="cf-title">Вечеринка</div>
+                        </div>
+                        <div class="cube-bottom">
+                            <div class="cb-title">Танцы до утра</div>
+                            <div class="cb-desc">Зажигаем огни, разрезаем торт и уходим в танцы с головой!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 6: Таймер (Вращающиеся Ромбы) -->
+        <section class="slow-fade">
+            <h2 class="elegant-font section-title glow-text">До старта</h2>
+            
+            <div class="rhombus-timer" id="countdown">
+                <div class="r-box">
+                    <div class="r-border"></div>
+                    <span class="glow-text" id="days">00</span><p class="glow-text">Дней</p>
+                </div>
+                <div class="r-box">
+                    <div class="r-border"></div>
+                    <span class="glow-text" id="hours">00</span><p class="glow-text">Часов</p>
+                </div>
+                <div class="r-box">
+                    <div class="r-border"></div>
+                    <span class="glow-text" id="minutes">00</span><p class="glow-text">Минут</p>
+                </div>
+                <div class="r-box">
+                    <div class="r-border"></div>
+                    <span class="glow-text" id="seconds">00</span><p class="glow-text">Секунд</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 7: Карта (Разрыв Экрана) -->
+        <section class="slow-fade">
+            <h2 class="elegant-font section-title glow-text">Место Силы</h2>
+            <p class="text-block glow-text" style="font-weight: 600; color: var(--color-rose);">Загородный клуб "Бархат"</p>
+            
+            <div class="map-split-h-container">
+                <div class="mask-up"><span>Открыть</span></div>
+                <div class="mask-down"><span>Карту</span></div>
+                <!-- Интерактивная карта -->
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2244.430307459374!2d37.6092183159313!3d55.76839398055745!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a413d7890fb%3A0xcf953931be0bd4e3!2z0JzQvtGB0LrQstCw!5e0!3m2!1sru!2sru!4v1690000000000!5m2!1sru!2sru" 
+                    allowfullscreen="" loading="lazy">
+                </iframe>
+            </div>
+
+            <!-- Реальная кнопка для перехода в карты -->
+            <a href="https://goo.gl/maps/BarkhatLink" target="_blank" class="btn-real-map">Открыть в Google Maps</a>
+        </section>
+
+        <!-- СЕКЦИЯ 8: RSVP (Выталкивание текста) -->
+        <section class="rsvp-section slow-fade" style="text-align: center;">
+            <h2 class="elegant-font section-title glow-text" style="font-size: 3.5rem; margin-bottom: 40px;">Будем счастливы видеть вас</h2>
+            
+            <!-- ВСТАВЬТЕ ССЫЛКУ НА СВОЙ ТЕЛЕГРАМ -->
+            <a href="https://t.me/MarkValeriaWedding" target="_blank" class="push-btn">
+                <!-- Старый текст -->
+                <div class="pb-old">Ваш Ответ</div>
+                <!-- Новый текст (выезжает снизу) -->
+                <div class="pb-new">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.12.03-1.99 1.25-5.61 3.67-.53.36-1.01.53-1.44.52-.47-.01-1.38-.27-2.05-.5-.82-.28-1.47-.43-1.41-.91.03-.25.38-.51 1.06-.78 4.15-1.8 6.92-2.99 8.31-3.57 3.95-1.65 4.77-1.93 5.3-1.94.12 0 .38.03.53.15.12.1.17.24.19.37.02.13.01.26-.01.4z"/>
+                    </svg>
+                    <span>Перейти в Telegram</span>
+                </div>
+            </a>
+        </section>
+
+    </div>
+
+    <!-- Скрипты -->
+    <script>
+        // 1. Таймер РАБОЧИЙ (Дата: 20 Ноября 2026)
+        const weddingDate = new Date("November 20, 2026 16:00:00").getTime();
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+            
+            if (distance < 0) { clearInterval(timer); return; }
+            
+            document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+        }, 1000);
+
+        // 2. Медленное появление контента при скролле (1.5 секунды)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.slow-fade').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
