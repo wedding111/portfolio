@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Свадьба | Лев и Маргарита</title>
+    <!-- Кинематографичные шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@200;300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ПАЛИТРА "ГЛУБОКИЙ ЛЕС" (Без черного, серого, оранжевого, красного!) */
+        :root {
+            /* Фон-фильтр (Очень темный зеленый мох, чтобы белый текст сиял) */
+            --bg-forest-filter: rgba(16, 43, 33, 0.85); 
+            
+            --text-pure: #ffffff;      /* Чистый белоснежный текст */
+            
+            /* Цвета акцентов (Природные, глубокие) */
+            --color-lake: #2c5460;     /* Глубокий озерный синий */
+            --color-mauve: #7a5c6f;    /* Пыльная слива/маув */
+            --color-sage: #6b8275;     /* Пыльный шалфей */
+            --color-ocean: #20465c;    /* Темный океан */
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-pure);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            background-color: #102b21; /* Подстраховка фона */
+        }
+
+        h1, h2, h3, .cinema-font { font-family: 'Cormorant Garamond', serif; margin: 0; font-weight: 400; }
+
+        /* --- ИЗЮМИНКА 1: ФОН "ЖИВАЯ ФОТОГРАФИЯ С ФИЛЬТРОМ" --- */
+        .photo-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 0; pointer-events: none;
+            /* Настоящая фотография туманного леса/поместья */
+            background-image: url('https://images.unsplash.com/photo-1444464666168-49b626f11151?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover; background-position: center;
+            /* Очень медленное увеличение фото (30 секунд) */
+            animation: cinematicZoom 30s infinite alternate linear;
+        }
+
+        @keyframes cinematicZoom { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
+
+        /* Глубокий изумрудный фильтр поверх фото (заменяет черный цвет) */
+        .bg-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: var(--bg-forest-filter);
+            z-index: 1; pointer-events: none;
+            backdrop-filter: blur(2px); /* Легкое размытие заднего плана */
+        }
+
+        .content { position: relative; z-index: 10; }
+
+        /* --- ИЗЮМИНКА 2: АНИМАЦИЯ ИМЕН "КИНЕМАТОГРАФИЧНЫЙ ФОКУС" --- */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        .focus-names {
+            text-align: center;
+            /* Уникальная анимация: Имена появляются из сильного размытия и уменьшаются (3 СЕКУНДЫ) */
+            animation: focusReveal 3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes focusReveal {
+            0% { filter: blur(30px); transform: scale(1.5); opacity: 0; }
+            100% { filter: blur(0px); transform: scale(1); opacity: 1; }
+        }
+
+        .h-name { font-size: 7vw; color: var(--text-pure); letter-spacing: 15px; text-transform: uppercase; line-height: 1.2; text-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .h-amp { font-size: 4vw; color: var(--color-sage); font-style: italic; margin: 10px 0; }
+
+        .h-date {
+            margin-top: 50px; font-size: 1.2rem; font-weight: 300; letter-spacing: 12px;
+            color: var(--text-pure); text-transform: uppercase;
+            border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 15px;
+            animation: fadeUp 2s ease forwards 1.5s; opacity: 0; transform: translateY(20px);
+        }
+
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* Общие секции */
+        section { padding: 120px 20px; max-width: 900px; margin: 0 auto; text-align: center; }
+        .section-title { font-size: 4rem; color: var(--text-pure); margin-bottom: 40px; text-shadow: 0 5px 20px rgba(0,0,0,0.3); }
+        .text-block { font-size: 1.2rem; line-height: 2; color: var(--text-pure); opacity: 0.9; max-width: 700px; margin: 0 auto; font-weight: 300; }
+
+        /* --- ИНТЕРАКТИВ 3: Дресс-код "Диагональный Раскол" (2 СЕКУНДЫ) --- */
+        .split-grid { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 60px; }
+        
+        .split-box {
+            width: 160px; height: 160px; position: relative; cursor: pointer;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4); border-radius: 5px;
+            background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Цвет внутри */
+        .split-color {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            border-radius: 5px; opacity: 0; transition: opacity 1.5s ease 0.5s;
+        }
+        
+        .sc-1 .split-color { background-color: var(--color-lake); }
+        .sc-2 .split-color { background-color: var(--color-mauve); }
+        .sc-3 .split-color { background-color: var(--color-sage); }
+        .sc-4 .split-color { background-color: var(--color-ocean); }
+
+        .split-color span { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--text-pure); letter-spacing: 2px; }
+
+        /* Две половинки крышки, разделенные по диагонали */
+        .cover-half {
+            position: absolute; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px);
+            z-index: 2; display: flex; justify-content: center; align-items: center;
+            /* ОЧЕНЬ МЕДЛЕННЫЙ РАЗЛЕТ (2 СЕКУНДЫ) */
+            transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1), opacity 2s ease;
+        }
+
+        .cover-top { top: 0; left: 0; clip-path: polygon(0 0, 100% 0, 0 100%); transform-origin: top left; }
+        .cover-bot { bottom: 0; right: 0; clip-path: polygon(100% 100%, 0 100%, 100% 0); transform-origin: bottom right; }
+
+        /* Текст-подсказка на крышке */
+        .cover-hint { position: absolute; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; z-index: 3; transition: opacity 0.5s; }
+
+        /* При наведении: треугольники разъезжаются по углам и исчезают */
+        .split-box:hover .cover-top { transform: translate(-50px, -50px); opacity: 0; }
+        .split-box:hover .cover-bot { transform: translate(50px, 50px); opacity: 0; }
+        .split-box:hover .cover-hint { opacity: 0; }
+        .split-box:hover .split-color { opacity: 1; }
+
+        /* --- ИНТЕРАКТИВ 4: Тайминг "Из Круга в Панель" (1.5 СЕКУНДЫ) --- */
+        .circle-timeline { display: flex; flex-direction: column; align-items: center; gap: 30px; margin-top: 60px; }
+        
+        .circle-card {
+            /* Изначально это идеальный круг в центре */
+            width: 120px; height: 120px; border-radius: 60px;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex; justify-content: center; align-items: center; cursor: default;
+            overflow: hidden; position: relative;
+            /* МЕДЛЕННОЕ РАСШИРЕНИЕ (1.5 СЕК) */
+            transition: width 1.5s cubic-bezier(0.25, 1, 0.5, 1), background 1.5s, border-radius 1.5s, box-shadow 1.5s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .cc-time {
+            font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--text-pure);
+            position: absolute; left: 50%; transform: translateX(-50%);
+            transition: left 1.5s cubic-bezier(0.25, 1, 0.5, 1), transform 1.5s, color 1.5s;
+            z-index: 2;
+        }
+
+        /* Скрытый контент */
+        .cc-content {
+            position: absolute; left: 150px; width: 500px; display: flex; flex-direction: column; justify-content: center; text-align: left;
+            opacity: 0; transform: translateX(30px);
+            transition: opacity 1s ease 0.5s, transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .cc-title { font-size: 1.2rem; font-weight: 600; color: var(--text-pure); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .cc-desc { font-size: 1rem; color: var(--text-pure); opacity: 0.8; font-weight: 300; }
+
+        /* При наведении: Круг превращается в длинную прямоугольную панель */
+        .circle-card:hover { width: 100%; max-width: 700px; border-radius: 15px; background: rgba(255, 255, 255, 0.15); box-shadow: 0 20px 50px rgba(0,0,0,0.5); border-color: transparent; }
+        .circle-card:hover .cc-time { left: 40px; transform: translateX(0); color: var(--color-sage); }
+        .circle-card:hover .cc-content { opacity: 1; transform: translateX(0); }
+
+        /* --- ИНТЕРАКТИВ 5: Таймер "Качели" --- */
+        .swing-timer { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 60px; }
+        
+        .s-box {
+            position: relative; width: 120px; height: 140px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            /* Медленное покачивание (как на волнах) */
+            animation: gentleSwing 6s infinite alternate ease-in-out;
+        }
+
+        .s-box:nth-child(2) { animation-delay: -1.5s; }
+        .s-box:nth-child(3) { animation-delay: -3s; }
+        .s-box:nth-child(4) { animation-delay: -4.5s; }
+
+        @keyframes gentleSwing { 0% { transform: translateY(10px); } 100% { transform: translateY(-10px); } }
+
+        .s-box span { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; color: var(--text-pure); line-height: 1; }
+        .s-box p { margin: 10px 0 0 0; font-size: 0.8rem; font-weight: 400; text-transform: uppercase; letter-spacing: 3px; color: var(--color-sage); }
+
+        /* --- ИНТЕРАКТИВ 6: РЕАЛЬНАЯ Карта "Вертикальная Щель" (2 СЕКУНДЫ) --- */
+        .map-slit-container {
+            margin: 60px auto 0 auto; width: 100%; max-width: 800px;
+            display: flex; flex-direction: column; align-items: center; gap: 20px;
+        }
+
+        .map-slit {
+            width: 100%; height: 15px; /* Изначально это просто узкая горизонтальная полоска! */
+            background-color: rgba(255,255,255,0.3); border-radius: 10px;
+            position: relative; overflow: hidden;
+            /* ОЧЕНЬ МЕДЛЕННОЕ РАСКРЫТИЕ ПО ВЫСОТЕ (2 СЕКУНДЫ) */
+            transition: height 2s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 2s, background-color 2s;
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+        }
+
+        /* Подсказка висит над картой */
+        .slit-hint { font-size: 0.9rem; letter-spacing: 3px; color: var(--text-pure); text-transform: uppercase; opacity: 0.7; }
+
+        /* При наведении: Полоска растягивается в огромный экран */
+        .map-slit-container:hover .map-slit { height: 450px; background-color: transparent; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+
+        .map-slit iframe {
+            width: 100%; height: 100%; border: 0; position: absolute; top: 0; left: 0;
+            /* Изумрудно-океанический фильтр */
+            filter: sepia(30%) hue-rotate(150deg) saturate(100%) brightness(85%) contrast(110%);
+            opacity: 0; transition: opacity 1.5s ease 0.5s; /* Карта плавно проявляется после начала открытия */
+        }
+        .map-slit-container:hover iframe { opacity: 1; }
+
+        /* РЕАЛЬНАЯ КЛИКАБЕЛЬНАЯ КНОПКА GOOGLE MAPS */
+        .real-map-btn {
+            display: inline-block; margin-top: 20px; font-size: 0.9rem; font-weight: 600;
+            letter-spacing: 2px; text-transform: uppercase; color: var(--bg-forest-filter);
+            background-color: var(--text-pure); padding: 15px 30px; border-radius: 5px;
+            text-decoration: none; transition: transform 0.4s, box-shadow 0.4s;
+        }
+        .real-map-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255,255,255,0.3); }
+
+        /* --- ИНТЕРАКТИВ 7: Telegram-кнопка "Жидкая Диагональ" --- */
+        .rsvp-section { padding-bottom: 150px; }
+        
+        .fluid-btn {
+            position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 15px;
+            padding: 25px 60px; margin-top: 40px; font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--text-pure); text-decoration: none; border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 5px; overflow: hidden; transition: border-color 1.5s ease, box-shadow 1.5s ease;
+        }
+
+        /* Заливка из нижнего левого угла */
+        .fluid-btn::before {
+            content: ''; position: absolute; bottom: -50px; left: -50px;
+            width: 0; height: 0; background-color: var(--color-lake);
+            border-radius: 50%;
+            /* МЕДЛЕННЫЙ ВЗРЫВ ИЗ УГЛА (1.5 СЕК) */
+            transition: width 1.5s cubic-bezier(0.25, 1, 0.5, 1), height 1.5s cubic-bezier(0.25, 1, 0.5, 1); z-index: 0;
+        }
+
+        .fluid-btn:hover { border-color: transparent; box-shadow: 0 15px 40px rgba(44, 84, 96, 0.5); }
+        .fluid-btn:hover::before { width: 600px; height: 600px; }
+
+        .fluid-btn span, .fluid-btn svg { position: relative; z-index: 1; transition: transform 1.5s ease; }
+        .fluid-btn svg { width: 26px; height: 26px; fill: currentColor; }
+        .fluid-btn:hover svg { transform: translateX(10px) translateY(-5px); }
+
+        /* Плавное появление контента (Fade Up) */
+        .slow-fade { opacity: 0; transform: translateY(40px); transition: all 1.5s ease-out; }
+        .slow-fade.visible { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            .h-name { font-size: 14vw; letter-spacing: 5px; }
+            .h-amp { font-size: 8vw; margin: 10px 0; }
+            .section-title { font-size: 2.5rem; letter-spacing: 1px; }
+            .circle-card { flex-direction: column; text-align: center; gap: 15px; width: 100%; border-radius: 15px; height: auto; padding: 20px; }
+            .cc-time { position: relative; left: 0; transform: none; font-size: 2rem; }
+            .cc-content { position: relative; left: 0; width: 100%; opacity: 1; transform: none; text-align: center; }
+            .circle-card:hover { width: 100%; }
+            .circle-card:hover .cc-time { left: 0; transform: none; }
+            .map-slit-container:hover .map-slit { height: 350px; }
+            .fluid-btn { padding: 20px 30px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ИЗЮМИНКА 1: ФОН "ЖИВАЯ ФОТОГРАФИЯ С ГЛУБОКИМ ФИЛЬТРОМ" -->
+    <div class="photo-bg"></div>
+    <div class="bg-overlay"></div>
+
+    <!-- КОНТЕНТ ПОВЕРХ ФОНА -->
+    <div class="content">
+
+        <!-- СЕКЦИЯ 1: Главный экран (Кинематографичный фокус) -->
+        <header class="hero">
+            <div class="focus-names">
+                <div class="cinema-font h-name">Лев</div>
+                <div class="cinema-font h-amp">&</div>
+                <div class="cinema-font h-name">Маргарита</div>
+                <div class="h-date">10 Октября 2026</div>
+            </div>
+        </header>
+
+        <!-- СЕКЦИЯ 2: О свадьбе -->
+        <section class="slow-fade">
+            <h2 class="cinema-font section-title">Глубина Момента</h2>
+            <p class="text-block">
+                Мы приглашаем вас в атмосферу кинематографичной эстетики. Вдали от суеты 
+                мы создадим вечер, где главным украшением станут искренние эмоции, глубокий звук, 
+                вкусное вино и присутствие самых близких нам людей.
+            </p>
+        </section>
+
+        <!-- СЕКЦИЯ 3: Дресс-код (Диагональный Раскол) -->
+        <section class="slow-fade">
+            <h2 class="cinema-font section-title">Холодная Палитра</h2>
+            <p class="text-block" style="font-size: 1.1rem; opacity: 0.7;">Отдайте предпочтение сложным, матовым оттенкам.<br>(Наведите курсор на карточки)</p>
+            
+            <div class="split-grid">
+                <div class="split-box sc-1">
+                    <div class="cover-half cover-top"></div><div class="cover-half cover-bot"></div>
+                    <div class="cover-hint">Цвет 1</div>
+                    <div class="split-color"><span>Озеро</span></div>
+                </div>
+                <div class="split-box sc-2">
+                    <div class="cover-half cover-top"></div><div class="cover-half cover-bot"></div>
+                    <div class="cover-hint">Цвет 2</div>
+                    <div class="split-color"><span>Слива</span></div>
+                </div>
+                <div class="split-box sc-3">
+                    <div class="cover-half cover-top"></div><div class="cover-half cover-bot"></div>
+                    <div class="cover-hint">Цвет 3</div>
+                    <div class="split-color"><span>Шалфей</span></div>
+                </div>
+                <div class="split-box sc-4">
+                    <div class="cover-half cover-top"></div><div class="cover-half cover-bot"></div>
+                    <div class="cover-hint">Цвет 4</div>
+                    <div class="split-color"><span>Океан</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 4: Тайминг (Из Круга в Панель) -->
+        <section class="slow-fade">
+            <h2 class="cinema-font section-title">Сценарий</h2>
+            <p class="text-block" style="font-size: 1.1rem; opacity: 0.7;">Наведите на круг со временем, чтобы открыть детали.</p>
+            
+            <div class="circle-timeline">
+                <div class="circle-card">
+                    <div class="cc-time">16:00</div>
+                    <div class="cc-content">
+                        <div class="cc-title">Сбор Гостей</div>
+                        <div class="cc-desc">Приветственные напитки, неспешные разговоры и погружение в атмосферу вечера.</div>
+                    </div>
+                </div>
+                <div class="circle-card">
+                    <div class="cc-time">17:00</div>
+                    <div class="cc-content">
+                        <div class="cc-title">Клятвы</div>
+                        <div class="cc-desc">Самые главные слова и слезы счастья. Мы станем семьей.</div>
+                    </div>
+                </div>
+                <div class="circle-card">
+                    <div class="cc-time">18:30</div>
+                    <div class="cc-content">
+                        <div class="cc-title">Ужин & Тосты</div>
+                        <div class="cc-desc">Изысканная кухня, мерцание свечей, смех и душевные поздравления.</div>
+                    </div>
+                </div>
+                <div class="circle-card">
+                    <div class="cc-time">21:30</div>
+                    <div class="cc-content">
+                        <div class="cc-title">Танцы</div>
+                        <div class="cc-desc">Сбрасываем пиджаки и танцуем до потери пульса!</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 5: Таймер (Качели) -->
+        <section class="slow-fade">
+            <h2 class="cinema-font section-title">До запуска</h2>
+            
+            <div class="swing-timer" id="countdown">
+                <div class="s-box"><span id="days">00</span><p>Дней</p></div>
+                <div class="s-box"><span id="hours">00</span><p>Часов</p></div>
+                <div class="s-box"><span id="minutes">00</span><p>Минут</p></div>
+                <div class="s-box"><span id="seconds">00</span><p>Секунд</p></div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 6: Карта (КЛИКАБЕЛЬНАЯ, Усадьба Архангельское) -->
+        <section class="slow-fade">
+            <h2 class="cinema-font section-title">Локация</h2>
+            <p class="text-block" style="font-weight: 600; color: var(--color-sage);">Усадьба "Архангельское", Москва</p>
+            
+            <div class="map-slit-container">
+                <div class="slit-hint">Наведите курсор, чтобы открыть карту</div>
+                
+                <div class="map-slit">
+                    <!-- Реальный Iframe для Усадьбы Архангельское -->
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2243.684124976451!2d37.28255031593181!3d55.78652398056269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b548b111111111%3A0x1111111111111111!2z0KPRgdCw0LTRjNCx0LAg0JDRgNGF0LDQvdCz0LXQu9GM0YHQutC-0LU!5e0!3m2!1sru!2sru!4v1690000000000!5m2!1sru!2sru" 
+                        allowfullscreen="" loading="lazy">
+                    </iframe>
+                </div>
+                
+                <!-- НОВОВВЕДЕНИЕ: ПРЯМАЯ, КЛИКАБЕЛЬНАЯ ССЫЛКА НА ГУГЛ КАРТЫ -->
+                <a href="https://goo.gl/maps/kG4Yy4P4eM8sH2R96" target="_blank" class="real-map-btn">Открыть в Google Maps</a>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 7: RSVP (Жидкая Волна) -->
+        <section class="rsvp-section slow-fade">
+            <h2 class="cinema-font section-title" style="font-size: 3.5rem; margin-bottom: 40px;">Ждем вашего ответа</h2>
+            
+            <!-- ВСТАВЬТЕ ССЫЛКУ НА СВОЙ ТЕЛЕГРАМ -->
+            <a href="https://t.me/LevMargoWedding" target="_blank" class="fluid-btn">
+                <span>Я буду с вами! (Telegram)</span>
+                <!-- Иконка Телеграм -->
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.12.03-1.99 1.25-5.61 3.67-.53.36-1.01.53-1.44.52-.47-.01-1.38-.27-2.05-.5-.82-.28-1.47-.43-1.41-.91.03-.25.38-.51 1.06-.78 4.15-1.8 6.92-2.99 8.31-3.57 3.95-1.65 4.77-1.93 5.3-1.94.12 0 .38.03.53.15.12.1.17.24.19.37.02.13.01.26-.01.4z"/>
+                </svg>
+            </a>
+        </section>
+
+    </div>
+
+    <!-- Скрипты -->
+    <script>
+        // 1. Таймер (Дата: 10 Октября 2026)
+        const weddingDate = new Date("October 10, 2026 16:00:00").getTime();
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+            
+            if (distance < 0) { clearInterval(timer); return; }
+            
+            document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+        }, 1000);
+
+        // 2. Медленное появление контента при скролле (1.5 секунды)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.slow-fade').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
