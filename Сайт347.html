@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Свадьба | Кирилл и Милана</title>
+    <!-- Два сложных, но не "королевских" шрифта -->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ПАЛИТРА COLOR BLOCKING (Разные цвета, не оттенки! Никакого черного и белого) */
+        :root {
+            --color-terracotta: #df6e53; /* Терракота (Секция 1 и 5) */
+            --color-sage: #81b29a;       /* Шалфей (Секция 2 - Тайминг) */
+            --color-mustard: #f2cc8f;    /* Горчичный (Секция 3 - Дресс-код) */
+            --color-tangerine: #e68a47;  /* Танжерин (Секция 4 - Таймер) */
+            
+            --text-coffee: #3d2c23;      /* Глубокий кофейный (Вместо черного) */
+            --text-almond: #f9eedf;      /* Светлый миндаль (Вместо белого) */
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            /* Шрифт основного текста */
+            font-family: 'Comfortaa', cursive; 
+            color: var(--text-coffee);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Шрифт заголовков */
+        h1, h2, h3, .heading-font {
+            font-family: 'Philosopher', sans-serif;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        /* Блок-секции (Color Blocking) */
+        section {
+            padding: 100px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sec-hero { background-color: var(--color-terracotta); color: var(--text-almond); min-height: 100vh; justify-content: center; }
+        .sec-timing { background-color: var(--color-sage); color: var(--text-coffee); }
+        .sec-dress { background-color: var(--color-mustard); color: var(--text-coffee); }
+        .sec-timer { background-color: var(--color-tangerine); color: var(--text-coffee); }
+        .sec-map { background-color: var(--color-terracotta); color: var(--text-almond); padding-bottom: 150px; }
+
+        .section-title {
+            font-size: 4rem;
+            margin-bottom: 50px;
+            text-align: center;
+            text-transform: lowercase; /* Модная фишка */
+        }
+
+        .text-block {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            max-width: 800px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        /* --- ИНТЕРАКТИВ 1: Главный экран (Магнитные имена) --- */
+        .names-wrapper {
+            display: flex; flex-direction: column; align-items: center;
+            perspective: 1000px;
+        }
+
+        .name-main {
+            font-size: 12vw;
+            line-height: 0.9;
+            transition: transform 0.2s ease-out;
+            text-shadow: 10px 10px 0px rgba(61, 44, 35, 0.2); /* Кофейная тень */
+        }
+
+        .ampersand {
+            font-size: 5vw;
+            color: var(--color-mustard);
+            margin: 20px 0;
+            animation: pulseAmper 2s infinite alternate;
+        }
+        @keyframes pulseAmper { 0% { transform: scale(1) rotate(-10deg); } 100% { transform: scale(1.2) rotate(10deg); } }
+
+        .date-badge {
+            margin-top: 50px;
+            font-size: 1.2rem;
+            background-color: var(--text-almond);
+            color: var(--color-terracotta);
+            padding: 15px 40px;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(61, 44, 35, 0.2);
+            font-weight: 700;
+        }
+
+        /* --- ИНТЕРАКТИВ 2: Тайминг / Расписание (Hover Timeline) --- */
+        .timeline {
+            width: 100%; max-width: 700px;
+            display: flex; flex-direction: column; gap: 20px;
+        }
+
+        .time-item {
+            display: flex; align-items: center;
+            padding: 25px;
+            border-radius: 20px;
+            background-color: transparent;
+            border: 2px solid var(--text-coffee);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: default;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Заливка при наведении */
+        .time-item::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background-color: var(--text-coffee);
+            transition: left 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 0;
+        }
+
+        .time-item:hover { transform: scale(1.05); border-color: var(--text-coffee); }
+        .time-item:hover::before { left: 0; }
+
+        .time-val {
+            font-family: 'Philosopher', sans-serif;
+            font-size: 2.5rem; font-weight: 700; width: 120px;
+            position: relative; z-index: 1; transition: color 0.4s;
+        }
+        .time-desc {
+            font-size: 1.2rem; font-weight: 700;
+            position: relative; z-index: 1; transition: color 0.4s;
+        }
+
+        .time-item:hover .time-val, .time-item:hover .time-desc { color: var(--color-sage); }
+
+        /* --- ИНТЕРАКТИВ 3: Дресс-код "Цветные двери" --- */
+        .doors-container {
+            display: flex; gap: 15px; width: 100%; max-width: 800px; height: 300px;
+        }
+        .door {
+            flex: 1; border-radius: 15px; position: relative; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; box-shadow: 0 10px 20px rgba(61, 44, 35, 0.15);
+            transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .door span {
+            font-family: 'Philosopher', sans-serif; font-size: 1.5rem;
+            color: var(--text-almond); transform: rotate(-90deg);
+            white-space: nowrap; transition: all 0.4s; opacity: 0;
+        }
+        .door:hover { flex: 3; }
+        .door:hover span { transform: rotate(0); opacity: 1; font-size: 2rem; }
+
+        /* --- ИНТЕРАКТИВ 4: Таймер "Жидкие пузыри (Gooey Effect)" --- */
+        .gooey-timer-wrapper {
+            position: relative; width: 100%; max-width: 800px; height: 250px;
+            display: flex; justify-content: center; align-items: center; gap: 30px;
+            filter: url(#goo); /* SVG Фильтр слияния */
+        }
+        .t-blob {
+            width: 130px; height: 130px; background-color: var(--text-coffee); color: var(--color-tangerine);
+            border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            animation: blobFloat 4s infinite alternate ease-in-out;
+            position: relative;
+        }
+        .t-blob:nth-child(even) { animation-direction: alternate-reverse; animation-duration: 5s; }
+        
+        @keyframes blobFloat { 0% { transform: translateY(20px) scale(1); } 100% { transform: translateY(-20px) scale(1.1); } }
+
+        .t-blob span { font-family: 'Philosopher', sans-serif; font-size: 3.5rem; line-height: 1; }
+        .t-blob p { font-size: 0.9rem; font-weight: 700; margin: 0; text-transform: uppercase; }
+
+        /* --- ИНТЕРАКТИВ 5: Карта "Штамп" --- */
+        .map-stamp {
+            margin-top: 30px; width: 100%; max-width: 800px; height: 400px;
+            /* Форма почтовой марки / облака */
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            overflow: hidden;
+            border: 8px solid var(--text-almond);
+            box-shadow: 0 20px 40px rgba(61, 44, 35, 0.3);
+            transition: border-radius 1s ease-in-out;
+        }
+        .map-stamp:hover { border-radius: 20px; } /* Разворачивается в прямоугольник при наведении */
+        
+        .map-stamp iframe {
+            width: 100%; height: 100%; border: 0;
+            /* Тонируем карту в терракотово-кофейный (без белого и синего) */
+            filter: sepia(60%) hue-rotate(330deg) saturate(150%) brightness(90%);
+        }
+
+        /* --- ИНТЕРАКТИВ 6: Кнопка Telegram "Разворачивающийся ковер" --- */
+        .btn-rsvp {
+            margin-top: 50px;
+            display: inline-flex; align-items: center; gap: 15px;
+            font-family: 'Philosopher', sans-serif; font-size: 1.5rem;
+            color: var(--color-terracotta); background-color: var(--text-almond);
+            padding: 20px 50px; border-radius: 10px; text-decoration: none;
+            position: relative; overflow: hidden;
+            box-shadow: 0 15px 30px rgba(61, 44, 35, 0.3);
+            transition: color 0.4s;
+        }
+        .btn-rsvp::after {
+            content: ''; position: absolute; width: 100%; height: 0%;
+            bottom: 0; left: 0; background-color: var(--text-coffee);
+            transition: height 0.4s cubic-bezier(0.25, 1, 0.5, 1); z-index: 0;
+        }
+        .btn-rsvp:hover { color: var(--text-almond); }
+        .btn-rsvp:hover::after { height: 100%; top: 0; }
+        .btn-rsvp span, .btn-rsvp svg { position: relative; z-index: 1; transition: transform 0.4s; }
+        .btn-rsvp svg { width: 26px; height: 26px; fill: currentColor; }
+        .btn-rsvp:hover svg { transform: translateY(-5px) rotate(15deg); }
+
+        /* Анимация появления контента (Scroll Reveal) */
+        .reveal { opacity: 0; transform: translateY(50px) scale(0.95); transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .reveal.visible { opacity: 1; transform: translateY(0) scale(1); }
+
+        @media (max-width: 768px) {
+            .name-main { font-size: 16vw; }
+            .section-title { font-size: 2.8rem; margin-bottom: 30px; }
+            .time-item { padding: 15px; flex-direction: column; text-align: center; gap: 10px; }
+            .time-val { width: auto; font-size: 2rem; }
+            .doors-container { height: 400px; flex-direction: column; }
+            .door span { transform: rotate(0); }
+            .gooey-timer-wrapper { flex-wrap: wrap; height: auto; gap: 10px; filter: none; } /* Отключаем gooey на мобильных для производительности */
+            .t-blob { width: 90px; height: 90px; }
+            .t-blob span { font-size: 2rem; }
+            .btn-rsvp { font-size: 1.2rem; padding: 20px 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SVG Фильтр для эффекта "Слипающихся пузырей" таймера -->
+    <svg style="visibility: hidden; position: absolute;" width="0" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <defs>
+            <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- СЕКЦИЯ 1: ГЛАВНЫЙ ЭКРАН (Цвет: Терракота) -->
+    <section class="sec-hero">
+        <div class="names-wrapper">
+            <h1 class="heading-font name-main" id="name1">Кирилл</h1>
+            <div class="heading-font ampersand">и</div>
+            <h1 class="heading-font name-main" id="name2">Милана</h1>
+        </div>
+        <div class="date-badge">28 АВГУСТА 2026</div>
+    </section>
+
+    <!-- СЕКЦИЯ 2: ТАЙМИНГ (Цвет: Шалфей) -->
+    <section class="sec-timing">
+        <h2 class="section-title reveal">Как пройдет день</h2>
+        <p class="text-block reveal">Мы спланировали этот день так, чтобы всем было комфортно, уютно и весело.</p>
+        
+        <div class="timeline reveal">
+            <div class="time-item">
+                <div class="time-val">15:00</div>
+                <div class="time-desc">Сбор гостей, легкие закуски и шампанское</div>
+            </div>
+            <div class="time-item">
+                <div class="time-val">16:00</div>
+                <div class="time-desc">Трогательная церемония обмена кольцами</div>
+            </div>
+            <div class="time-item">
+                <div class="time-val">17:30</div>
+                <div class="time-desc">Праздничный ужин, тосты и объятия</div>
+            </div>
+            <div class="time-item">
+                <div class="time-val">20:00</div>
+                <div class="time-desc">Музыка, танцы босиком и свадебный торт!</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ 3: ДРЕСС-КОД (Цвет: Горчичный) -->
+    <section class="sec-dress">
+        <h2 class="section-title reveal">Оттенки праздника</h2>
+        <p class="text-block reveal">Будем рады, если вы выберете наряды в нашей теплой, природной палитре. Наведите на цветные двери!</p>
+        
+        <div class="doors-container reveal">
+            <div class="door" style="background-color: var(--color-terracotta);"><span>Терракота</span></div>
+            <div class="door" style="background-color: var(--color-sage);"><span>Шалфей</span></div>
+            <div class="door" style="background-color: var(--text-coffee);"><span style="color: var(--color-mustard);">Какао</span></div>
+            <div class="door" style="background-color: var(--text-almond);"><span style="color: var(--color-tangerine);">Миндаль</span></div>
+            <div class="door" style="background-color: var(--color-tangerine);"><span>Танжерин</span></div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ 4: ТАЙМЕР (Цвет: Танжерин) -->
+    <section class="sec-timer">
+        <h2 class="section-title reveal">Считаем дни</h2>
+        
+        <!-- Жидкий таймер -->
+        <div class="gooey-timer-wrapper reveal" id="countdown">
+            <div class="t-blob"><span id="days">00</span><p>Дней</p></div>
+            <div class="t-blob"><span id="hours">00</span><p>Часов</p></div>
+            <div class="t-blob"><span id="minutes">00</span><p>Минут</p></div>
+            <div class="t-blob"><span id="seconds">00</span><p>Секунд</p></div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ 5: КАРТА И RSVP (Цвет: Терракота) -->
+    <section class="sec-map">
+        <h2 class="section-title reveal">Место торжества</h2>
+        <p class="text-block reveal" style="font-weight: 700; color: var(--color-mustard);">Бутик-отель "Степь"</p>
+        
+        <!-- Карта-марка -->
+        <div class="map-stamp reveal">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2244.430307459374!2d37.6092183159313!3d55.76839398055745!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a413d7890fb%3A0xcf953931be0bd4e3!2z0JzQvtGB0LrQstCw!5e0!3m2!1sru!2sru!4v1690000000000!5m2!1sru!2sru" 
+                allowfullscreen="" loading="lazy">
+            </iframe>
+        </div>
+
+        <h2 class="section-title reveal" style="margin-top: 100px; font-size: 3rem;">Вы будете с нами?</h2>
+        
+        <!-- Кнопка Telegram -->
+        <!-- ВСТАВЬТЕ ССВОЮ ССЫЛКУ НИЖЕ -->
+        <a href="https://t.me/KirillMilanaWedding" target="_blank" class="btn-rsvp reveal">
+            <span>Да, я приду!</span>
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.12.03-1.99 1.25-5.61 3.67-.53.36-1.01.53-1.44.52-.47-.01-1.38-.27-2.05-.5-.82-.28-1.47-.43-1.41-.91.03-.25.38-.51 1.06-.78 4.15-1.8 6.92-2.99 8.31-3.57 3.95-1.65 4.77-1.93 5.3-1.94.12 0 .38.03.53.15.12.1.17.24.19.37.02.13.01.26-.01.4z"/>
+            </svg>
+        </a>
+    </section>
+
+    <!-- Скрипты -->
+    <script>
+        // 1. Интерактив на главном экране (Магнитные имена)
+        // Имена тянутся за курсором при движении мыши (для ПК)
+        const name1 = document.getElementById('name1');
+        const name2 = document.getElementById('name2');
+        
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 40; // Сила смещения
+            const y = (e.clientY / window.innerHeight - 0.5) * 40;
+            
+            name1.style.transform = `translate(${x}px, ${y}px) rotate(${x * 0.1}deg)`;
+            name2.style.transform = `translate(${-x}px, ${-y}px) rotate(${-x * 0.1}deg)`;
+        });
+
+        // 2. Таймер (Дата: 28 Августа 2026)
+        const weddingDate = new Date("August 28, 2026 15:00:00").getTime();
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+            
+            if (distance < 0) { clearInterval(timer); return; }
+            
+            document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+        }, 1000);
+
+        // 3. Анимация появления блоков (Scroll Reveal)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
