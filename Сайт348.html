@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Свадьба | Роман и Елизавета</title>
+    <!-- Уникальные, контрастные шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;800&family=Righteous&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ПАЛИТРА COLOR BLOCKING (Жесткая смена цветов, без черного/белого) */
+        :root {
+            --bg-emerald: #2a5a4a;     /* Изумрудный */
+            --bg-ochre: #d36a43;       /* Охра / Жженая глина */
+            --bg-mauve: #9a7b8e;       /* Пыльная сирень */
+            --bg-mustard: #dda243;     /* Насыщенная горчица */
+            
+            --text-eggplant: #2d1b2e;  /* Глубокий баклажан (вместо черного) */
+            --text-vanilla: #f4ecd8;   /* Ванильный крем (вместо белого) */
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Exo 2', sans-serif;
+            color: var(--text-eggplant);
+            overflow-x: hidden;
+            background-color: var(--bg-emerald); /* Дефолтный фон */
+        }
+
+        /* Шрифт заголовков */
+        h1, h2, h3, .heading-font {
+            font-family: 'Righteous', display;
+            font-weight: 400;
+            margin: 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Настройка секций (Color Blocking) */
+        section {
+            padding: 120px 20px;
+            display: flex; flex-direction: column; align-items: center;
+            position: relative; overflow: hidden;
+        }
+
+        .sec-1 { background-color: var(--bg-emerald); color: var(--text-vanilla); min-height: 100vh; justify-content: center; }
+        .sec-2 { background-color: var(--bg-ochre); color: var(--text-vanilla); }
+        .sec-3 { background-color: var(--bg-mauve); color: var(--text-vanilla); }
+        .sec-4 { background-color: var(--bg-mustard); color: var(--text-eggplant); }
+        .sec-5 { background-color: var(--bg-emerald); color: var(--text-vanilla); padding-bottom: 150px; }
+
+        .section-title { font-size: 4rem; margin-bottom: 60px; text-align: center; }
+        .text-block { font-size: 1.3rem; line-height: 1.6; max-width: 800px; text-align: center; font-weight: 600; margin-bottom: 40px; }
+
+        /* --- ИНТЕРАКТИВ 1: Главный экран (Геометрический параллакс) --- */
+        .hero-shapes {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;
+        }
+        /* Огромный вращающийся полукруг */
+        .shape-half-circle {
+            position: absolute; top: -10%; right: -10%;
+            width: 50vw; height: 50vw;
+            background-color: var(--bg-ochre);
+            border-radius: 0 0 50vw 50vw; /* Полукруг */
+            animation: spinHero 20s linear infinite;
+        }
+        @keyframes spinHero { 100% { transform: rotate(360deg); } }
+
+        .names-box {
+            position: relative; z-index: 2; text-align: center;
+        }
+        .name {
+            font-size: 10vw; line-height: 1;
+            text-shadow: 8px 8px 0px var(--text-eggplant); /* Жесткая ретро-тень */
+            transition: transform 0.2s;
+        }
+        .amp { font-size: 6vw; color: var(--bg-mustard); margin: 10px 0; }
+        
+        .date-box {
+            margin-top: 50px; display: inline-block;
+            background-color: var(--text-eggplant); color: var(--bg-mustard);
+            padding: 15px 50px; font-size: 1.5rem; font-family: 'Righteous', display;
+            box-shadow: 8px 8px 0px var(--text-vanilla);
+        }
+
+        /* --- ИНТЕРАКТИВ 2: Тайминг "Механические кнопки" (Зигзаг) --- */
+        .timeline-container {
+            display: flex; flex-direction: column; gap: 40px; width: 100%; max-width: 800px;
+        }
+        .time-card {
+            background-color: var(--bg-emerald);
+            color: var(--text-vanilla);
+            padding: 30px; border: 4px solid var(--text-eggplant);
+            display: flex; align-items: center; gap: 30px; width: 80%;
+            /* Механическая тень */
+            box-shadow: 12px 12px 0px var(--text-eggplant);
+            transition: all 0.2s ease; cursor: default;
+        }
+        /* Зигзаг: четные карточки сдвинуты вправо */
+        .time-card:nth-child(even) { align-self: flex-end; flex-direction: row-reverse; text-align: right; background-color: var(--bg-mustard); color: var(--text-eggplant); }
+
+        /* Эффект нажатия (Тень пропадает, карточка сдвигается) */
+        .time-card:hover { transform: translate(12px, 12px); box-shadow: 0px 0px 0px var(--text-eggplant); }
+
+        .t-time { font-family: 'Righteous', display; font-size: 3rem; }
+        .t-desc { font-size: 1.2rem; font-weight: 800; }
+
+        /* --- ИНТЕРАКТИВ 3: Дресс-код "Морфинг Фигур" --- */
+        .morph-grid {
+            display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 40px;
+        }
+        .morph-shape {
+            width: 150px; height: 150px;
+            display: flex; justify-content: center; align-items: center;
+            font-family: 'Righteous', display; font-size: 1.2rem; color: var(--text-vanilla);
+            cursor: pointer; transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 8px 8px 0px var(--text-eggplant); border: 3px solid var(--text-eggplant);
+        }
+        
+        /* Начальные формы */
+        .shape-1 { background-color: var(--bg-emerald); border-radius: 50%; } /* Круг */
+        .shape-2 { background-color: var(--bg-ochre); border-radius: 75px 75px 0 0; } /* Арка */
+        .shape-3 { background-color: var(--bg-mustard); border-radius: 0; transform: rotate(45deg); color: var(--text-eggplant); } /* Ромб */
+        .shape-3 span { transform: rotate(-45deg); transition: transform 0.6s; } /* Текст внутри ромба ровно */
+        .shape-4 { background-color: var(--text-eggplant); border-radius: 20px; } /* Скругленный квадрат */
+
+        /* Морфинг при наведении */
+        .shape-1:hover { border-radius: 10px; transform: scale(1.1); background-color: var(--bg-ochre); } /* В квадрат */
+        .shape-2:hover { border-radius: 75px; transform: scale(1.1); background-color: var(--bg-mustard); color: var(--text-eggplant); } /* В пилюлю */
+        .shape-3:hover { border-radius: 50%; transform: rotate(0deg) scale(1.1); background-color: var(--bg-emerald); color: var(--text-vanilla); } /* В круг */
+        .shape-3:hover span { transform: rotate(0deg); color: var(--text-vanilla); }
+        .shape-4:hover { border-radius: 75px 0 75px 0; transform: scale(1.1); background-color: var(--bg-ochre); } /* В лист */
+
+        /* --- ИНТЕРАКТИВ 4: Таймер "Левитирующие ромбы" --- */
+        .rhombus-timer {
+            display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; margin-top: 60px;
+        }
+        .r-box {
+            width: 140px; height: 140px;
+            background-color: var(--text-vanilla);
+            border: 4px solid var(--text-eggplant);
+            transform: rotate(45deg); /* Делаем ромб */
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 15px 15px 0px rgba(45, 27, 46, 0.2);
+            animation: floatRhombus 4s ease-in-out infinite alternate;
+        }
+        .r-box:nth-child(even) { background-color: var(--bg-mauve); animation-direction: alternate-reverse; animation-delay: 1s; }
+
+        @keyframes floatRhombus { 0% { transform: rotate(45deg) translateY(0px); } 100% { transform: rotate(45deg) translateY(-25px); box-shadow: 25px 25px 0px rgba(45, 27, 46, 0.1); } }
+
+        /* Контент внутри ромба должен крутиться обратно, чтобы стоять ровно */
+        .r-content {
+            transform: rotate(-45deg);
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .r-content span { font-family: 'Righteous', display; font-size: 3.5rem; color: var(--text-eggplant); line-height: 1; }
+        .r-content p { font-size: 1rem; font-weight: 800; color: var(--text-eggplant); margin: 0; }
+
+        /* --- ИНТЕРАКТИВ 5: Карта "Живая Клякса -> Прямоугольник" --- */
+        .map-blob {
+            margin-top: 40px; width: 100%; max-width: 800px; height: 450px;
+            /* Форма плавающей кляксы */
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            overflow: hidden;
+            border: 6px solid var(--bg-mustard);
+            box-shadow: 15px 15px 0px var(--text-eggplant);
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            animation: morphMap 8s ease-in-out infinite;
+        }
+
+        @keyframes morphMap {
+            0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            50% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+            100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+        }
+
+        /* При наведении клякса выравнивается в строгий экран */
+        .map-blob:hover {
+            border-radius: 10px;
+            animation: none; /* Останавливаем кляксу */
+            transform: scale(1.02);
+            box-shadow: 20px 20px 0px var(--text-eggplant);
+        }
+
+        .map-blob iframe {
+            width: 100%; height: 100%; border: 0;
+            /* Изумрудно-желтый фильтр на карту */
+            filter: sepia(40%) hue-rotate(100deg) saturate(200%) brightness(85%);
+        }
+
+        /* --- ИНТЕРАКТИВ 6: Кнопка Telegram "Бегущая строка" --- */
+        .rsvp-btn {
+            margin-top: 60px; display: inline-flex; align-items: center; justify-content: center;
+            width: 350px; height: 80px; overflow: hidden;
+            background-color: var(--bg-ochre); border: 4px solid var(--text-vanilla);
+            border-radius: 40px; text-decoration: none; color: var(--text-vanilla);
+            box-shadow: 10px 10px 0px var(--text-eggplant);
+            transition: all 0.3s; position: relative;
+        }
+
+        .btn-static {
+            font-family: 'Righteous', display; font-size: 1.5rem; position: absolute;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        
+        .btn-marquee {
+            position: absolute; display: flex; white-space: nowrap;
+            font-family: 'Righteous', display; font-size: 1.5rem; color: var(--text-eggplant);
+            opacity: 0; transform: translateY(50px); transition: all 0.3s;
+        }
+
+        /* Бесконечная прокрутка текста */
+        .marquee-inner { animation: marquee 3s linear infinite; display: flex; gap: 10px; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* Поведение при наведении */
+        .rsvp-btn:hover { background-color: var(--bg-mustard); box-shadow: 15px 15px 0px var(--text-eggplant); transform: translate(-5px, -5px); border-color: var(--text-eggplant); }
+        .rsvp-btn:hover .btn-static { transform: translateY(-50px); opacity: 0; }
+        .rsvp-btn:hover .btn-marquee { opacity: 1; transform: translateY(0); }
+
+        /* Анимация появления контента при прокрутке */
+        .pop-in { opacity: 0; transform: scale(0.9) translateY(40px); transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .pop-in.visible { opacity: 1; transform: scale(1) translateY(0); }
+
+        @media (max-width: 768px) {
+            .name { font-size: 15vw; }
+            .section-title { font-size: 3rem; margin-bottom: 40px; }
+            .time-card { width: 100%; flex-direction: column !important; text-align: center !important; gap: 15px; box-shadow: 6px 6px 0px var(--text-eggplant); padding: 20px; }
+            .time-card:hover { transform: translate(6px, 6px); }
+            .r-box { width: 100px; height: 100px; margin-bottom: 20px; }
+            .r-content span { font-size: 2.5rem; }
+            .shape-half-circle { width: 100vw; height: 100vw; border-radius: 0 0 100vw 100vw; }
+            .rsvp-btn { width: 300px; height: 70px; }
+            .btn-static, .btn-marquee { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- СЕКЦИЯ 1: Главный экран (Изумрудный) -->
+    <section class="sec-1">
+        <div class="hero-shapes">
+            <div class="shape-half-circle"></div>
+        </div>
+        
+        <div class="names-box" id="parallaxNames">
+            <h1 class="heading-font name">Роман</h1>
+            <div class="heading-font amp">&</div>
+            <h1 class="heading-font name">Елизавета</h1>
+            <div class="date-box">10 ОКТЯБРЯ 2026</div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ 2: Тайминг (Охра) -->
+    <section class="sec-2">
+        <h2 class="section-title pop-in">План Дня</h2>
+        <p class="text-block pop-in">Мы подготовили насыщенную, но комфортную программу. <br> Наведите курсор на карточки, чтобы «нажать» их.</p>
+        
+        <div class="timeline-container pop-in">
+            <div class="time-card">
+                <div class="t-time">16:00</div>
+                <div class="t-desc">Сбор гостей. Велкам-дринк, знакомство и легкая джазовая музыка.</div>
+            </div>
+            <div class="time-card">
+                <div class="t-time">17:00</div>
+                <div class="t-desc">Выездная регистрация. Самый трогательный момент вечера.</div>
+            </div>
+            <div class="time-card">
+                <div class="t-time">18:00</div>
+                <div class="t-desc">Старт банкета. Вкусная еда, тосты и первые танцы.</div>
+            </div>
+            <div class="time-card">
+                <div class="t-time">21:00</div>
+                <div class="t-desc">Вынос торта и начало грандиозной вечеринки!</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ 3: Дресс-код (Пыльная сирень) -->
+    <section class="sec-3">
+        <h2 class="section-title pop-in">Палитра</h2>
+        <p class="text-block pop-in">Поддержите атмосферу нашего праздника! Наведите мышку на геометрические фигуры, чтобы увидеть магию.</p>
+        
+        <div class="morph-grid pop-in">
+            <div class="morph-shape shape-1">Изумруд</div>
+            <div class="morph-shape shape-2">Охра</div>
+            <div class="morph-shape shape-3"><span>Горчица</span></div>
+            <div class="morph-shape shape-4">Баклажан</div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ 4: Таймер (Горчица) -->
+    <section class="sec-4">
+        <h2 class="section-title pop-in">Отсчет запущен</h2>
+        <p class="text-block pop-in" style="color: var(--text-eggplant);">Ждем с нетерпением этот день!</p>
+        
+        <div class="rhombus-timer pop-in" id="countdown">
+            <div class="r-box"><div class="r-content"><span id="days">00</span><p>Дней</p></div></div>
+            <div class="r-box"><div class="r-content"><span id="hours">00</span><p>Часов</p></div></div>
+            <div class="r-box"><div class="r-content"><span id="minutes">00</span><p>Минут</p></div></div>
+            <div class="r-box"><div class="r-content"><span id="seconds">00</span><p>Секунд</p></div></div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ 5: Карта и RSVP (Изумрудный) -->
+    <section class="sec-5">
+        <h2 class="section-title pop-in">Где тусим?</h2>
+        <p class="text-block pop-in" style="color: var(--bg-mustard);">Лофт-пространство "Геометрия"</p>
+        <p class="pop-in" style="font-weight: 800; font-size: 1.1rem; opacity: 0.8;">Наведите на карту, чтобы развернуть её</p>
+        
+        <!-- Живая карта -->
+        <div class="map-blob pop-in">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2244.430307459374!2d37.6092183159313!3d55.76839398055745!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a413d7890fb%3A0xcf953931be0bd4e3!2z0JzQvtGB0LrQstCw!5e0!3m2!1sru!2sru!4v1690000000000!5m2!1sru!2sru" 
+                allowfullscreen="" loading="lazy">
+            </iframe>
+        </div>
+
+        <h2 class="section-title pop-in" style="margin-top: 100px;">Вы с нами?</h2>
+        
+        <!-- Кнопка Telegram с бегущей строкой -->
+        <!-- ВСТАВЬТЕ ССЫЛКУ НА СВОЙ ТЕЛЕГРАМ НИЖЕ -->
+        <a href="https://t.me/RomanElizavetaWedding" target="_blank" class="rsvp-btn pop-in">
+            <div class="btn-static">Telegram ✈️</div>
+            <div class="btn-marquee">
+                <div class="marquee-inner">
+                    ПОДТВЕРДИТЬ • ПОДТВЕРДИТЬ • ПОДТВЕРДИТЬ • ПОДТВЕРДИТЬ • 
+                </div>
+            </div>
+        </a>
+    </section>
+
+    <!-- Скрипты -->
+    <script>
+        // 1. Легкий параллакс имен на главном экране (тянется за мышкой)
+        const namesBox = document.getElementById('parallaxNames');
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 30;
+            const y = (e.clientY / window.innerHeight - 0.5) * 30;
+            namesBox.style.transform = `translate(${x}px, ${y}px)`;
+        });
+
+        // 2. Таймер (Дата: 10 Октября 2026)
+        const weddingDate = new Date("October 10, 2026 16:00:00").getTime();
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+            
+            if (distance < 0) { clearInterval(timer); return; }
+            
+            document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+        }, 1000);
+
+        // 3. Анимация появления блоков при скролле (Pop-in)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.pop-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
