@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение | Александр и Екатерина</title>
+    <!-- Элегантные и чистые шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;600&family=Unna:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ПАЛИТРА "КОСМОС И НЕОН" (Без черного, серого, красного, оранжевого!) */
+        :root {
+            --bg-night: #050b14;       /* Очень глубокий синий (Космос) */
+            --text-snow: #ffffff;      /* Чистый белый (100% контраст) */
+            
+            --color-azure: #007bb5;    /* Лазурный океан */
+            --color-amethyst: #6236ff; /* Яркий Аметист (Фиолетовый) */
+            --color-teal: #009688;     /* Насыщенный Тил */
+            --color-indigo: #3949ab;   /* Глубокий Индиго */
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Jost', sans-serif;
+            background-color: var(--bg-night);
+            color: var(--text-snow);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, .royal-font { font-family: 'Unna', serif; margin: 0; font-weight: 400; }
+
+        /* --- ИЗЮМИНКА 1: МОЩНАЯ АНИМАЦИЯ ФОНА (Галактика) --- */
+        .galaxy-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 0; pointer-events: none; overflow: hidden;
+            background-color: var(--bg-night);
+        }
+
+        /* Огромные, ОЧЕНЬ яркие цветовые пятна */
+        .cosmic-blob {
+            position: absolute; border-radius: 50%; filter: blur(120px);
+            opacity: 0.6; /* Очень заметные */
+            mix-blend-mode: screen; /* При пересечении создают свечение */
+            animation: cosmicFloat 25s infinite alternate ease-in-out;
+        }
+
+        .cb-1 { width: 70vw; height: 70vw; background-color: var(--color-amethyst); top: -20%; left: -20%; }
+        .cb-2 { width: 60vw; height: 80vw; background-color: var(--color-azure); bottom: -10%; right: -20%; animation-delay: -7s; animation-direction: alternate-reverse; }
+        .cb-3 { width: 50vw; height: 50vw; background-color: var(--color-teal); top: 30%; left: 30%; animation-duration: 35s; opacity: 0.4; }
+
+        @keyframes cosmicFloat {
+            0% { transform: translate(0, 0) scale(0.9); }
+            50% { transform: translate(25vw, 15vh) scale(1.3); }
+            100% { transform: translate(-15vw, 25vh) scale(1); }
+        }
+
+        .content { position: relative; z-index: 10; }
+
+        /* --- ИЗЮМИНКА 2: Горизонтальные Имена --- */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        .names-row {
+            display: flex; justify-content: center; align-items: center; gap: 40px;
+            width: 100%; white-space: nowrap;
+        }
+
+        .h-name {
+            font-size: 8vw; color: var(--text-snow);
+            letter-spacing: 5px; transition: transform 0.1s linear;
+            text-shadow: 0 10px 40px rgba(98, 54, 255, 0.4); /* Аметистовое свечение текста */
+        }
+
+        .h-amp { font-size: 6vw; color: var(--color-azure); font-style: italic; }
+
+        .h-date {
+            margin-top: 50px; font-size: 1.3rem; font-weight: 300; letter-spacing: 12px;
+            color: var(--text-snow); text-transform: uppercase;
+            border-bottom: 1px solid var(--color-amethyst); padding-bottom: 15px;
+        }
+
+        /* Общие секции */
+        section { padding: 120px 20px; max-width: 900px; margin: 0 auto; text-align: center; }
+        .section-title { font-size: 4rem; color: var(--text-snow); margin-bottom: 40px; text-shadow: 0 5px 20px rgba(0,123,181,0.5); }
+        .text-block { font-size: 1.3rem; line-height: 1.9; color: var(--text-snow); opacity: 0.9; max-width: 700px; margin: 0 auto; font-weight: 300; }
+
+        /* --- ИНТЕРАКТИВ 3: Дресс-код "Крутящиеся Планеты" (ОЧЕНЬ медленно) --- */
+        .planets-grid { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 60px; }
+        
+        .planet-orb {
+            width: 140px; height: 140px; border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; position: relative;
+            /* ПЛАВНЕЙШАЯ 3D АНИМАЦИЯ (2 СЕКУНДЫ) */
+            transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1), background-color 2s, border-color 2s, box-shadow 2s;
+            transform-style: preserve-3d;
+        }
+
+        .planet-orb span {
+            font-family: 'Unna', serif; font-size: 1.4rem; color: var(--text-snow);
+            opacity: 0; transform: scale(0.5); 
+            transition: all 1.5s ease 0.5s; /* Появляется после начала вращения */
+        }
+
+        /* При наведении: сфера делает оборот, заливается цветом, рамка исчезает */
+        .planet-orb:hover { transform: rotateY(360deg); border-color: transparent; }
+        .planet-orb:hover span { opacity: 1; transform: scale(1); text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+
+        /* Назначение ярких цветов сферам */
+        .po-1:hover { background-color: var(--color-azure); box-shadow: 0 0 50px rgba(0, 123, 181, 0.8); }
+        .po-2:hover { background-color: var(--color-amethyst); box-shadow: 0 0 50px rgba(98, 54, 255, 0.8); }
+        .po-3:hover { background-color: var(--color-teal); box-shadow: 0 0 50px rgba(0, 150, 136, 0.8); }
+        .po-4:hover { background-color: var(--color-indigo); box-shadow: 0 0 50px rgba(57, 73, 171, 0.8); }
+
+        /* --- ИНТЕРАКТИВ 4: Тайминг "Выезжающие Ящики" --- */
+        .drawer-timeline { display: flex; flex-direction: column; gap: 20px; margin-top: 60px; max-width: 700px; margin-left: auto; margin-right: auto; }
+        
+        .drawer {
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px;
+            background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
+            overflow: hidden; cursor: default;
+            /* Плавное изменение фона */
+            transition: background 1.5s ease, border-color 1.5s ease, box-shadow 1.5s ease;
+        }
+
+        .drawer-header {
+            display: flex; align-items: center; gap: 30px; padding: 25px 30px;
+        }
+
+        .d-time { font-family: 'Unna', serif; font-size: 2.5rem; color: var(--text-snow); transition: color 1.5s; width: 100px; text-align: left; }
+        .d-title { font-size: 1.3rem; font-weight: 600; color: var(--text-snow); text-transform: uppercase; letter-spacing: 2px; }
+
+        /* Скрытое содержимое (Высота 0) */
+        .drawer-content {
+            max-height: 0; padding: 0 30px; opacity: 0; text-align: left;
+            /* МЕДЛЕННОЕ раскрытие (1.5 секунды) */
+            transition: max-height 1.5s cubic-bezier(0.25, 1, 0.5, 1), padding 1.5s, opacity 1s ease 0.5s;
+        }
+        .drawer-content p { margin: 0 0 30px 0; font-size: 1.1rem; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,0.8); }
+
+        /* При наведении: ящик открывается, фон подсвечивается Аметистом */
+        .drawer:hover { background: rgba(98, 54, 255, 0.15); border-color: var(--color-amethyst); box-shadow: 0 10px 40px rgba(98, 54, 255, 0.3); }
+        .drawer:hover .d-time { color: var(--color-azure); }
+        .drawer:hover .drawer-content { max-height: 200px; padding: 0 30px; opacity: 1; }
+
+        /* --- ИНТЕРАКТИВ 5: Таймер "Неоновые Грани" --- */
+        .neon-timer { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 60px; }
+        
+        .n-box {
+            position: relative; width: 120px; height: 120px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        /* Квадратные рамки, которые вращаются */
+        .n-box::before, .n-box::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1), border-color 1.5s;
+        }
+
+        .n-box:hover::before { transform: rotate(45deg); border-color: var(--color-azure); }
+        .n-box:hover::after { transform: rotate(90deg); border-color: var(--color-amethyst); }
+
+        .n-box span { font-family: 'Unna', serif; font-size: 3.5rem; color: var(--text-snow); line-height: 1; text-shadow: 0 0 15px rgba(255,255,255,0.5); }
+        .n-box p { margin: 5px 0 0 0; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--text-snow); opacity: 0.7; }
+
+        /* --- ИНТЕРАКТИВ 6: Карта "Расширяющийся Портал" --- */
+        .map-portal-container {
+            margin: 60px auto 0 auto; width: 100%; max-width: 800px; height: 450px;
+            position: relative; border-radius: 20px; overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            background-color: var(--bg-night);
+        }
+
+        /* Подсказка в центре темного экрана */
+        .portal-hint {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 1rem; letter-spacing: 4px; color: var(--color-azure);
+            text-transform: uppercase; z-index: 5; transition: opacity 1s; pointer-events: none;
+            animation: pulseHint 2s infinite alternate;
+        }
+        @keyframes pulseHint { 0% { opacity: 0.4; } 100% { opacity: 1; text-shadow: 0 0 15px var(--color-azure); } }
+
+        /* Сама карта, скрытая круглой маской в центре (радиус 0%) */
+        .portal-map {
+            width: 100%; height: 100%;
+            -webkit-mask-image: radial-gradient(circle 0px at 50% 50%, black 100%, transparent 100%);
+            mask-image: radial-gradient(circle 0px at 50% 50%, black 100%, transparent 100%);
+            /* МЕДЛЕННОЕ раскрытие портала (2 секунды) */
+            transition: -webkit-mask-image 2s cubic-bezier(0.25, 1, 0.5, 1), mask-image 2s cubic-bezier(0.25, 1, 0.5, 1);
+            position: relative; z-index: 2;
+        }
+
+        /* При наведении: Маска расширяется на 150%, открывая всю карту */
+        .map-portal-container:hover .portal-map {
+            -webkit-mask-image: radial-gradient(circle 800px at 50% 50%, black 100%, transparent 100%);
+            mask-image: radial-gradient(circle 800px at 50% 50%, black 100%, transparent 100%);
+        }
+        .map-portal-container:hover .portal-hint { opacity: 0; animation: none; }
+
+        .portal-map iframe {
+            width: 100%; height: 100%; border: 0;
+            /* Синий космический фильтр */
+            filter: sepia(30%) hue-rotate(190deg) saturate(200%) brightness(80%) contrast(120%);
+        }
+
+        /* --- ИНТЕРАКТИВ 7: Telegram-кнопка "Неоновая Рамка" --- */
+        .rsvp-section { padding-bottom: 150px; }
+        
+        .neon-btn {
+            position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 15px;
+            padding: 25px 60px; margin-top: 40px; font-family: 'Jost', sans-serif;
+            font-size: 1.2rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--text-snow); text-decoration: none; border: 2px solid transparent;
+            border-radius: 5px; overflow: hidden; transition: color 1.5s ease;
+        }
+
+        /* SVG для отрисовки рамки */
+        .neon-btn svg.border-draw {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
+        }
+        .neon-btn svg.border-draw rect {
+            fill: transparent; stroke: var(--color-azure); stroke-width: 6;
+            stroke-dasharray: 1000; stroke-dashoffset: 1000;
+            /* Медленная отрисовка рамки (1.5 сек) */
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.25, 1, 0.5, 1), fill 1.5s ease 0.5s;
+        }
+
+        /* При наведении: Рамка рисуется, затем кнопка заливается синим цветом */
+        .neon-btn:hover svg.border-draw rect { stroke-dashoffset: 0; fill: rgba(0, 123, 181, 0.3); }
+        .neon-btn:hover { color: var(--text-snow); text-shadow: 0 0 10px rgba(255,255,255,0.8); box-shadow: 0 0 40px rgba(0, 123, 181, 0.6); }
+
+        .neon-btn span, .neon-btn .icon-tg { position: relative; z-index: 1; transition: transform 1.5s ease; }
+        .neon-btn .icon-tg { width: 24px; height: 24px; fill: currentColor; }
+        .neon-btn:hover .icon-tg { transform: rotate(15deg) scale(1.2); }
+
+        /* Медленное появление контента при прокрутке */
+        .slow-reveal { opacity: 0; transform: translateY(50px); transition: all 1.5s ease-out; }
+        .slow-reveal.visible { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            .names-row { flex-direction: column; gap: 10px; }
+            .h-name { font-size: 18vw; letter-spacing: 5px; }
+            .h-amp { font-size: 10vw; margin: 10px 0; }
+            .section-title { font-size: 2.8rem; }
+            .drawer-header { flex-direction: column; gap: 10px; text-align: center; }
+            .d-time { text-align: center; width: auto; }
+            .planet-orb { width: 100px; height: 100px; }
+            .planet-orb span { font-size: 1rem; }
+            .n-box { width: 100px; height: 100px; }
+            .n-box span { font-size: 2.5rem; }
+            .map-portal-container { height: 350px; }
+            .neon-btn { padding: 20px 30px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ИЗЮМИНКА 1: МОЩНЫЙ АНИМИРОВАННЫЙ ФОН (Галактика) -->
+    <div class="galaxy-bg">
+        <div class="cosmic-blob cb-1"></div>
+        <div class="cosmic-blob cb-2"></div>
+        <div class="cosmic-blob cb-3"></div>
+    </div>
+
+    <!-- КОНТЕНТ ПОВЕРХ ФОНА -->
+    <div class="content">
+
+        <!-- СЕКЦИЯ 1: Главный экран (Горизонтальные имена) -->
+        <header class="hero">
+            <div class="names-row">
+                <!-- ID для скрипта разъезжания -->
+                <div class="royal-font h-name" id="nameLeft">Александр</div>
+                <div class="royal-font h-amp">&</div>
+                <div class="royal-font h-name" id="nameRight">Екатерина</div>
+            </div>
+            <div class="h-date">09 Сентября 2026</div>
+        </header>
+
+        <!-- СЕКЦИЯ 2: О свадьбе -->
+        <section class="slow-reveal">
+            <h2 class="royal-font section-title">Космическая связь</h2>
+            <p class="text-block">
+                Среди миллионов вероятностей мы нашли друг друга. 
+                Мы приглашаем вас на торжество, наполненное глубокими эмоциями, 
+                неоновым светом, отличной музыкой и атмосферой настоящего чуда.
+            </p>
+        </section>
+
+        <!-- СЕКЦИЯ 3: Дресс-код (Крутящиеся планеты) -->
+        <section class="slow-reveal">
+            <h2 class="royal-font section-title">Цвета Галактики</h2>
+            <p class="text-block" style="font-size: 1.1rem; opacity: 0.7;">Будем рады видеть вас в глубоких, драгоценных оттенках.<br>(Наведите на кольца)</p>
+            
+            <div class="planets-grid">
+                <div class="planet-orb po-1"><span>Лазурь</span></div>
+                <div class="planet-orb po-2"><span>Аметист</span></div>
+                <div class="planet-orb po-3"><span>Тил</span></div>
+                <div class="planet-orb po-4"><span>Индиго</span></div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 4: Тайминг (Выезжающие Ящики) -->
+        <section class="slow-reveal">
+            <h2 class="royal-font section-title">Хронология</h2>
+            <p class="text-block" style="font-size: 1.1rem; opacity: 0.7;">Наведите курсор на строку, чтобы открыть детали.</p>
+            
+            <div class="drawer-timeline">
+                <div class="drawer">
+                    <div class="drawer-header">
+                        <div class="d-time">17:00</div>
+                        <div class="d-title">Приветствие</div>
+                    </div>
+                    <div class="drawer-content">
+                        <p>Начинаем вечер с бокала шампанского. Знакомимся, делаем красивые фото в неоновом свете и предвкушаем начало.</p>
+                    </div>
+                </div>
+                <div class="drawer">
+                    <div class="drawer-header">
+                        <div class="d-time">18:00</div>
+                        <div class="d-title">Церемония</div>
+                    </div>
+                    <div class="drawer-content">
+                        <p>Под звездным небом мы произнесем свои клятвы и обменяемся кольцами. Самый важный момент дня.</p>
+                    </div>
+                </div>
+                <div class="drawer">
+                    <div class="drawer-header">
+                        <div class="d-time">19:30</div>
+                        <div class="d-title">Гастро-ужин</div>
+                    </div>
+                    <div class="drawer-content">
+                        <p>Изысканные блюда, потрясающие коктейли, смех и трогательные тосты от наших самых близких.</p>
+                    </div>
+                </div>
+                <div class="drawer">
+                    <div class="drawer-header">
+                        <div class="d-time">22:00</div>
+                        <div class="d-title">Вечеринка</div>
+                    </div>
+                    <div class="drawer-content">
+                        <p>Время отбросить все правила! Выходим на танцпол и отрываемся под любимые треки до глубокой ночи.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 5: Таймер (Неоновые Грани) -->
+        <section class="slow-reveal">
+            <h2 class="royal-font section-title">До запуска</h2>
+            
+            <div class="neon-timer" id="countdown">
+                <div class="n-box"><span id="days">00</span><p>Дней</p></div>
+                <div class="n-box"><span id="hours">00</span><p>Часов</p></div>
+                <div class="n-box"><span id="minutes">00</span><p>Минут</p></div>
+                <div class="n-box"><span id="seconds">00</span><p>Секунд</p></div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 6: Карта (Расширяющийся Портал) -->
+        <section class="slow-reveal">
+            <h2 class="royal-font section-title">Координаты</h2>
+            <p class="text-block" style="font-weight: 600; color: var(--color-azure);">Пространство "Невесомость"</p>
+            
+            <div class="map-portal-container">
+                <div class="portal-hint">Наведите в центр, чтобы открыть портал</div>
+                <div class="portal-map">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2244.430307459374!2d37.6092183159313!3d55.76839398055745!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a413d7890fb%3A0xcf953931be0bd4e3!2z0JzQvtGB0LrQstCw!5e0!3m2!1sru!2sru!4v1690000000000!5m2!1sru!2sru" 
+                        allowfullscreen="" loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 7: RSVP (Неоновая Рамка) -->
+        <section class="rsvp-section slow-reveal">
+            <h2 class="royal-font section-title" style="font-size: 3.5rem; margin-bottom: 40px;">Будете с нами?</h2>
+            
+            <!-- ВСТАВЬТЕ ССЫЛКУ НА СВОЙ ТЕЛЕГРАМ -->
+            <a href="https://t.me/AlexEkaterinaWedding" target="_blank" class="neon-btn">
+                <!-- SVG для анимации рамки -->
+                <svg class="border-draw"><rect width="100%" height="100%" rx="5"/></svg>
+                <span>Подтвердить (Telegram)</span>
+                <!-- Иконка Телеграм -->
+                <svg class="icon-tg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.12.03-1.99 1.25-5.61 3.67-.53.36-1.01.53-1.44.52-.47-.01-1.38-.27-2.05-.5-.82-.28-1.47-.43-1.41-.91.03-.25.38-.51 1.06-.78 4.15-1.8 6.92-2.99 8.31-3.57 3.95-1.65 4.77-1.93 5.3-1.94.12 0 .38.03.53.15.12.1.17.24.19.37.02.13.01.26-.01.4z"/>
+                </svg>
+            </a>
+        </section>
+
+    </div>
+
+    <!-- Скрипты -->
+    <script>
+        // 1. Горизонтальный параллакс имен при скролле (Разъезжаются в стороны)
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const nameLeft = document.getElementById('nameLeft');
+            const nameRight = document.getElementById('nameRight');
+            
+            // Имена медленно и красиво разъезжаются
+            nameLeft.style.transform = `translateX(${scrollY * -0.2}px)`;
+            nameRight.style.transform = `translateX(${scrollY * 0.2}px)`;
+        });
+
+        // 2. Таймер (Дата: 09 Сентября 2026)
+        const weddingDate = new Date("September 9, 2026 17:00:00").getTime();
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+            
+            if (distance < 0) { clearInterval(timer); return; }
+            
+            document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+        }, 1000);
+
+        // 3. Медленное появление контента при скролле (1.5 секунды)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.slow-reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
