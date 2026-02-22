@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Свадьба | Роман и Милана</title>
+    <!-- Воздушные, романтичные шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,400;0,600;1,400&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ПАЛИТРА "ПЕРСИКОВЫЙ САД" (Никакого черного, серого или мрачного! Только тепло и свет) */
+        :root {
+            /* Очень светлый, нежный фон (Персиковый крем) */
+            --bg-light-peach: #fff3ee; 
+            --bg-soft-peach: #ffe4db;  
+            
+            --text-pure: #ffffff;      /* Ослепительно белый текст */
+            
+            /* ТЕМНЫЕ ПЕРСИКОВЫЕ ПЛАШКИ (Чтобы белый текст сиял и идеально читался) */
+            --plate-coral: #d48c7c;    /* Пыльный коралл */
+            --plate-rose: #c77d73;     /* Теплая пудровая роза */
+            --plate-terra: #bd6c63;    /* Мягкая терракота */
+            --plate-chestnut: #a6655c; /* Пыльный каштан */
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Josefin Sans', sans-serif;
+            background: linear-gradient(135deg, var(--bg-light-peach), var(--bg-soft-peach));
+            background-attachment: fixed;
+            color: var(--text-pure);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, .peach-font { font-family: 'Cormorant Infant', serif; margin: 0; font-weight: 600; }
+
+        /* Идеальная читаемость белого текста на персиковых плашках */
+        .text-glow { text-shadow: 0 4px 15px rgba(189, 108, 99, 0.4); }
+
+        /* Правило: Белый текст живет внутри красивых плашек */
+        .plate-box {
+            background-color: var(--plate-coral);
+            padding: 50px 40px; border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(212, 140, 124, 0.3);
+            display: block; position: relative; z-index: 2;
+            width: 100%; box-sizing: border-box;
+        }
+
+        /* --- ИЗЮМИНКА 1: ФОН "МЯГКОЕ СОЛНЦЕ" (Вращающиеся полумесяцы) --- */
+        .sun-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 0; pointer-events: none; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .sun-shape {
+            position: absolute; border-radius: 50%;
+            background: linear-gradient(135deg, rgba(212, 140, 124, 0.1), rgba(212, 140, 124, 0.02));
+            border: 1px solid rgba(212, 140, 124, 0.15);
+            backdrop-filter: blur(5px);
+            /* МЕДЛЕННОЕ вращение */
+            animation: spinSun 60s linear infinite;
+        }
+
+        /* Делаем из кругов полумесяцы через смещенный box-shadow */
+        .sun-1 { width: 80vw; height: 80vw; top: -20%; left: -20%; box-shadow: inset 50px 50px 100px rgba(212, 140, 124, 0.05); }
+        .sun-2 { width: 60vw; height: 60vw; bottom: -10%; right: -10%; animation-duration: 45s; animation-direction: reverse; box-shadow: inset -50px -50px 100px rgba(189, 108, 99, 0.05); }
+
+        @keyframes spinSun { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .content { position: relative; z-index: 10; padding: 0 5%; }
+
+        /* --- ИЗЮМИНКА 2: АНИМАЦИЯ ИМЕН "ЭЛЛИПТИЧЕСКОЕ РАСКРЫТИЕ" --- */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        .names-row {
+            display: flex; justify-content: center; align-items: center; gap: 30px;
+            width: 100%; white-space: nowrap;
+        }
+
+        /* Контейнер-маска для имен */
+        .name-mask-box {
+            /* НОВАЯ АНИМАЦИЯ (2.5 СЕКУНДЫ): Расширяющийся эллипс из центра */
+            clip-path: ellipse(0% 0% at 50% 50%);
+            animation: expandEllipse 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes expandEllipse {
+            0% { clip-path: ellipse(0% 0% at 50% 50%); transform: scale(0.9); }
+            100% { clip-path: ellipse(150% 150% at 50% 50%); transform: scale(1); }
+        }
+
+        .h-name {
+            font-size: 8vw; color: var(--text-pure);
+            letter-spacing: 5px; text-transform: uppercase;
+        }
+
+        .h-amp { font-size: 5vw; color: var(--bg-light-peach); font-style: italic; opacity: 0.9; }
+
+        .h-date {
+            margin-top: 50px; font-size: 1.2rem; font-weight: 600; letter-spacing: 12px;
+            color: var(--text-pure); text-transform: uppercase;
+            border-top: 1px solid rgba(255,255,255,0.4); padding-top: 15px;
+            opacity: 0; animation: fadeUpDate 2s ease forwards 1.5s; transform: translateY(20px);
+        }
+
+        @keyframes fadeUpDate { to { opacity: 1; transform: translateY(0); } }
+
+        /* Общие секции */
+        section { padding: 120px 0; max-width: 900px; margin: 0 auto; text-align: center; }
+        .section-title { font-size: 3.5rem; color: var(--text-pure); margin-bottom: 20px; letter-spacing: 2px; text-transform: lowercase; }
+        .text-block { font-size: 1.2rem; line-height: 1.9; color: var(--text-pure); opacity: 0.95; max-width: 700px; margin: 0 auto; font-weight: 300; }
+
+        /* --- ИНТЕРАКТИВ 3: Дресс-код "Превращение в Лепесток" (2 СЕКУНДЫ) --- */
+        .leaf-grid { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 60px; }
+        
+        .leaf-card {
+            width: 150px; height: 150px; position: relative;
+            background-color: transparent; border: 2px solid var(--text-pure);
+            display: flex; justify-content: center; align-items: center; cursor: pointer;
+            /* Изначально ровный квадрат */
+            border-radius: 0px;
+            /* ОЧЕНЬ МЕДЛЕННАЯ ТРАНСФОРМАЦИЯ (2 СЕКУНДЫ) */
+            transition: all 2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .leaf-card span {
+            font-family: 'Cormorant Infant', serif; font-size: 1.4rem; color: var(--text-pure);
+            opacity: 0; transition: opacity 1.5s ease 0.5s; letter-spacing: 2px; font-weight: 600;
+        }
+
+        /* При наведении: Скругляются противоположные углы (эффект листа), заливается цвет */
+        .leaf-card:hover { border-radius: 50% 0 50% 0; border-color: transparent; box-shadow: 0 15px 30px rgba(189, 108, 99, 0.4); transform: scale(1.05); }
+        .lc-1:hover { background-color: var(--plate-rose); }
+        .lc-2:hover { background-color: var(--plate-chestnut); }
+        .lc-3:hover { background-color: #bfa7a4; } /* Пыльный беж */
+        .lc-4:hover { background-color: var(--plate-terra); }
+
+        .leaf-card:hover span { opacity: 1; }
+
+        /* --- ИНТЕРАКТИВ 4: Тайминг "3D Двойные Двери" (1.5 СЕКУНДЫ) --- */
+        .doors-timeline { display: flex; flex-direction: column; gap: 20px; margin-top: 60px; max-width: 700px; margin-left: auto; margin-right: auto; perspective: 1500px; }
+        
+        .doors-card {
+            position: relative; width: 100%; height: 130px;
+            background: rgba(255, 255, 255, 0.05); border-radius: 10px; border: 1px solid rgba(255,255,255,0.3);
+            display: flex; align-items: center; justify-content: center; padding: 0 40px; box-sizing: border-box;
+            cursor: default; transition: background 1.5s;
+        }
+
+        /* Скрытый контент внутри */
+        .dc-content {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; gap: 30px; padding: 0 40px; box-sizing: border-box;
+            z-index: 1; text-align: left; opacity: 0; transition: opacity 1s ease 0.5s;
+        }
+
+        .dc-time { font-family: 'Cormorant Infant', serif; font-size: 2.5rem; color: var(--text-pure); width: 120px; text-shadow: 0 4px 10px rgba(189, 108, 99, 0.4); }
+        .dc-info { flex: 1; }
+        .dc-title { font-size: 1.3rem; font-weight: 600; color: var(--text-pure); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .dc-desc { font-size: 1rem; color: var(--text-pure); opacity: 0.9; font-weight: 300; }
+
+        /* Две 3D-двери, закрывающие карточку по центру */
+        .door-3d {
+            position: absolute; top: 0; width: 50%; height: 100%;
+            background-color: var(--plate-rose); z-index: 2;
+            display: flex; justify-content: center; align-items: center;
+            /* МЕДЛЕННОЕ 3D ОТКРЫТИЕ (1.5 СЕК) */
+            transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+            backface-visibility: hidden; -webkit-backface-visibility: hidden;
+        }
+
+        .d3-left { left: 0; transform-origin: left center; border-right: 1px solid rgba(255,255,255,0.3); border-radius: 10px 0 0 10px; }
+        .d3-right { right: 0; transform-origin: right center; border-left: 1px solid rgba(255,255,255,0.3); border-radius: 0 10px 10px 0; }
+
+        .door-3d span { font-family: 'Cormorant Infant', serif; font-size: 1.5rem; color: var(--text-pure); letter-spacing: 3px; transition: opacity 0.5s; }
+
+        /* При наведении: двери открываются вовнутрь (как дверцы шкафа) */
+        .doors-card:hover { background: rgba(255, 255, 255, 0.15); box-shadow: 0 15px 40px rgba(189, 108, 99, 0.3); border-color: transparent; }
+        .doors-card:hover .d3-left { transform: rotateY(100deg); }
+        .doors-card:hover .d3-right { transform: rotateY(-100deg); }
+        .doors-card:hover .door-3d span { opacity: 0; }
+        .doors-card:hover .dc-content { opacity: 1; }
+
+        /* --- ИНТЕРАКТИВ 5: Таймер "Диагональное Наполнение" --- */
+        .diag-timer { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 60px; }
+        
+        .dt-box {
+            position: relative; width: 130px; height: 130px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            border: 2px solid rgba(255,255,255,0.4); transform: rotate(45deg);
+            overflow: hidden; cursor: default;
+            transition: box-shadow 1.5s ease, border-color 1.5s ease;
+        }
+
+        /* Цветная жидкость, растущая из нижнего угла */
+        .dt-fill {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 0%;
+            background-color: var(--plate-chestnut); z-index: 0;
+            /* МЕДЛЕННОЕ ЗАПОЛНЕНИЕ (1.5 СЕК) */
+            transition: height 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .dt-box:hover { border-color: transparent; box-shadow: 0 15px 30px rgba(166, 101, 92, 0.4); }
+        .dt-box:hover .dt-fill { height: 100%; }
+
+        /* Текст выравниваем обратно */
+        .dt-content { transform: rotate(-45deg); display: flex; flex-direction: column; align-items: center; z-index: 1; }
+        
+        .dt-content span { font-family: 'Cormorant Infant', serif; font-size: 3.5rem; color: var(--text-pure); line-height: 1; text-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .dt-content p { margin: 5px 0 0 0; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--text-pure); opacity: 0.8; }
+
+        /* --- ИНТЕРАКТИВ 6: Карта "Косой Срез (5 полос)" (2 СЕКУНДЫ) --- */
+        .map-slice-container {
+            margin: 60px auto 0 auto; width: 100%; max-width: 800px; height: 450px;
+            position: relative; border-radius: 15px; overflow: hidden;
+            box-shadow: 0 20px 50px rgba(189, 108, 99, 0.4); border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .map-slice-container iframe {
+            width: 100%; height: 100%; border: 0; position: absolute; top: 0; left: 0; z-index: 1;
+            /* Теплый персиковый фильтр для карты */
+            filter: sepia(30%) hue-rotate(320deg) saturate(120%) brightness(105%) contrast(100%);
+        }
+
+        /* 5 диагональных полос, закрывающих карту */
+        .slice {
+            position: absolute; top: -50%; width: 30%; height: 200%;
+            background-color: var(--plate-terra); z-index: 2;
+            transform: rotate(30deg); /* Наклон полос */
+            /* ОЧЕНЬ МЕДЛЕННОЕ СКОЛЬЖЕНИЕ ВПРАВО (2 СЕКУНДЫ) */
+            transition: left 2s cubic-bezier(0.25, 1, 0.5, 1);
+            border-right: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .sl-1 { left: -20%; }
+        .sl-2 { left: 5%; transition-delay: 0.1s; }
+        .sl-3 { left: 30%; transition-delay: 0.2s; }
+        .sl-4 { left: 55%; transition-delay: 0.3s; }
+        .sl-5 { left: 80%; transition-delay: 0.4s; }
+
+        .map-hint { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3; font-family: 'Cormorant Infant', serif; font-size: 1.5rem; letter-spacing: 3px; color: var(--text-pure); transition: opacity 0.5s; pointer-events: none; }
+
+        /* При наведении: Полосы уезжают вправо за пределы экрана */
+        .map-slice-container:hover .slice { left: 150%; }
+        .map-slice-container:hover .map-hint { opacity: 0; }
+
+        /* Реальная кнопка Карты */
+        .btn-real-map {
+            display: inline-block; margin-top: 30px; padding: 18px 40px; border-radius: 5px;
+            background-color: var(--text-pure); color: var(--plate-coral); font-weight: 600;
+            text-transform: uppercase; letter-spacing: 2px; text-decoration: none;
+            transition: transform 0.4s, box-shadow 0.4s;
+        }
+        .btn-real-map:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255,255,255,0.3); }
+
+        /* --- ИНТЕРАКТИВ 7: Telegram-кнопка "Растущая Рамка-Заливка" --- */
+        .rsvp-section { padding-bottom: 150px; }
+        
+        .frame-btn {
+            position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 15px;
+            padding: 25px 60px; margin-top: 40px; font-family: 'Josefin Sans', sans-serif;
+            font-size: 1.2rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--text-pure); text-decoration: none;
+            /* Рамка делается через box-shadow inset */
+            box-shadow: inset 0 0 0 2px var(--text-pure);
+            border-radius: 5px; overflow: hidden; 
+            /* МЕДЛЕННОЕ УТОЛЩЕНИЕ РАМКИ (1.5 СЕК) */
+            transition: box-shadow 1.5s cubic-bezier(0.25, 1, 0.5, 1), color 1.5s ease;
+        }
+
+        /* При наведении: Внутренняя тень вырастает до 100px, заливая кнопку белым цветом! */
+        .frame-btn:hover { box-shadow: inset 0 0 0 100px var(--text-pure), 0 15px 30px rgba(255,255,255,0.3); color: var(--plate-coral); }
+
+        .frame-btn span, .frame-btn svg { position: relative; z-index: 1; transition: transform 1.5s ease; }
+        .frame-btn svg { width: 26px; height: 26px; fill: currentColor; }
+        .frame-btn:hover svg { transform: translateX(10px); }
+
+        /* Плавное появление контента при прокрутке */
+        .slow-fade { opacity: 0; transform: translateY(40px); transition: all 1.5s ease-out; }
+        .slow-fade.visible { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            .names-row { flex-direction: column; gap: 10px; }
+            .h-name { font-size: 16vw; letter-spacing: 5px; }
+            .h-amp { font-size: 8vw; margin: 10px 0; }
+            .section-title { font-size: 2.5rem; letter-spacing: 1px; }
+            .plate-box { padding: 40px 20px; }
+            .doors-card { height: 160px; }
+            .dc-content { flex-direction: column; text-align: center; gap: 10px; padding: 20px; }
+            .dc-time { width: auto; font-size: 2.2rem; }
+            .map-slice-container { height: 350px; }
+            .slice { width: 40%; } /* На мобилках полосы шире */
+            .frame-btn { padding: 20px 30px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ИЗЮМИНКА 1: ФОН "МЯГКОЕ СОЛНЦЕ" (Вращающиеся Полумесяцы) -->
+    <div class="sun-bg">
+        <div class="sun-shape sun-1"></div>
+        <div class="sun-shape sun-2"></div>
+    </div>
+
+    <!-- КОНТЕНТ ПОВЕРХ ФОНА -->
+    <div class="content">
+
+        <!-- СЕКЦИЯ 1: Главный экран (Эллиптическое Раскрытие Имен) -->
+        <header class="hero">
+            <div class="plate-box" style="background-color: transparent; box-shadow: none;">
+                <div class="name-mask-box">
+                    <div class="names-row">
+                        <div class="peach-font h-name text-glow">Роман</div>
+                        <div class="peach-font h-amp text-glow">&</div>
+                        <div class="peach-font h-name text-glow">Милана</div>
+                    </div>
+                </div>
+                <div class="h-date text-glow">10 Августа 2026</div>
+            </div>
+        </header>
+
+        <!-- СЕКЦИЯ 2: О свадьбе -->
+        <section class="slow-fade">
+            <div class="plate-box">
+                <h2 class="peach-font section-title text-glow">Теплое Утро</h2>
+                <p class="text-block text-glow">
+                    Мы приглашаем вас в атмосферу светлой эстетики, искренних улыбок и настоящего тепла. 
+                    Оставьте суету города, наденьте красивый наряд и разделите с нами день, 
+                    который навсегда останется в наших сердцах.
+                </p>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 3: Дресс-код (Превращение в Лепесток) -->
+        <section class="slow-fade">
+            <div class="plate-box" style="background-color: var(--plate-rose);">
+                <h2 class="peach-font section-title text-glow">Цвета Сада</h2>
+                <p class="text-block text-glow" style="font-size: 1.1rem; opacity: 0.9;">Поддержите нас, выбрав наряды в теплых, пудровых оттенках.<br>(Наведите курсор на рамки)</p>
+                
+                <div class="leaf-grid">
+                    <div class="leaf-card lc-1"><span>Персик</span></div>
+                    <div class="leaf-card lc-2"><span>Пудра</span></div>
+                    <div class="leaf-card lc-3"><span>Беж</span></div>
+                    <div class="leaf-card lc-4"><span>Терракота</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 4: Тайминг (3D Двойные Двери) -->
+        <section class="slow-fade">
+            <div class="plate-box" style="background-color: var(--plate-terra);">
+                <h2 class="peach-font section-title text-glow">Сюжет Дня</h2>
+                <p class="text-block text-glow" style="font-size: 1.1rem; opacity: 0.9;">Наведите курсор, чтобы открыть двери.</p>
+                
+                <div class="doors-timeline">
+                    <div class="doors-card">
+                        <!-- 3D Створки -->
+                        <div class="door-3d d3-left"><span>Сбор</span></div>
+                        <div class="door-3d d3-right"><span>Гостей</span></div>
+                        <!-- Скрытый контент -->
+                        <div class="dc-content">
+                            <div class="dc-time">15:30</div>
+                            <div class="dc-info">
+                                <div class="dc-title">Приветствие</div>
+                                <div class="dc-desc">Теплые объятия, охлажденное шампанское и легкая музыка.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="doors-card">
+                        <div class="door-3d d3-left"><span>Время</span></div>
+                        <div class="door-3d d3-right"><span>Клятв</span></div>
+                        <div class="dc-content">
+                            <div class="dc-time">16:30</div>
+                            <div class="dc-info">
+                                <div class="dc-title">Церемония</div>
+                                <div class="dc-desc">Самые главные слова. Мы обменяемся кольцами и станем семьей.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="doors-card">
+                        <div class="door-3d d3-left"><span>Званый</span></div>
+                        <div class="door-3d d3-right"><span>Ужин</span></div>
+                        <div class="dc-content">
+                            <div class="dc-time">18:00</div>
+                            <div class="dc-info">
+                                <div class="dc-title">Банкет</div>
+                                <div class="dc-desc">Изысканная кухня, звон хрусталя, смех и душевные тосты.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="doors-card">
+                        <div class="door-3d d3-left"><span>Яркий</span></div>
+                        <div class="door-3d d3-right"><span>Финал</span></div>
+                        <div class="dc-content">
+                            <div class="dc-time">21:30</div>
+                            <div class="dc-info">
+                                <div class="dc-title">Танцы</div>
+                                <div class="dc-desc">Разрезаем огромный торт и танцуем до самой ночи!</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 5: Таймер (Диагональное Наполнение) -->
+        <section class="slow-fade">
+            <div class="plate-box" style="background-color: var(--plate-chestnut);">
+                <h2 class="peach-font section-title text-glow">До встречи</h2>
+                
+                <div class="diag-timer" id="countdown">
+                    <div class="dt-box">
+                        <div class="dt-fill"></div>
+                        <div class="dt-content"><span id="days">00</span><p>Дней</p></div>
+                    </div>
+                    <div class="dt-box">
+                        <div class="dt-fill"></div>
+                        <div class="dt-content"><span id="hours">00</span><p>Часов</p></div>
+                    </div>
+                    <div class="dt-box">
+                        <div class="dt-fill"></div>
+                        <div class="dt-content"><span id="minutes">00</span><p>Минут</p></div>
+                    </div>
+                    <div class="dt-box">
+                        <div class="dt-fill"></div>
+                        <div class="dt-content"><span id="seconds">00</span><p>Секунд</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 6: Карта (Косой Срез - 5 полос) -->
+        <section class="slow-fade">
+            <div class="plate-box" style="background-color: var(--plate-rose); padding-bottom: 80px;">
+                <h2 class="peach-font section-title text-glow">Тайный Сад</h2>
+                <p class="text-block text-glow" style="font-weight: 600;">Усадьба "Персиковый Рассвет"</p>
+                
+                <div class="map-slice-container">
+                    <div class="map-hint text-glow">Наведите курсор</div>
+                    
+                    <!-- 5 косых полос маски -->
+                    <div class="slice sl-1"></div>
+                    <div class="slice sl-2"></div>
+                    <div class="slice sl-3"></div>
+                    <div class="slice sl-4"></div>
+                    <div class="slice sl-5"></div>
+
+                    <!-- Интерактивная карта -->
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2244.430307459374!2d37.6092183159313!3d55.76839398055745!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a413d7890fb%3A0xcf953931be0bd4e3!2z0JzQvtGB0LrQstCw!5e0!3m2!1sru!2sru!4v1690000000000!5m2!1sru!2sru" 
+                        allowfullscreen="" loading="lazy">
+                    </iframe>
+                </div>
+
+                <!-- РЕАЛЬНАЯ КЛИКАБЕЛЬНАЯ КНОПКА GOOGLE MAPS -->
+                <a href="https://goo.gl/maps/PeachLink" target="_blank" class="btn-real-map">Построить маршрут</a>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 7: RSVP (Растущая Рамка-Заливка) -->
+        <section class="rsvp-section slow-fade">
+            <div class="plate-box" style="text-align: center;">
+                <h2 class="peach-font section-title text-glow" style="font-size: 3.5rem; margin-bottom: 40px;">Будем рады вашему ответу</h2>
+                
+                <!-- ВСТАВЬТЕ ССЫЛКУ НА СВОЙ ТЕЛЕГРАМ -->
+                <a href="https://t.me/RomanMilanaWedding" target="_blank" class="frame-btn text-glow">
+                    <span>Подтвердить в Telegram</span>
+                    <!-- Иконка Телеграм -->
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.12.03-1.99 1.25-5.61 3.67-.53.36-1.01.53-1.44.52-.47-.01-1.38-.27-2.05-.5-.82-.28-1.47-.43-1.41-.91.03-.25.38-.51 1.06-.78 4.15-1.8 6.92-2.99 8.31-3.57 3.95-1.65 4.77-1.93 5.3-1.94.12 0 .38.03.53.15.12.1.17.24.19.37.02.13.01.26-.01.4z"/>
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Скрипты -->
+    <script>
+        // 1. Таймер РАБОЧИЙ (Дата: 10 Августа 2026)
+        const weddingDate = new Date("August 10, 2026 16:00:00").getTime();
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+            
+            if (distance < 0) { clearInterval(timer); return; }
+            
+            document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+        }, 1000);
+
+        // 2. Медленное появление контента при скролле (1.5 секунды)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.slow-fade').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
