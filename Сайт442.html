@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Свадьба Алисы и Романа</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;500;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --text-main: #4a3c31;
+            --accent: #d4a396;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.4);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            color: var(--text-main);
+            font-family: 'Comfortaa', cursive;
+            overflow-x: hidden;
+            background: #fceae6;
+        }
+
+        /* НАСТОЯЩИЙ АНИМИРОВАННЫЙ ГРАДИЕНТНЫЙ ФОН */
+        .bg-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            background: linear-gradient(45deg, #fceae6, #e8d5cc, #fdf2f0, #d4a396);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .floating-blobs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: blur(60px);
+        }
+
+        .blob {
+            position: absolute;
+            background: var(--accent);
+            opacity: 0.3;
+            border-radius: 50%;
+            animation: drift 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes drift {
+            from { transform: translate(-20%, -20%) scale(1); }
+            to { transform: translate(30%, 30%) scale(1.2); }
+        }
+
+        /* ТИПОГРАФИКА */
+        h1 { font-size: 5.5rem; margin: 0; font-weight: 700; letter-spacing: -3px; }
+        h2 { font-size: 3.8rem; margin-bottom: 40px; text-align: center; }
+        p { font-size: 1.6rem; line-height: 1.6; text-align: center; max-width: 800px; }
+
+        section {
+            min-height: 100vh;
+            padding: 100px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ФОТО */
+        .hero-img {
+            width: 380px;
+            height: 500px;
+            border-radius: 190px 190px 50px 50px;
+            border: 15px solid var(--white);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+            object-fit: cover;
+            animation: slowSwing 5s ease-in-out infinite;
+            margin-bottom: 40px;
+        }
+
+        @keyframes slowSwing {
+            0%, 100% { transform: rotate(-2deg) translateY(0); }
+            50% { transform: rotate(2deg) translateY(-10px); }
+        }
+
+        /* МУЗЫКА */
+        .music-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .music-btn {
+            background: var(--white);
+            border: 2px solid var(--accent);
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-family: 'Comfortaa', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 25px rgba(212, 163, 150, 0.4);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .music-btn:hover { transform: scale(1.1); background: var(--accent); color: white; }
+
+        /* ОБРАТНЫЙ ОТСЧЕТ */
+        .timer {
+            display: flex;
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .timer-unit {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 30px;
+            min-width: 120px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.5);
+            animation: bounce 2s infinite alternate ease-in-out;
+        }
+
+        .timer-unit span { display: block; font-size: 3.5rem; font-weight: 700; color: var(--accent); }
+        .timer-unit p { font-size: 1rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        /* ТАЙМИНГ */
+        .timing-list { width: 100%; max-width: 600px; list-style: none; padding: 0; }
+        .timing-item {
+            background: var(--white);
+            margin: 20px 0;
+            padding: 30px;
+            border-radius: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: 0.8s ease;
+        }
+
+        .timing-item.show { opacity: 1; transform: scale(1); }
+        .timing-time { font-size: 2.2rem; font-weight: 700; color: var(--accent); }
+        .timing-desc { font-size: 1.4rem; font-weight: 500; }
+
+        /* КАЛЕНДАРЬ */
+        .calendar-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 50px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .cal-month { font-size: 2rem; margin-bottom: 20px; font-weight: 700; }
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 15px;
+        }
+
+        .cal-day { font-size: 1.2rem; padding: 10px; border-radius: 50%; }
+        .cal-day.wedding { background: var(--accent); color: white; font-weight: 700; transform: scale(1.3); }
+
+        /* ДРЕСС-КОД */
+        .color-palette { display: flex; gap: 30px; margin-top: 50px; }
+        .color-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .color-circle:hover {
+            transform: scale(1.5) rotate(15deg);
+            border-radius: 30%;
+        }
+
+        /* КАРТА */
+        .map-container {
+            width: 100%;
+            max-width: 1000px;
+            height: 500px;
+            border-radius: 60px;
+            overflow: hidden;
+            border: 20px solid var(--white);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.15);
+            transform: rotateX(45deg) translateY(100px);
+            opacity: 0;
+            transition: 1.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .map-container.unfold {
+            transform: rotateX(0) translateY(0);
+            opacity: 1;
+        }
+
+        /* КНОПКА ТЕЛЕГРАМ */
+        .tg-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: #24A1DE;
+            color: white;
+            text-decoration: none;
+            padding: 25px 60px;
+            border-radius: 60px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-top: 50px;
+            transition: 0.3s;
+            box-shadow: 0 15px 35px rgba(36, 161, 222, 0.4);
+        }
+
+        .tg-link:hover { transform: translateY(-10px); background: #1e88be; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            h2 { font-size: 2.5rem; }
+            .hero-img { width: 280px; height: 380px; }
+            .timer { flex-wrap: wrap; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-wrapper"></div>
+    <div class="floating-blobs">
+        <div class="blob" style="width: 400px; height: 400px; left: 10%; top: 10%;"></div>
+        <div class="blob" style="width: 600px; height: 600px; right: -5%; bottom: -5%; animation-delay: -5s;"></div>
+    </div>
+
+    <audio id="music" loop>
+        <source src="Love - Always See Your Face.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="music-panel">
+        <button class="music-btn" onclick="togglePlay()">
+            <span id="music-icon">🎵</span> <span id="music-text">ВКЛЮЧИТЬ МУЗЫКУ</span>
+        </button>
+    </div>
+
+    <section>
+        <img src="photo_2026-03-05_22-11-54.jpg" class="hero-img" alt="Свадебное фото">
+        <h1 style="text-align: center;">Алиса & Роман</h1>
+        <p>Мы решили пожениться! И будем счастливы видеть вас в этот особенный день.</p>
+    </section>
+
+    <section>
+        <h2>До торжества осталось</h2>
+        <div class="timer">
+            <div class="timer-unit"><span id="days">00</span><p>дней</p></div>
+            <div class="timer-unit" style="animation-delay: 0.2s;"><span id="hours">00</span><p>часов</p></div>
+            <div class="timer-unit" style="animation-delay: 0.4s;"><span id="mins">00</span><p>минут</p></div>
+            <div class="timer-unit" style="animation-delay: 0.6s;"><span id="secs">00</span><p>секунд</p></div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Дата свадьбы</h2>
+        <div class="calendar-card">
+            <div class="cal-month">Август 2026</div>
+            <div class="cal-grid" id="calGrid">
+                </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Свадебный тайминг</h2>
+        <div class="timing-list">
+            <div class="timing-item">
+                <div class="timing-time">15:00</div>
+                <div class="timing-desc">Сбор гостей и фуршет</div>
+            </div>
+            <div class="timing-item" style="transition-delay: 0.2s;">
+                <div class="timing-time">16:00</div>
+                <div class="timing-desc">Выездная регистрация</div>
+            </div>
+            <div class="timing-item" style="transition-delay: 0.4s;">
+                <div class="timing-time">17:30</div>
+                <div class="timing-desc">Праздничный ужин</div>
+            </div>
+            <div class="timing-item" style="transition-delay: 0.6s;">
+                <div class="timing-time">21:00</div>
+                <div class="timing-desc">Свадебный торт</div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Дресс-код</h2>
+        <p>Мы будем очень признательны, если при выборе нарядов вы поддержите палитру нашей свадьбы:</p>
+        <div class="color-palette">
+            <div class="color-circle" style="background: #E2B4A8;"></div>
+            <div class="color-circle" style="background: #D8C3B6;"></div>
+            <div class="color-circle" style="background: #F4EBE8;"></div>
+            <div class="color-circle" style="background: #A69185;"></div>
+            <div class="color-circle" style="background: #5E5048;"></div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Локация</h2>
+        <p>Ресторан «Вилла Прованс», ул. Живописная, 44</p>
+        <div class="map-container" id="map">
+            <iframe src="https://yandex.ru/map-widget/v1/?ll=37.6176%2C55.7558&z=14" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+    </section>
+
+    <section style="min-height: 60vh;">
+        <h2>Нужна помощь?</h2>
+        <p>Если у вас возникли вопросы, наш свадебный координатор на связи:</p>
+        <a href="https://t.me/AliceAndRomanWedding" class="tg-link">Написать в Telegram</a>
+    </section>
+
+    <script>
+        // 1. Управление музыкой
+        const audio = document.getElementById('music');
+        const mBtn = document.getElementById('music-text');
+        const mIcon = document.getElementById('music-icon');
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play();
+                mBtn.innerText = "ПАУЗА";
+                mIcon.innerText = "⏸";
+            } else {
+                audio.pause();
+                mBtn.innerText = "ВКЛЮЧИТЬ МУЗЫКУ";
+                mIcon.innerText = "🎵";
+            }
+        }
+
+        // 2. Обратный отсчет (на 15 августа 2026)
+        const targetDate = new Date("Aug 15, 2026 15:00:00").getTime();
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('days').innerText = d;
+            document.getElementById('hours').innerText = h;
+            document.getElementById('mins').innerText = m;
+            document.getElementById('secs').innerText = s;
+        }
+        setInterval(updateTimer, 1000);
+
+        // 3. Календарь
+        const grid = document.getElementById('calGrid');
+        for(let i=1; i<=31; i++) {
+            const day = document.createElement('div');
+            day.className = i === 15 ? 'cal-day wedding' : 'cal-day';
+            day.innerText = i;
+            grid.appendChild(day);
+        }
+
+        // 4. Скролл-анимации
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (entry.target.classList.contains('map-container')) {
+                        entry.target.classList.add('unfold');
+                    } else if (entry.target.classList.contains('timing-item')) {
+                        entry.target.classList.add('show');
+                    }
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.map-container, .timing-item').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
