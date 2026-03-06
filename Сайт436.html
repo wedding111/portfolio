@@ -227,6 +227,106 @@
         .music-card.visible .c-drop:nth-child(1) { transition-delay: 0.2s; }
         .music-card.visible .c-drop:nth-child(2) { transition-delay: 0.4s; }
         .music-card.visible .c-drop:nth-child(3) { transition-delay: 0.6s; }
+        
+        /* ==== КАСТОМНАЯ ФОРМА АНКЕТЫ ==== */
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-group label.question-title {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            font-weight: 500;
+            color: #8a5a6b;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .music-card input[type="text"] {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1px solid rgba(138, 90, 107, 0.3);
+            border-radius: 10px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 1.1em;
+            color: #4a3b40;
+            background: rgba(255, 255, 255, 0.7);
+            box-sizing: border-box;
+            transition: 0.3s ease;
+        }
+
+        .music-card input[type="text"]:focus {
+            border-color: #8a5a6b;
+            outline: none;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(138, 90, 107, 0.1);
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+        
+        .radio-group label:hover {
+            color: #8a5a6b;
+        }
+
+        .music-card input[type="radio"] {
+            accent-color: #8a5a6b;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            margin-top: 35px;
+            padding: 16px 45px;
+            font-size: 1.1em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #fff;
+            background: #8a5a6b;
+            border: none;
+            border-radius: 40px;
+            font-family: 'Raleway', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(138, 90, 107, 0.3);
+        }
+
+        .submit-btn:hover { 
+            background: #6e4654; 
+            transform: translateY(-5px); 
+            box-shadow: 0 15px 30px rgba(138, 90, 107, 0.4); 
+        }
+
+        #success-message {
+            display: none;
+            text-align: center;
+            font-size: 1.5em;
+            color: #8a5a6b;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         /* --- КРУТАЯ АНИМАЦИЯ КАРТЫ: КОНВЕРТ --- */
         .map-box {
@@ -343,8 +443,46 @@
             <div class="c-drop" style="background-color: #8a5a6b;" title="Пыльно-сиреневый"></div>
         </div>
     </div>
+    
+    <!-- 5. АНКЕТА (ФОРМА ПОДТВЕРЖДЕНИЯ ПРИСУТСТВИЯ) -->
+    <div class="music-card scroll-reveal">
+        <h2>Анкета гостя</h2>
+        <p style="margin-bottom: 30px;">Пожалуйста, подтвердите своё присутствие до 1 сентября, чтобы мы могли всё идеально подготовить.</p>
+        
+        <!-- Невидимый iframe для отправки данных без перезагрузки -->
+        <script>var rsvpSubmitted=false;</script>
+        <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(rsvpSubmitted) {
+            document.getElementById('rsvp-form').style.display='none';
+            document.getElementById('success-message').style.display='block';
+        }"></iframe>
 
-    <!-- 5. КАРТА (Анимация "Конверт") -->
+        <!-- Сама форма, отправляющая ответы в Google -->
+        <form id="rsvp-form" action="https://docs.google.com/forms/d/e/1FAIpQLSeL92D7XykEJvvTiI7JHQOEhrXbrUWIyGzDZDgLdl9ly1-XXg/formResponse" method="POST" target="hidden_iframe" onsubmit="rsvpSubmitted=true;">
+            
+            <div class="form-group">
+                <label class="question-title">Ваше ФИО</label>
+                <!-- Код вопроса: entry.550485150 -->
+                <input type="text" name="entry.550485150" placeholder="Например, Иванова Мария" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="question-title">Вы придёте?</label>
+                <!-- Код вопроса: entry.2017199155 -->
+                <div class="radio-group">
+                    <label><input type="radio" name="entry.2017199155" value="Да" required> Да, с удовольствием!</label>
+                    <label><input type="radio" name="entry.2017199155" value="Нет"> К сожалению, не смогу</label>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Подтвердить</button>
+        </form>
+
+        <div id="success-message">
+            Спасибо!<br>Ваш ответ получен, с нетерпением ждем встречи!
+        </div>
+    </div>
+
+    <!-- 6. КАРТА (Анимация "Конверт") -->
     <div class="music-card scroll-reveal">
         <h2>Где нас найти</h2>
         <p>Резиденция "Afire Love", г. Москва</p>
@@ -354,7 +492,7 @@
         </div>
         
         <br><br>
-        <a href="https://t.me/your_telegram_username" target="_blank" class="btn-send">Ответить в Telegram</a>
+        <a href="https://t.me/your_telegram_username" target="_blank" class="btn-send">Связаться в Telegram</a>
     </div>
 
 </div>
