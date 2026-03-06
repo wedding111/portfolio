@@ -203,6 +203,120 @@
             border-radius: 30%;
         }
 
+        /* ==== ФОРМА В СТИЛЕ САЙТА ==== */
+        .rsvp-form-container {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            padding: 50px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 600px;
+            text-align: left;
+            margin-top: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-group label.question-title {
+            display: block;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .rsvp-form-container input[type="text"] {
+            width: 100%;
+            padding: 18px 25px;
+            border: 2px solid rgba(212, 163, 150, 0.3);
+            border-radius: 30px;
+            font-family: 'Comfortaa', cursive;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.8);
+            box-sizing: border-box;
+            transition: 0.4s ease;
+        }
+
+        .rsvp-form-container input[type="text"]:focus {
+            border-color: var(--accent);
+            outline: none;
+            background: var(--white);
+            box-shadow: 0 5px 15px rgba(212, 163, 150, 0.2);
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 12px 20px;
+            border-radius: 20px;
+            transition: 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .radio-group label:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(212, 163, 150, 0.3);
+        }
+
+        .rsvp-form-container input[type="radio"] {
+            accent-color: var(--accent);
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            background: var(--white);
+            color: var(--text-main);
+            border: 2px solid var(--accent);
+            padding: 20px;
+            border-radius: 50px;
+            font-family: 'Comfortaa', cursive;
+            font-size: 1.4rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 40px;
+            box-shadow: 0 10px 25px rgba(212, 163, 150, 0.2);
+        }
+
+        .submit-btn:hover {
+            background: var(--accent);
+            color: var(--white);
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(212, 163, 150, 0.4);
+        }
+
+        #success-message {
+            display: none;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 40px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            border: 2px dashed var(--accent);
+            animation: slowSwing 3s ease-in-out infinite;
+        }
+
         /* КАРТА */
         .map-container {
             width: 100%;
@@ -244,8 +358,10 @@
         @media (max-width: 768px) {
             h1 { font-size: 3.5rem; }
             h2 { font-size: 2.5rem; }
+            p { font-size: 1.2rem; }
             .hero-img { width: 280px; height: 380px; }
             .timer { flex-wrap: wrap; justify-content: center; }
+            .rsvp-form-container { padding: 30px 20px; }
         }
     </style>
 </head>
@@ -323,6 +439,45 @@
             <div class="color-circle" style="background: #F4EBE8;"></div>
             <div class="color-circle" style="background: #A69185;"></div>
             <div class="color-circle" style="background: #5E5048;"></div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ ПОДТВЕРЖДЕНИЯ ПРИСУТСТВИЯ (ФОРМА) -->
+    <section>
+        <h2>Подтвердите присутствие</h2>
+        <p>Пожалуйста, заполните небольшую анкету до 1 августа, чтобы мы могли всё идеально спланировать.</p>
+
+        <!-- Невидимый iframe для отправки данных без перехода на страницу Google -->
+        <script>var rsvpSubmitted=false;</script>
+        <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(rsvpSubmitted) {
+            document.getElementById('rsvp-form').style.display='none';
+            document.getElementById('success-message').style.display='block';
+        }"></iframe>
+
+        <div class="rsvp-form-container" id="rsvp-form">
+            <!-- Готовая, полностью настроенная форма -->
+            <form action="https://docs.google.com/forms/d/e/1FAIpQLSeL92D7XykEJvvTiI7JHQOEhrXbrUWIyGzDZDgLdl9ly1-XXg/formResponse" method="POST" target="hidden_iframe" onsubmit="rsvpSubmitted=true;">
+                
+                <div class="form-group">
+                    <label class="question-title">Ваше ФИО</label>
+                    <input type="text" name="entry.550485150" placeholder="Например, Алиса Селезнева" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="question-title">Вы придёте?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="entry.2017199155" value="Да" required> Да, с удовольствием!</label>
+                        <label><input type="radio" name="entry.2017199155" value="Нет"> К сожалению, не смогу</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">ОТПРАВИТЬ ОТВЕТ</button>
+            </form>
+        </div>
+
+        <!-- Сообщение после успешной отправки -->
+        <div id="success-message">
+            🤍 Спасибо! Ваш ответ получен. 🤍
         </div>
     </section>
 
