@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение | Максим & Елизавета</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Outfit:wght@200;300;400&display=swap');
+
+        :root {
+            --text-main: #3b2a33; /* Теплый, глубокий сливовый оттенок */
+            --accent: #a88394; /* Пыльная роза / сиреневый */
+            --glow: rgba(255, 255, 255, 0.6);
+            --font-head: 'Tenor Sans', sans-serif; /* Изящный, широкий шрифт для заголовков */
+            --font-text: 'Outfit', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f7ecee;
+            background-image: url('5194c421cdd02fb8b4551de63e147285.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-main);
+            font-family: var(--font-text);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* 
+           Эфирное матовое напыление.
+           Мы не делаем фон белым, мы делаем его чуть переливающимся
+        */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(255, 250, 245, 0.4) 0%, rgba(220, 200, 210, 0.2) 100%);
+            backdrop-filter: blur(2px);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- ЭФИРНЫЕ КАРТОЧКИ --- */
+        .ethereal-box {
+            /* Градиентное полупрозрачное стекло */
+            background: linear-gradient(
+                135deg, 
+                rgba(255, 255, 255, 0.4) 0%, 
+                rgba(255, 255, 255, 0.1) 100%
+            );
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            /* Внутреннее свечение (перламутр) */
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.05),
+                inset 0 0 20px rgba(255, 255, 255, 0.8);
+            border-radius: 40px;
+            padding: 60px 40px;
+            margin-bottom: 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Блик, гуляющий по карточке */
+        .ethereal-box::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+        .ethereal-box:hover::after {
+            opacity: 1;
+            animation: move-glow 5s linear infinite;
+        }
+        @keyframes move-glow {
+            0% { transform: translate(-30%, -30%); }
+            50% { transform: translate(30%, 30%); }
+            100% { transform: translate(-30%, -30%); }
+        }
+
+        h1, h2, h3 {
+            font-family: var(--font-head);
+            font-weight: 400;
+            margin: 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            color: var(--text-main);
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+            letter-spacing: 4px;
+        }
+
+        p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        /* Главный экран */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-names {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .date-badge {
+            font-family: var(--font-text);
+            font-size: 1.4rem;
+            letter-spacing: 8px;
+            margin-top: 30px;
+            color: var(--text-main);
+            position: relative;
+            display: inline-block;
+        }
+        /* Линии по бокам от даты */
+        .date-badge::before, .date-badge::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40px; height: 1px;
+            background: var(--text-main);
+        }
+        .date-badge::before { left: -60px; }
+        .date-badge::after { right: -60px; }
+
+        /* Таймер (Левитирующие элементы) */
+        .timer-grid {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        .t-item {
+            background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.2));
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 20px;
+            width: 90px; height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.04);
+            animation: float-levitate 4s ease-in-out infinite alternate;
+        }
+        /* Разное время левитации для каждого блока */
+        .t-item:nth-child(2) { animation-delay: -1s; }
+        .t-item:nth-child(3) { animation-delay: -2s; }
+        .t-item:nth-child(4) { animation-delay: -3s; }
+
+        @keyframes float-levitate {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+
+        .t-item span {
+            font-family: var(--font-head);
+            font-size: 2.5rem;
+            color: var(--text-main);
+        }
+        .t-item p {
+            margin: 0;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            font-weight: 400;
+        }
+
+        /* Календарь */
+        .cal-month {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: var(--text-main);
+        }
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 15px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .cal-head { font-weight: 300; font-size: 0.8rem; color: var(--accent); letter-spacing: 1px; }
+        .cal-day { padding: 10px 0; font-size: 1.2rem; }
+        .cal-day.target {
+            background: var(--text-main);
+            color: #fff;
+            border-radius: 12px;
+            transform: scale(1.15);
+            box-shadow: 0 10px 20px rgba(59, 42, 51, 0.2);
+            position: relative;
+        }
+
+        /* Тайминг */
+        .timeline {
+            text-align: center;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .tl-item {
+            margin-bottom: 40px;
+            position: relative;
+        }
+        .tl-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px; height: 15px;
+            background: var(--accent);
+        }
+        .tl-time {
+            font-family: var(--font-head);
+            font-size: 2.2rem;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+        .tl-desc {
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        /* Дресс-код */
+        .palette {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .color-dot {
+            width: 50px; height: 50px;
+            border-radius: 15px; /* Мягкие квадраты вместо кругов */
+            border: 2px solid rgba(255,255,255,0.8);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        /* Эффект перламутра на цветах дресс-кода */
+        .color-dot::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 100%);
+        }
+
+        /* Карта */
+        .map-box {
+            width: 100%; height: 350px;
+            border-radius: 20px; overflow: hidden;
+            margin-top: 30px;
+            border: 1px solid rgba(255,255,255,0.6);
+            /* Мягкий фильтр */
+            filter: saturate(0.8) opacity(0.9);
+        }
+
+        /* Кнопка */
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 18px 50px;
+            background: var(--text-main);
+            color: #fff;
+            border-radius: 30px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 0.85rem;
+            box-shadow: 0 10px 20px rgba(59, 42, 51, 0.2);
+            transition: all 0.4s ease;
+        }
+        .btn:hover {
+            background: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(168, 131, 148, 0.3);
+        }
+
+        /* --- АНИМАЦИИ ПОЯВЛЕНИЯ (Мягкое дыхание) --- */
+        .breath-reveal {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+        }
+        .breath-reveal.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Адаптив */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 1.8rem; letter-spacing: 2px; }
+            .ethereal-box { padding: 40px 20px; border-radius: 25px; }
+            .date-badge { font-size: 1.1rem; }
+            .date-badge::before { left: -40px; width: 25px; }
+            .date-badge::after { right: -40px; width: 25px; }
+            .timer-grid { gap: 10px; }
+            .t-item { width: 75px; height: 85px; }
+            .t-item span { font-size: 2rem; }
+            .cal-grid { gap: 10px 5px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- Главный экран -->
+        <section class="hero breath-reveal">
+            <div class="ethereal-box" style="padding: 80px 40px;">
+                <div class="hero-names">
+                    <h1>Максим<br>&<br>Елизавета</h1>
+                </div>
+                <div class="date-badge">12 Сентября 2026</div>
+                <p style="margin-top: 25px; font-style: italic; color: var(--accent);">Свадебное торжество</p>
+            </div>
+        </section>
+
+        <!-- Приветствие -->
+        <div class="ethereal-box breath-reveal">
+            <h2>Дорогие друзья</h2>
+            <p>В этот день мы создаем нечто совершенно прекрасное — нашу семью. Мы приглашаем вас окунуться в атмосферу света, красоты и искренней любви.</p>
+            <p>Будем безмерно счастливы видеть вас рядом в этот волшебный момент.</p>
+        </div>
+
+        <!-- Таймер -->
+        <div class="ethereal-box breath-reveal">
+            <h2>До нашей встречи</h2>
+            <div class="timer-grid" id="countdown">
+                <div class="t-item"><span id="days">00</span><p>Дней</p></div>
+                <div class="t-item"><span id="hours">00</span><p>Часов</p></div>
+                <div class="t-item"><span id="minutes">00</span><p>Минут</p></div>
+                <div class="t-item"><span id="seconds">00</span><p>Секунд</p></div>
+            </div>
+        </div>
+
+        <!-- Календарь -->
+        <div class="ethereal-box breath-reveal">
+            <div class="cal-month">Сентябрь 2026</div>
+            <div class="cal-grid">
+                <div class="cal-head">ПН</div><div class="cal-head">ВТ</div><div class="cal-head">СР</div><div class="cal-head">ЧТ</div><div class="cal-head">ПТ</div><div class="cal-head">СБ</div><div class="cal-head">ВС</div>
+                <div></div><div class="cal-day">1</div><div class="cal-day">2</div><div class="cal-day">3</div><div class="cal-day">4</div><div class="cal-day">5</div><div class="cal-day">6</div>
+                <div class="cal-day">7</div><div class="cal-day">8</div><div class="cal-day">9</div><div class="cal-day">10</div><div class="cal-day">11</div><div class="cal-day target">12</div><div class="cal-day">13</div>
+                <div class="cal-day">14</div><div class="cal-day">15</div><div class="cal-day">16</div><div class="cal-day">17</div><div class="cal-day">18</div><div class="cal-day">19</div><div class="cal-day">20</div>
+                <div class="cal-day">21</div><div class="cal-day">22</div><div class="cal-day">23</div><div class="cal-day">24</div><div class="cal-day">25</div><div class="cal-day">26</div><div class="cal-day">27</div>
+                <div class="cal-day">28</div><div class="cal-day">29</div><div class="cal-day">30</div><div></div><div></div><div></div><div></div>
+            </div>
+        </div>
+
+        <!-- Тайминг (С центрированием) -->
+        <div class="ethereal-box breath-reveal">
+            <h2>Программа дня</h2>
+            <div class="timeline">
+                <div class="tl-item">
+                    <div class="tl-time">15:30</div>
+                    <div class="tl-desc">Встреча гостей на панорамной веранде. Легкий фуршет и предвкушение праздника.</div>
+                </div>
+                <div class="tl-item">
+                    <div class="tl-time">16:30</div>
+                    <div class="tl-desc">Трогательная церемония на фоне закатного неба.</div>
+                </div>
+                <div class="tl-item">
+                    <div class="tl-time">17:30</div>
+                    <div class="tl-desc">Праздничный ужин. Теплые слова, улыбки и танцы.</div>
+                </div>
+                <div class="tl-item">
+                    <div class="tl-time">22:00</div>
+                    <div class="tl-desc">Разрезание торта и волшебный финал вечера.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Дресс-код -->
+        <div class="ethereal-box breath-reveal">
+            <h2>Дресс-код</h2>
+            <p>Мы будем признательны, если вы поддержите воздушную палитру нашего торжества в ваших нарядах:</p>
+            <div class="palette">
+                <!-- Эфирная палитра (взята с лепестков на фото) -->
+                <div class="color-dot" style="background-color: #Fdfbfb;"></div> <!-- Жемчужно-белый -->
+                <div class="color-dot" style="background-color: #EEDBE0;"></div> <!-- Пыльно-персиковый -->
+                <div class="color-dot" style="background-color: #D4BCC3;"></div> <!-- Нежно-сиреневый -->
+                <div class="color-dot" style="background-color: #A88394;"></div> <!-- Пыльная роза -->
+                <div class="color-dot" style="background-color: #3B2A33;"></div> <!-- Сливовый (текст) -->
+            </div>
+        </div>
+
+        <!-- Локация -->
+        <div class="ethereal-box breath-reveal" style="margin-bottom: 20px;">
+            <h2>Место проведения</h2>
+            <p>Панорамный ресторан «Birds»<br>Москва-Сити, башня ОКО, 84 этаж</p>
+            <div class="map-box">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2245.241838634865!2d37.53181821593026!3d55.74895698055286!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54bcca9a528db%3A0xa62624c9eb92f699!2sBirds!5e0!3m2!1sru!2sru!4v1680000000000!5m2!1sru!2sru" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+
+            <h2 style="margin-top: 60px;">Остаемся на связи</h2>
+            <p>Все детали и фотографии мы будем публиковать в нашем Telegram-чате.</p>
+            <a href="https://t.me/telegram" target="_blank" class="btn">Перейти в чат</a>
+        </div>
+
+    </div>
+
+    <script>
+        // Таймер (12 Сентября 2026)
+        const weddingDate = new Date("Sep 12, 2026 15:30:00").getTime();
+        
+        const timer = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance < 0) {
+                clearInterval(timer);
+                document.getElementById("countdown").innerHTML = "<h3>Этот день настал!</h3>";
+                return;
+            }
+
+            document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = Math.floor((dist % (1000 * 60)) / 1000).toString().padStart(2, '0');
+        }, 1000);
+
+        // Плавная анимация появления ("Дыхание")
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    obs.unobserve(entry.target); 
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.breath-reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
