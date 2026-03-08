@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение на свадьбу | Александр & Екатерина</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500&display=swap');
+
+        :root {
+            --bg-color: #08140b; /* Глубокий изумрудный / лесной зеленый */
+            --glass-bg: rgba(13, 30, 18, 0.6); /* Полупрозрачный зеленый для карточек */
+            --glass-border: rgba(224, 203, 160, 0.15);
+            --text-main: #f0f0f0;
+            --accent: #E0CBA0; /* Цвет шампанского / светлое золото */
+            --font-head: 'Playfair Display', serif;
+            --font-text: 'Jost', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-text);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Фоновые орхидеи разных размеров */
+        .floral-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .orchid {
+            position: absolute;
+            mix-blend-mode: screen; /* Убирает черный фон, оставляет оригинальные цветы */
+            animation: drift ease-in-out infinite alternate;
+        }
+
+        /* 1. Огромная орхидея справа внизу */
+        .o-huge { width: 90vw; max-width: 800px; bottom: -10%; right: -20%; animation-duration: 18s; transform-origin: bottom right; opacity: 0.85; }
+        /* 2. Средняя орхидея слева вверху */
+        .o-medium { width: 45vw; max-width: 400px; top: -5%; left: -15%; animation-duration: 14s; animation-delay: -5s; transform: rotate(115deg); }
+        /* 3. Маленькая размытая (эффект дали) справа вверху */
+        .o-small { width: 20vw; max-width: 200px; top: 15%; right: 5%; animation-duration: 20s; filter: blur(3px); opacity: 0.6; transform: scaleX(-1) rotate(45deg); }
+        /* 4. Большая слева по центру */
+        .o-large { width: 60vw; max-width: 600px; top: 40%; left: -25%; animation-duration: 16s; animation-delay: -7s; transform: rotate(-30deg); }
+        /* 5. Очень маленькая внизу слева */
+        .o-tiny { width: 15vw; max-width: 150px; bottom: 15%; left: 10%; animation-duration: 12s; filter: blur(2px); opacity: 0.5; transform: rotate(80deg); }
+
+        @keyframes drift {
+            0% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+            100% { transform: translateY(-30px) rotate(calc(var(--rot, 0deg) + 5deg)); }
+        }
+
+        /* Контейнер контента */
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            padding: 0 15px;
+        }
+
+        /* Стеклянные карточки (Glassmorphism) */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 60px 40px;
+            max-width: 800px;
+            margin: 0 auto 80px auto;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        h1, h2, h3 {
+            font-family: var(--font-head);
+            font-weight: 400;
+            color: var(--accent);
+            margin-top: 0;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+        
+        .ampersand {
+            font-size: 3rem;
+            font-style: italic;
+            display: block;
+            margin: -10px 0;
+            opacity: 0.8;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+        }
+
+        p {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        /* Первый экран */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .date-badge {
+            display: inline-block;
+            border: 1px solid var(--accent);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 20px;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Таймер в новом стиле */
+        .timer-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .timer-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .timer-box span {
+            font-family: var(--font-head);
+            font-size: 3rem;
+            color: var(--text-main);
+            line-height: 1;
+            text-shadow: 0 0 15px rgba(224, 203, 160, 0.4);
+        }
+
+        .timer-box p {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin: 10px 0 0 0;
+        }
+
+        /* Календарь (Минимализм) */
+        .cal-month {
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            color: var(--text-main);
+        }
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 15px;
+            font-size: 1.1rem;
+        }
+        .cal-head {
+            color: var(--accent);
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        .cal-day.active {
+            background-color: var(--accent);
+            color: var(--bg-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-weight: 600;
+            box-shadow: 0 0 20px rgba(224, 203, 160, 0.6);
+        }
+
+        /* Асимметричный тайминг */
+        .program-list {
+            text-align: left;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .program-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 35px;
+            border-left: 2px solid rgba(224, 203, 160, 0.3);
+            padding-left: 20px;
+            position: relative;
+        }
+        .program-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
+        }
+        .program-time {
+            font-family: var(--font-head);
+            font-size: 1.6rem;
+            color: var(--accent);
+            min-width: 90px;
+            line-height: 1;
+        }
+        .program-desc {
+            font-size: 1.05rem;
+            line-height: 1.5;
+            padding-top: 2px;
+        }
+
+        /* Цвета дресс-кода под новый стиль */
+        .dress-code-colors {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .color-dot {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        /* Карта */
+        .map-wrap {
+            height: 350px;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: 30px;
+            border: 1px solid var(--glass-border);
+        }
+
+        /* Кнопка */
+        .btn-tg {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 18px 45px;
+            background: rgba(224, 203, 160, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 50px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .btn-tg:hover {
+            background: var(--accent);
+            color: var(--bg-color);
+        }
+
+        /* Анимация появления */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Адаптив */
+        @media (max-width: 768px) {
+            h1 { font-size: 3.2rem; }
+            h2 { font-size: 2.2rem; }
+            .glass-panel { padding: 40px 20px; border-radius: 20px; }
+            .timer-container { gap: 15px; }
+            .timer-box span { font-size: 2.2rem; }
+            .cal-day.active { width: 35px; height: 35px; }
+            .program-time { font-size: 1.4rem; min-width: 75px; }
+            .color-dot { width: 45px; height: 45px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Фиксированный фон с орхидеями разных размеров -->
+    <div class="floral-bg">
+        <img src="vecteezy_a-delicate-orchid-branch-showcasing-blooms-and-buds-in-a_53133053.png" class="orchid o-huge" style="--rot: 0deg;" alt="">
+        <img src="vecteezy_a-delicate-orchid-branch-showcasing-blooms-and-buds-in-a_53133053.png" class="orchid o-medium" style="--rot: 115deg;" alt="">
+        <img src="vecteezy_a-delicate-orchid-branch-showcasing-blooms-and-buds-in-a_53133053.png" class="orchid o-small" style="--rot: 45deg;" alt="">
+        <img src="vecteezy_a-delicate-orchid-branch-showcasing-blooms-and-buds-in-a_53133053.png" class="orchid o-large" style="--rot: -30deg;" alt="">
+        <img src="vecteezy_a-delicate-orchid-branch-showcasing-blooms-and-buds-in-a_53133053.png" class="orchid o-tiny" style="--rot: 80deg;" alt="">
+    </div>
+
+    <div class="wrapper">
+        <!-- Главный экран -->
+        <section class="hero fade-up">
+            <h1>Александр <span class="ampersand">&</span> Екатерина</h1>
+            <p style="font-size: 1.3rem; margin-top: 10px;">Приглашаем разделить с нами этот день</p>
+            <div class="date-badge">24 Августа 2025</div>
+            
+            <div class="timer-container" id="countdown">
+                <div class="timer-box"><span id="days">00</span><p>Дней</p></div>
+                <div class="timer-box"><span id="hours">00</span><p>Часов</p></div>
+                <div class="timer-box"><span id="minutes">00</span><p>Минут</p></div>
+                <div class="timer-box"><span id="seconds">00</span><p>Секунд</p></div>
+            </div>
+        </section>
+
+        <!-- Приветствие -->
+        <div class="glass-panel fade-up">
+            <h2>Дорогие близкие!</h2>
+            <p>В нашей жизни предстоит невероятно важное и трепетное событие — день нашей свадьбы. Мы не представляем этот праздник без самых дорогих нам людей.</p>
+            <p>Будем счастливы, если вы проведете этот волшебный день вместе с нами, разделив наши эмоции и радость!</p>
+        </div>
+
+        <!-- Календарь -->
+        <div class="glass-panel fade-up">
+            <h2>Наш день</h2>
+            <div class="cal-month">Август 2025</div>
+            <div class="cal-grid">
+                <div class="cal-head">ПН</div><div class="cal-head">ВТ</div><div class="cal-head">СР</div><div class="cal-head">ЧТ</div><div class="cal-head">ПТ</div><div class="cal-head">СБ</div><div class="cal-head">ВС</div>
+                <div></div><div></div><div></div><div></div><div>1</div><div>2</div><div>3</div>
+                <div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div>
+                <div>11</div><div>12</div><div>13</div><div>14</div><div>15</div><div>16</div><div>17</div>
+                <div>18</div><div>19</div><div>20</div><div>21</div><div>22</div><div>23</div><div class="cal-day active">24</div>
+                <div>25</div><div>26</div><div>27</div><div>28</div><div>29</div><div>30</div><div>31</div>
+            </div>
+        </div>
+
+        <!-- Тайминг -->
+        <div class="glass-panel fade-up">
+            <h2>Тайминг</h2>
+            <div class="program-list">
+                <div class="program-item">
+                    <div class="program-time">15:00</div>
+                    <div class="program-desc">Сбор гостей. Приветственный фуршет, шампанское и живая музыка.</div>
+                </div>
+                <div class="program-item">
+                    <div class="program-time">16:00</div>
+                    <div class="program-desc">Трогательная церемония обмена клятвами.</div>
+                </div>
+                <div class="program-item">
+                    <div class="program-time">17:00</div>
+                    <div class="program-desc">Начало праздничного ужина, поздравления и танцы.</div>
+                </div>
+                <div class="program-item">
+                    <div class="program-time">21:30</div>
+                    <div class="program-desc">Вынос свадебного торта.</div>
+                </div>
+                <div class="program-item">
+                    <div class="program-time">23:00</div>
+                    <div class="program-desc">Бенгальские огни и завершение вечера.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Дресс-код -->
+        <div class="glass-panel fade-up">
+            <h2>Дресс-код</h2>
+            <p>Мы будем очень признательны, если вы поддержите стилистику нашей свадьбы и выберете наряды в следующей цветовой палитре:</p>
+            <div class="dress-code-colors">
+                <div class="color-dot" style="background-color: #08140b;"></div> <!-- Изумрудный -->
+                <div class="color-dot" style="background-color: #2b2b2b;"></div> <!-- Черный/графит -->
+                <div class="color-dot" style="background-color: #E0CBA0;"></div> <!-- Шампань/золото -->
+                <div class="color-dot" style="background-color: #ffffff;"></div> <!-- Белый -->
+            </div>
+        </div>
+
+        <!-- Карта и контакты -->
+        <div class="glass-panel fade-up" style="margin-bottom: 50px;">
+            <h2>Место проведения</h2>
+            <p>Ресторан "Турандот"<br>Тверской бульвар, 26, стр. 3, Москва</p>
+            <div class="map-wrap">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2245.0397576566835!2d37.60228301593068!3d55.76288698055695!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a43415c8e41%3A0x7d6b412bf5b9c030!2sTurandot!5e0!3m2!1sru!2sru!4v1680000000000!5m2!1sru!2sru" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            
+            <h2 style="margin-top: 60px;">Чат гостей</h2>
+            <p>Присоединяйтесь к нашему каналу в Telegram, чтобы не пропустить важные детали и получить фотографии после торжества.</p>
+            <a href="https://t.me/telegram" target="_blank" class="btn-tg">Перейти в Telegram</a>
+        </div>
+    </div>
+
+    <script>
+        // Таймер
+        const wedDate = new Date("Aug 24, 2025 15:00:00").getTime();
+        const tmr = setInterval(() => {
+            const now = new Date().getTime();
+            const dist = wedDate - now;
+
+            if (dist < 0) {
+                clearInterval(tmr);
+                document.getElementById("countdown").innerHTML = "<div>Свадьба состоялась!</div>";
+                return;
+            }
+
+            document.getElementById("days").innerText = Math.floor(dist / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            document.getElementById("hours").innerText = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = Math.floor((dist % (1000 * 60)) / 1000).toString().padStart(2, '0');
+        }, 1000);
+
+        // Анимация при скролле
+        const obs = new IntersectionObserver((entries, observer) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+    </script>
+</body>
+</html>
