@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Свадьба Давида и Елены</title>
+    <!-- Утонченные, полупрозрачные шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Jura:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* --- ДЫМЧАТО-СЕРЕБРИСТЫЙ ФОН --- */
+        body {
+            font-family: 'Jura', sans-serif;
+            margin: 0;
+            padding: 0;
+            /* Морозный, перламутровый фон, на котором X-RAY цветок сияет */
+            background: linear-gradient(120deg, #e2e8f0, #cbd5e1, #94a3b8, #e0f2fe);
+            background-size: 300% 300%;
+            animation: pearlShine 15s ease infinite alternate;
+            color: #1e293b; /* Глубокий темно-сине-серый для текста */
+            overflow-x: hidden;
+        }
+
+        @keyframes pearlShine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1, h2, h3 {
+            font-family: 'Cinzel Decorative', serif;
+            font-weight: 700;
+            margin: 0;
+            color: #0f172a;
+            letter-spacing: 2px;
+        }
+
+        /* --- КНОПКА МУЗЫКИ --- */
+        .music-btn {
+            position: fixed; top: 30px; right: 30px; z-index: 9999;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(15, 23, 42, 0.3); color: #0f172a;
+            padding: 12px 25px; border-radius: 50px;
+            font-family: 'Jura', sans-serif; font-size: 1em; font-weight: 500;
+            letter-spacing: 2px; cursor: pointer; transition: 0.4s;
+            display: flex; align-items: center; gap: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .music-btn:hover { background: #0f172a; color: #fff; }
+        .music-icon { font-size: 1.2em; }
+        .music-btn.playing .music-icon { animation: beat 1.5s infinite alternate; }
+
+        @keyframes beat { 0% { transform: scale(0.9); } 100% { transform: scale(1.1); } }
+
+        /* --- РЕНТГЕНОВСКИЕ ЦВЕТЫ (X-RAY FLOWER) --- */
+        .floral-blend {
+            position: absolute;
+            /* Screen убирает черный фон картинки, оставляя только синие прожилки */
+            mix-blend-mode: screen; 
+            pointer-events: none;
+            z-index: -1;
+            /* Фильтр делает цветок более контрастным и стеклянным */
+            filter: contrast(1.2) brightness(0.8) drop-shadow(0 0 30px rgba(59, 130, 246, 0.5));
+            opacity: 0.8;
+        }
+
+        /* 1. Огромный цветок-основа на весь первый экран */
+        .f-main { 
+            width: 120vw; /* Больше ширины экрана */
+            top: 50%; left: 50%; 
+            transform: translate(-50%, -50%); 
+            opacity: 0.4; 
+            animation: breatheFlower 15s infinite alternate; 
+            position: fixed; /* Он будет всегда на фоне при скролле */
+            z-index: -2;
+        }
+
+        @keyframes breatheFlower {
+            0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 0.3; }
+            100% { transform: translate(-50%, -50%) scale(1.05) rotate(5deg); opacity: 0.5; }
+        }
+
+        /* Остальные цветы разбросаны по сайту и сильно анимированы */
+        .f1 { width: 700px; top: 10%; left: -20%; animation: driftRight 20s infinite alternate; }
+        .f2 { width: 600px; top: 35%; right: -15%; animation: driftLeft 18s infinite alternate; }
+        .f3 { width: 800px; top: 60%; left: -25%; animation: driftRight 25s infinite alternate; }
+        .f4 { width: 650px; top: 85%; right: -10%; animation: driftLeft 22s infinite alternate; }
+
+        @keyframes driftRight {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); }
+            100% { transform: translateY(100px) translateX(100px) rotate(20deg); }
+        }
+        @keyframes driftLeft {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); }
+            100% { transform: translateY(-100px) translateX(-100px) rotate(-20deg); }
+        }
+
+        /* --- СТРУКТУРА И ХРУСТАЛЬНЫЕ ПЛАШКИ --- */
+        .container {
+            max-width: 800px; margin: 0 auto; padding: 20px;
+            position: relative; z-index: 10;
+            display: flex; flex-direction: column; gap: 150px; padding-bottom: 150px;
+        }
+
+        /* Блоки выглядят как матовое стекло. Сквозь них видно проплывающие прожилки цветов! */
+        .crystal-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(25px); /* Сильное размытие фона */
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 40px;
+            padding: 70px 50px;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(15, 23, 42, 0.15);
+            
+            /* Анимация появления */
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .crystal-card.show { opacity: 1; transform: translateY(0); }
+        
+        .crystal-card h2 { font-size: 3.5em; margin-bottom: 30px; }
+        .crystal-card p { font-size: 1.3em; line-height: 1.7; font-weight: 500; }
+
+        /* --- ГЛАВНЫЙ ЭКРАН --- */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center;
+        }
+        .name {
+            font-size: 5em; line-height: 1.1; 
+            opacity: 0; transform: translateY(30px); animation: fadeUp 1.5s forwards 0.5s;
+        }
+        .ampersand {
+            font-family: 'Jura', sans-serif; font-size: 3em; font-weight: 300; margin: 10px 0; color: #3b82f6;
+            opacity: 0; animation: fadeUp 1.5s forwards 1s;
+        }
+        .date {
+            margin-top: 40px; font-size: 1.5em; letter-spacing: 15px; font-weight: 500; text-transform: uppercase;
+            border-top: 1px solid #1e293b; padding-top: 20px;
+            opacity: 0; animation: fadeUp 1.5s forwards 1.5s;
+        }
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* --- ТАЙМИНГ (Стеклянные капсулы) --- */
+        .time-box {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50px; padding: 25px 40px; margin-bottom: 25px;
+            display: flex; align-items: center; gap: 40px;
+            transition: 0.4s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        .time-box:hover { transform: scale(1.03); background: rgba(255, 255, 255, 0.5); }
+        .t-time { font-family: 'Cinzel Decorative', serif; font-size: 3em; color: #1e40af; font-weight: 700; line-height: 1;}
+        .t-desc { font-size: 1.3em; font-weight: 600; text-align: left; }
+
+        /* --- ДРЕСС-КОД: "РАЗМЫТЫЕ КРУГИ" --- */
+        .colors { display: flex; justify-content: center; gap: 30px; margin-top: 40px; flex-wrap: wrap; }
+        .color-dot {
+            width: 80px; height: 80px; border-radius: 50%;
+            /* Имитация цветного стекла */
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255,255,255,0.8);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15), inset 0 0 20px rgba(255,255,255,0.5);
+            transition: 0.5s; cursor: pointer;
+        }
+        .color-dot:hover { transform: scale(1.2); }
+
+        /* --- АНКЕТА --- */
+        .form-group { margin-bottom: 30px; text-align: left; }
+        .form-group label.q-title { display: block; margin-bottom: 15px; font-size: 1.4em; font-weight: 600; }
+        
+        .crystal-card input[type="text"] {
+            width: 100%; padding: 20px 25px;
+            background: rgba(255, 255, 255, 0.4); border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 15px; color: #0f172a; font-family: 'Jura', sans-serif; font-size: 1.2em; font-weight: 500;
+            box-sizing: border-box; transition: 0.4s;
+        }
+        .crystal-card input[type="text"]::placeholder { color: #64748b; }
+        .crystal-card input[type="text"]:focus {
+            outline: none; background: #ffffff; border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+        
+        .radio-wrap { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; cursor: pointer; font-size: 1.2em; font-weight: 500; }
+        .crystal-card input[type="radio"] { width: 22px; height: 22px; cursor: pointer; accent-color: #1e40af; }
+
+        .btn-crystal {
+            display: inline-block; width: 100%; padding: 20px; margin-top: 30px;
+            background: rgba(15, 23, 42, 0.8); color: #ffffff; border: none; border-radius: 15px;
+            font-family: 'Jura', sans-serif; font-size: 1.2em; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+            cursor: pointer; transition: 0.4s; box-shadow: 0 15px 30px rgba(15, 23, 42, 0.3);
+        }
+        .btn-crystal:hover { background: #3b82f6; transform: translateY(-5px); box-shadow: 0 20px 40px rgba(59, 130, 246, 0.4); }
+
+        #success-message { display: none; font-family: 'Cinzel Decorative', serif; font-size: 1.8em; color: #1e40af; font-weight: 700; margin-top: 30px; }
+
+        /* --- КАРТА --- */
+        iframe {
+            width: 100%; height: 350px; border: none; border-radius: 20px; margin-top: 30px;
+            filter: grayscale(80%) contrast(1.1) opacity(0.9);
+        }
+
+        @media (max-width: 768px) {
+            .name { font-size: 3.5em; }
+            .container { gap: 80px; padding-bottom: 100px; }
+            .crystal-card { padding: 40px 20px; border-radius: 30px; }
+            .crystal-card h2 { font-size: 2.5em; }
+            .time-box { flex-direction: column; gap: 10px; text-align: center; padding: 20px; border-radius: 30px; }
+            .t-desc { text-align: center; }
+            .music-btn { top: 15px; right: 15px; padding: 10px 15px; font-size: 0.8em; }
+            /* Уменьшаем цветы для телефона */
+            .f-main { width: 250vw; }
+            .f1, .f2, .f3, .f4 { width: 450px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- АУДИОПЛЕЕР (Музыка "Phantom") -->
+<audio id="bgMusic" loop>
+    <source src="Rasster - Phantom.mp3" type="audio/mpeg">
+</audio>
+
+<button class="music-btn" id="musicToggleBtn" onclick="toggleMusic()">
+    <span class="music-icon" id="musicIcon">♪</span>
+    <span id="musicText">МУЗЫКА</span>
+</button>
+
+<!-- РЕНТГЕНОВСКИЕ ЦВЕТЫ ПО ВСЕМУ САЙТУ -->
+<!-- Главный гигантский цветок фиксирован по центру -->
+<img src="vecteezy_delicate-blue-flower-on-transparent-highlighting-natures_57446903.png" class="floral-blend f-main" alt="">
+
+<!-- Плавающие цветы -->
+<img src="vecteezy_delicate-blue-flower-on-transparent-highlighting-natures_57446903.png" class="floral-blend f1 prlx" data-speed="0.2" alt="">
+<img src="vecteezy_delicate-blue-flower-on-transparent-highlighting-natures_57446903.png" class="floral-blend f2 prlx" data-speed="-0.3" alt="">
+<img src="vecteezy_delicate-blue-flower-on-transparent-highlighting-natures_57446903.png" class="floral-blend f3 prlx" data-speed="0.3" alt="">
+<img src="vecteezy_delicate-blue-flower-on-transparent-highlighting-natures_57446903.png" class="floral-blend f4 prlx" data-speed="-0.2" alt="">
+
+<div class="container">
+
+    <!-- 1. ГЛАВНЫЙ ЭКРАН -->
+    <div class="hero">
+        <h1 class="name">Давид</h1>
+        <div class="ampersand">&</div>
+        <h1 class="name">Елена</h1>
+        <div class="date">15 ОКТЯБРЯ 2024</div>
+    </div>
+
+    <!-- 2. ПРИГЛАШЕНИЕ -->
+    <div class="crystal-card scroll-anim">
+        <h2>Магия момента</h2>
+        <p>Мы приглашаем вас разделить с нами этот хрупкий и прекрасный момент. День, когда наши судьбы сплетутся воедино, словно тонкие узоры на стекле. Будем счастливы видеть вас!</p>
+    </div>
+
+    <!-- 3. ТАЙМИНГ -->
+    <div class="crystal-card scroll-anim">
+        <h2>Тайминг дня</h2>
+        <div class="time-box">
+            <div class="t-time">15:00</div>
+            <div class="t-desc">Сбор гостей и ледяное шампанское</div>
+        </div>
+        <div class="time-box">
+            <div class="t-time">16:30</div>
+            <div class="t-desc">Трогательная церемония обмена кольцами</div>
+        </div>
+        <div class="time-box">
+            <div class="t-time">18:00</div>
+            <div class="t-desc">Торжественный ужин в кругу близких</div>
+        </div>
+        <div class="time-box">
+            <div class="t-time">22:00</div>
+            <div class="t-desc">Разрезание торта и танцы</div>
+        </div>
+    </div>
+
+    <!-- 4. ДРЕСС-КОД -->
+    <div class="crystal-card scroll-anim">
+        <h2>Дресс-код</h2>
+        <p>Пожалуйста, поддержите эстетику нашего праздника, выбрав наряды в глубоких, "морозных" и кристальных оттенках.</p>
+        <div class="colors">
+            <div class="color-dot" style="background: rgba(226, 232, 240, 0.8);" title="Серебристый"></div>
+            <div class="color-dot" style="background: rgba(148, 163, 184, 0.8);" title="Стальной"></div>
+            <div class="color-dot" style="background: rgba(59, 130, 246, 0.8);" title="Синий"></div>
+            <div class="color-dot" style="background: rgba(15, 23, 42, 0.8);" title="Глубокий индиго"></div>
+        </div>
+    </div>
+
+    <!-- 5. АНКЕТА -->
+    <div class="crystal-card scroll-anim">
+        <h2>Присутствие</h2>
+        <p style="margin-bottom: 40px;">Просим вас подтвердить свое присутствие до 1 октября.</p>
+
+        <script>var rsvpSubmitted=false;</script>
+        <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(rsvpSubmitted) {
+            document.getElementById('rsvp-form').style.display='none';
+            document.getElementById('success-message').style.display='block';
+        }"></iframe>
+
+        <!-- Не забудьте вставить ID ваших вопросов в name="entry.ХХХ" -->
+        <form id="rsvp-form" action="https://docs.google.com/forms/d/e/1FAIpQLSeL92D7XykEJvvTiI7JHQOEhrXbrUWIyGzDZDgLdl9ly1-XXg/formResponse" method="POST" target="hidden_iframe" onsubmit="rsvpSubmitted=true;">
+            <div class="form-group">
+                <label class="q-title">Имя и Фамилия</label>
+                <input type="text" name="entry.550485150" placeholder="Например: Иванова Анна" required>
+            </div>
+            <div class="form-group">
+                <label class="q-title">Сможете ли вы разделить этот день с нами?</label>
+                <label class="radio-wrap"><input type="radio" name="entry.2017199155" value="Да" required> С удовольствием буду!</label>
+                <label class="radio-wrap"><input type="radio" name="entry.2017199155" value="Нет"> Вынужден(а) пропустить</label>
+            </div>
+            <button type="submit" class="btn-crystal">ОТПРАВИТЬ ОТВЕТ</button>
+        </form>
+        <div id="success-message">
+            Ваш ответ бережно сохранен! ✨
+        </div>
+    </div>
+
+    <!-- 6. ЛОКАЦИЯ -->
+    <div class="crystal-card scroll-anim">
+        <h2>Место торжества</h2>
+        <p>Усадьба "Crystal Ice"<br>Московская область</p>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2245.028711311053!2d37.6172993159301!3d55.75582608055318!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a50b315e573%3A0xa886bf5a3d9b2e68!2sThe%20Moscow%20Kremlin!5e0!3m2!1sen!2s!4v1622638848777!5m2!1sen!2s" allowfullscreen="" loading="lazy"></iframe>
+        
+        <a href="https://t.me/your_telegram_username" target="_blank" class="btn-crystal" style="display:inline-block; text-decoration: none; width: auto; padding: 15px 40px; margin-top: 30px;">Связь с организатором</a>
+    </div>
+
+</div>
+
+<!-- Скрипты -->
+<script>
+    // 1. Плавное появление матовых плашек при скролле
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+            }
+        });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.scroll-anim').forEach((el) => {
+        observer.observe(el);
+    });
+
+    // 2. Параллакс (скольжение цветов под стеклянными плашками)
+    window.addEventListener('scroll', function() {
+        const scrollY = window.scrollY;
+        document.querySelectorAll('.prlx').forEach(flower => {
+            const speed = parseFloat(flower.getAttribute('data-speed'));
+            flower.style.marginTop = (scrollY * speed) + 'px';
+        });
+    });
+
+    // 3. Управление музыкой
+    const audio = document.getElementById('bgMusic');
+    const btn = document.getElementById('musicToggleBtn');
+    const text = document.getElementById('musicText');
+    const icon = document.getElementById('musicIcon');
+    
+    let isPlaying = false;
+
+    function toggleMusic() {
+        if (isPlaying) {
+            audio.pause();
+            btn.classList.remove('playing');
+            text.innerText = 'МУЗЫКА';
+            isPlaying = false;
+        } else {
+            audio.play().then(() => {
+                btn.classList.add('playing');
+                text.innerText = 'ПАУЗА';
+                isPlaying = true;
+            }).catch(e => console.log(e));
+        }
+    }
+</script>
+
+</body>
+</html>
