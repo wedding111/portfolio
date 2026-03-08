@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Свадьба Ильи и Софии</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* --- БОГАТЫЙ ГРАДИЕНТНЫЙ ФОН (Изумруд и Золото) --- */
+        body {
+            font-family: 'Jost', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #f0f0f0; /* Светлый текст на темном фоне */
+            background: linear-gradient(135deg, #132a13, #2c4228, #4a5c44, #2b3a27, #1b261b);
+            background-size: 300% 300%;
+            animation: royalGradient 18s ease infinite alternate;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        @keyframes royalGradient {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        h1, h2, h3 {
+            font-family: 'Cinzel', serif;
+            color: #e8d0a9; /* Золотистый оттенок для заголовков */
+            margin: 0;
+        }
+
+        /* --- ПАРАЛЛАКС КАРТИНКИ (СЛОЙ 1 - ДАЛЬНИЙ, ОГРОМНЫЕ) --- */
+        .parallax-bg {
+            position: absolute;
+            z-index: 0;
+            opacity: 0.2; /* Полупрозрачные, чтобы не рябило в глазах */
+            pointer-events: none;
+            width: 1200px; /* Гигантские */
+            filter: blur(4px); /* Слегка размыты для глубины */
+        }
+        #bg-wreath-1 { top: -200px; left: -400px; transform: rotate(15deg); }
+        #bg-wreath-2 { top: 50vh; right: -500px; transform: rotate(-45deg); }
+        #bg-wreath-3 { top: 150vh; left: -300px; transform: rotate(60deg); }
+
+        /* --- ПАРАЛЛАКС КАРТИНКИ (СЛОЙ 2 - БЛИЖНИЙ, РЕЗКИЕ И КРУПНЫЕ) --- */
+        .parallax-fg {
+            position: absolute;
+            z-index: 10;
+            pointer-events: none;
+            width: 600px;
+            filter: drop-shadow(0 30px 40px rgba(0,0,0,0.6));
+        }
+        #fg-branch-1 { top: 10vh; right: -200px; transform: rotate(-20deg); }
+        #fg-branch-2 { top: 80vh; left: -250px; transform: scaleX(-1) rotate(10deg); }
+        #fg-branch-3 { top: 180vh; right: -150px; transform: rotate(35deg); width: 700px; }
+        #fg-branch-4 { bottom: -100px; left: -100px; transform: rotate(-15deg); width: 800px; }
+
+        /* --- ОСНОВНОЙ КОНТЕЙНЕР --- */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 5; /* Между дальним и ближним слоями цветов */
+            padding: 20px;
+        }
+
+        /* --- ГЛАВНЫЙ ЭКРАН --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .hero-main-wreath {
+            width: 120%; /* Огромный венок на весь экран */
+            max-width: 800px;
+            position: absolute;
+            animation: slowBreathe 8s ease-in-out infinite alternate;
+        }
+        @keyframes slowBreathe {
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.05) rotate(3deg); filter: drop-shadow(0 0 30px rgba(232, 208, 169, 0.2)); }
+        }
+        .names {
+            font-size: 5.5em;
+            text-align: center;
+            line-height: 1;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            letter-spacing: 2px;
+        }
+
+        /* --- СЕКЦИИ С ТЕКСТОМ --- */
+        .content-section {
+            margin: 15vh 0;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, rgba(23, 42, 23, 0.8), rgba(43, 66, 40, 0.6));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(232, 208, 169, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 1s ease-out;
+        }
+        .content-section.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .content-section h2 {
+            font-size: 3.2em;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(232, 208, 169, 0.3);
+            padding-bottom: 15px;
+            display: inline-block;
+        }
+        .content-section p {
+            font-size: 1.3em;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+        .highlight {
+            font-family: 'Cinzel', serif;
+            font-size: 2em;
+            color: #e8d0a9;
+            display: block;
+            margin-top: 20px;
+        }
+
+        /* Тайминг */
+        .time-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            padding: 15px 0;
+            border-bottom: 1px dashed rgba(255,255,255,0.2);
+            text-align: left;
+        }
+        .t-time {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2em;
+            color: #e8d0a9;
+            width: 120px;
+        }
+        .t-desc {
+            font-size: 1.2em;
+            flex-grow: 1;
+        }
+
+        /* --- ДРЕСС-КОД: ПАДАЮЩИЕ КАПЛИ --- */
+        .color-drops {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 40px;
+            height: 120px; /* Чтобы было место для падения */
+            align-items: flex-end;
+        }
+        .drop {
+            width: 60px;
+            height: 80px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; /* Форма вытянутой капли */
+            border: 3px solid rgba(232, 208, 169, 0.8);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            /* Начальное скрытое состояние */
+            opacity: 0;
+            transform: translateY(-100px) scale(0.5);
+        }
+        .content-section.visible .drop {
+            animation: dropBounce 1s cubic-bezier(0.28, 0.84, 0.42, 1) forwards;
+        }
+        .content-section.visible .drop:nth-child(1) { animation-delay: 0.2s; }
+        .content-section.visible .drop:nth-child(2) { animation-delay: 0.4s; }
+        .content-section.visible .drop:nth-child(3) { animation-delay: 0.6s; }
+        .content-section.visible .drop:nth-child(4) { animation-delay: 0.8s; }
+        
+        @keyframes dropBounce {
+            0% { opacity: 0; transform: translateY(-150px) scale(0.5); }
+            60% { opacity: 1; transform: translateY(20px) scale(1.1); }
+            80% { transform: translateY(-10px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Карта */
+        iframe {
+            width: 100%;
+            height: 350px;
+            border: none;
+            border-radius: 15px;
+            margin-top: 30px;
+            filter: grayscale(30%) sepia(30%) hue-rotate(40deg); /* Тонируем карту под стиль */
+        }
+
+        /* Кнопка */
+        .gold-btn {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 18px 50px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #132a13;
+            background: linear-gradient(to right, #e8d0a9, #d4af37, #e8d0a9);
+            background-size: 200% auto;
+            border-radius: 5px;
+            text-decoration: none;
+            text-transform: uppercase;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            transition: all 0.5s;
+            animation: shineBtn 3s linear infinite;
+        }
+        @keyframes shineBtn {
+            to { background-position: 200% center; }
+        }
+        .gold-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Адаптация */
+        @media (max-width: 768px) {
+            .names { font-size: 4em; }
+            .hero-main-wreath { width: 150%; }
+            .parallax-fg { width: 400px; }
+            .time-row { flex-direction: column; text-align: center; }
+            .t-time { width: auto; margin-bottom: 5px; }
+            .drop { width: 45px; height: 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ДАЛЬНИЙ СЛОЙ (Огромные размытые венки) -->
+<img src="__2.png" class="parallax-bg" id="bg-wreath-1" alt="">
+<img src="__2.png" class="parallax-bg" id="bg-wreath-2" alt="">
+<img src="__2.png" class="parallax-bg" id="bg-wreath-3" alt="">
+
+<!-- БЛИЖНИЙ СЛОЙ (Гигантские четкие ветки, перекрывающие контент) -->
+<img src="ChatGPT_Image_24__20.png" class="parallax-fg" id="fg-branch-1" alt="">
+<img src="ChatGPT_Image_24__20.png" class="parallax-fg" id="fg-branch-2" alt="">
+<img src="ChatGPT_Image_24__20.png" class="parallax-fg" id="fg-branch-3" alt="">
+<img src="ChatGPT_Image_24__20.png" class="parallax-fg" id="fg-branch-4" alt="">
+
+
+<div class="container">
+
+    <!-- 1. Главный экран -->
+    <div class="hero">
+        <img src="__2.png" class="hero-main-wreath" alt="Венок">
+        <h1 class="names">Илья<br>&<br>София</h1>
+    </div>
+
+    <!-- 2. Приглашение -->
+    <div class="content-section anim-target">
+        <h2>Торжество Любви</h2>
+        <p>Мы приглашаем вас разделить с нами волшебство этого дня. Оставьте все заботы и погрузитесь в атмосферу праздника вместе с нами.</p>
+        <span class="highlight">18 Ноября 2024</span>
+    </div>
+
+    <!-- 3. Тайминг -->
+    <div class="content-section anim-target">
+        <h2>Расписание</h2>
+        <div class="time-row">
+            <div class="t-time">15:00</div>
+            <div class="t-desc">Сбор гостей в каминном зале</div>
+        </div>
+        <div class="time-row">
+            <div class="t-time">16:00</div>
+            <div class="t-desc">Церемония при свечах</div>
+        </div>
+        <div class="time-row">
+            <div class="t-time">17:30</div>
+            <div class="t-desc">Королевский ужин</div>
+        </div>
+        <div class="time-row">
+            <div class="t-time">22:00</div>
+            <div class="t-desc">Огненное шоу и торт</div>
+        </div>
+    </div>
+
+    <!-- 4. Дресс-код -->
+    <div class="content-section anim-target">
+        <h2>Палитра вечера</h2>
+        <p>Мы просим дам выбрать вечерние платья в пол, а джентльменов — строгие костюмы (Black Tie). Цвета, которые украсят наш праздник:</p>
+        
+        <div class="color-drops">
+            <div class="drop" style="background-color: #132a13;" title="Глубокий изумруд"></div>
+            <div class="drop" style="background-color: #4a5c44;" title="Оливковый"></div>
+            <div class="drop" style="background-color: #e8d0a9;" title="Золото"></div>
+            <div class="drop" style="background-color: #000000;" title="Черный"></div>
+        </div>
+    </div>
+
+    <!-- 5. Карта -->
+    <div class="content-section anim-target">
+        <h2>Локация</h2>
+        <p>Замок "Изумрудный Лес", Московская область</p>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2245.028711311053!2d37.6172993159301!3d55.75582608055318!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a50b315e573%3A0xa886bf5a3d9b2e68!2sThe%20Moscow%20Kremlin!5e0!3m2!1sen!2s!4v1622638848777!5m2!1sen!2s" allowfullscreen="" loading="lazy"></iframe>
+        
+        <br>
+        <a href="https://t.me/your_telegram_username" target="_blank" class="gold-btn">Сообщить о присутствии</a>
+    </div>
+
+</div>
+
+<!-- Скрипт для параллакса и появления секций -->
+<script>
+    // 1. Появление секций при скролле
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.anim-target').forEach((el) => observer.observe(el));
+
+    // 2. Эффект ПАРАЛЛАКСА при прокрутке мыши
+    window.addEventListener('scroll', function() {
+        let scrollY = window.scrollY;
+
+        // Двигаем дальний фон медленно ВНИЗ
+        document.getElementById('bg-wreath-1').style.transform = 'translateY(' + scrollY * 0.2 + 'px) rotate(15deg)';
+        document.getElementById('bg-wreath-2').style.transform = 'translateY(' + scrollY * 0.15 + 'px) rotate(-45deg)';
+        document.getElementById('bg-wreath-3').style.transform = 'translateY(' + scrollY * 0.25 + 'px) rotate(60deg)';
+
+        // Двигаем ближние ветки быстро ВВЕРХ (создает глубину)
+        document.getElementById('fg-branch-1').style.transform = 'translateY(' + scrollY * -0.3 + 'px) rotate(-20deg)';
+        document.getElementById('fg-branch-2').style.transform = 'translateY(' + scrollY * -0.4 + 'px) scaleX(-1) rotate(10deg)';
+        document.getElementById('fg-branch-3').style.transform = 'translateY(' + scrollY * -0.2 + 'px) rotate(35deg)';
+        document.getElementById('fg-branch-4').style.transform = 'translateY(' + scrollY * -0.5 + 'px) rotate(-15deg)';
+    });
+</script>
+
+</body>
+</html>
