@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Шикарная Свадьба | Даниил и Елизавета</title>
+    <!-- Премиальные шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Proza+Libre:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* --- ФОН: РОЗОВОЕ ШАМПАНСКОЕ --- */
+        body {
+            font-family: 'Proza Libre', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(120deg, #fdfbfb, #fbebed, #f9e2e9, #fff0f5);
+            background-size: 300% 300%;
+            animation: royalGradient 15s ease infinite alternate;
+            color: #5a2a35; /* Дорогой винный цвет текста */
+            overflow-x: hidden;
+        }
+
+        @keyframes royalGradient {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        h1, h2, h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            margin: 0;
+            color: #7b3e4d;
+        }
+
+        /* --- МАГИЯ ДЛЯ JPG (Убираем белый фон) --- */
+        .blend-img {
+            position: absolute;
+            z-index: 0;
+            pointer-events: none;
+            mix-blend-mode: multiply; /* Сливает картинку с фоном */
+            filter: contrast(1.1) brightness(1.05);
+        }
+
+        /* --- ПАДАЮЩИЕ ЛЕПЕСТКИ (Генерируются через JS) --- */
+        #petals-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1; /* Под текстом, но над фоном */
+            overflow: hidden;
+        }
+        .petal {
+            position: absolute;
+            background: linear-gradient(135deg, #ffb6c1, #ffc0cb);
+            border-radius: 15px 0 15px 0; /* Форма лепестка */
+            opacity: 0.6;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg) scale(0.5); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(110vh) rotate(360deg) scale(1); opacity: 0; }
+        }
+
+        /* --- ГИГАНТСКИЕ ФОНОВЫЕ ЦВЕТЫ --- */
+        .bg-flower-fixed {
+            position: fixed;
+            width: 90vh; /* Гигантский */
+            min-width: 600px;
+            top: -20vh;
+            left: -20vw;
+            opacity: 0.5;
+            animation: slowSpin 80s linear infinite;
+            z-index: 0;
+        }
+        @keyframes slowSpin { 100% { transform: rotate(360deg); } }
+
+        /* --- КОНТЕЙНЕР --- */
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+            padding: 20px;
+        }
+
+        /* --- ГЛАВНЫЙ ЭКРАН --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        /* Цветок за именами */
+        .hero-flower {
+            width: 140%;
+            max-width: 800px;
+            opacity: 0.8;
+            animation: breathe 8s ease-in-out infinite alternate;
+        }
+        @keyframes breathe {
+            0% { transform: scale(0.95); }
+            100% { transform: scale(1.05); }
+        }
+
+        .names-box {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+        .names {
+            font-size: 6.5em;
+            line-height: 1;
+            text-shadow: 0 5px 20px rgba(255,255,255,0.9), 0 0 50px rgba(255,255,255,1);
+            margin-bottom: 20px;
+        }
+        .hero-date {
+            font-size: 2em;
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: 5px;
+            color: #a05c6d;
+            text-transform: uppercase;
+        }
+
+        /* --- ШИКАРНЫЕ КАРТОЧКИ (С АНИМАЦИЕЙ "ЦВЕТЕНИЯ") --- */
+        .luxury-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 2px 50px 2px 50px; /* Изящная форма */
+            padding: 70px 60px;
+            margin: 80px 0;
+            box-shadow: 0 30px 60px rgba(90, 42, 53, 0.05);
+            text-align: center;
+            position: relative;
+            /* Начальное состояние для скрипта */
+            opacity: 0;
+            transform: translateY(60px) scale(0.95);
+            transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .luxury-card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .luxury-card h2 {
+            font-size: 3.8em;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        .luxury-card p {
+            font-size: 1.3em;
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        /* Декоративные цветы на карточках */
+        .decor-flower {
+            width: 350px;
+            opacity: 0;
+            transform: scale(0.5) rotate(-30deg);
+            transition: all 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s;
+        }
+        .luxury-card.visible .decor-flower {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+        .decor-right { top: -80px; right: -100px; }
+        .decor-left { bottom: -100px; left: -100px; transform: scaleX(-1); }
+
+        /* --- ТАЙМИНГ (ВЕРТИКАЛЬНЫЙ) --- */
+        .timing-list {
+            text-align: left;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .timing-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .t-time {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8em;
+            color: #7b3e4d;
+            margin-right: 30px;
+            position: relative;
+        }
+        .t-time::after {
+            content: '';
+            position: absolute;
+            right: -15px;
+            top: 20%;
+            height: 60%;
+            width: 1px;
+            background: #d8aeb7;
+        }
+        .t-event {
+            font-size: 1.3em;
+        }
+
+        /* --- ДРЕСС-КОД: РОМБЫ --- */
+        .color-diamonds {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 40px;
+        }
+        .diamond {
+            width: 55px;
+            height: 55px;
+            transform: rotate(45deg) scale(0);
+            border: 2px solid #fff;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .luxury-card.visible .diamond { transform: rotate(45deg) scale(1); }
+        .luxury-card.visible .diamond:nth-child(1) { transition-delay: 0.2s; }
+        .luxury-card.visible .diamond:nth-child(2) { transition-delay: 0.4s; }
+        .luxury-card.visible .diamond:nth-child(3) { transition-delay: 0.6s; }
+        .luxury-card.visible .diamond:nth-child(4) { transition-delay: 0.8s; }
+
+        .diamond:hover { filter: brightness(1.1); cursor: pointer; }
+
+        /* --- КАРТА И КНОПКА --- */
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            border-radius: 10px;
+            margin-top: 30px;
+            box-shadow: 0 15px 30px rgba(90, 42, 53, 0.1);
+        }
+
+        /* Кнопка с эффектом блика */
+        .btn-royal {
+            position: relative;
+            display: inline-block;
+            margin-top: 50px;
+            padding: 20px 60px;
+            font-size: 1.2em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #fff;
+            background: #7b3e4d;
+            border: 1px solid #7b3e4d;
+            border-radius: 0 25px 0 25px; /* Под стиль карточек */
+            text-decoration: none;
+            overflow: hidden;
+            transition: all 0.5s;
+            box-shadow: 0 15px 30px rgba(123, 62, 77, 0.3);
+        }
+        .btn-royal::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -150%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transform: skewX(-25deg);
+            transition: 0.5s;
+        }
+        .btn-royal:hover::before { left: 150%; }
+        .btn-royal:hover {
+            background: #5a2a35;
+            box-shadow: 0 20px 40px rgba(123, 62, 77, 0.5);
+            transform: translateY(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .names { font-size: 4.5em; }
+            .hero-date { font-size: 1.4em; }
+            .bg-flower-fixed { width: 450px; }
+            .luxury-card { padding: 40px 25px; margin: 40px 0; }
+            .luxury-card h2 { font-size: 2.8em; }
+            .decor-flower { width: 220px; }
+            .decor-right { right: -50px; top: -50px; }
+            .decor-left { left: -50px; bottom: -50px; }
+            .timing-row { flex-direction: column; text-align: center; }
+            .t-time { margin-right: 0; margin-bottom: 10px; }
+            .t-time::after { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Контейнер для скрипта падающих лепестков -->
+<div id="petals-container"></div>
+
+<!-- Фиксированный гигантский вращающийся цветок -->
+<img src="b4dae34cb976780fafeffc5eacadda95.jpg" class="blend-img bg-flower-fixed" alt="">
+
+<div class="container">
+
+    <!-- 1. ИМЕНА И ВЕНОК -->
+    <div class="hero">
+        <img src="ea008bc205df917932901f19834b2851.jpg" class="blend-img hero-flower" alt="">
+        <div class="names-box">
+            <h1 class="names">Даниил<br>&<br>Елизавета</h1>
+            <div class="hero-date">24 Августа 2024</div>
+        </div>
+    </div>
+
+    <!-- 2. ПРИГЛАШЕНИЕ -->
+    <div class="luxury-card anim-scroll">
+        <!-- Букет справа сверху (расцветает при скролле) -->
+        <img src="5c4d2f49156b7aeb4605ce63dc7e90a9.jpg" class="blend-img decor-flower decor-right" alt="">
+        
+        <h2>Таинство Любви</h2>
+        <p>Мы приглашаем вас разделить с нами волшебство этого дня. Оставьте все заботы и погрузитесь в атмосферу нежности, цветов и искренней радости вместе с нами.</p>
+    </div>
+
+    <!-- 3. ТАЙМИНГ -->
+    <div class="luxury-card anim-scroll">
+        <h2>Сценарий дня</h2>
+        <div class="timing-list">
+            <div class="timing-row">
+                <div class="t-time">16:00</div>
+                <div class="t-event">Welcome-зона, коктейли и живая музыка</div>
+            </div>
+            <div class="timing-row">
+                <div class="t-time">17:00</div>
+                <div class="t-event">Церемония обмена клятвами</div>
+            </div>
+            <div class="timing-row">
+                <div class="t-time">18:30</div>
+                <div class="t-event">Торжественный ужин и поздравления</div>
+            </div>
+            <div class="timing-row">
+                <div class="t-time">22:00</div>
+                <div class="t-event">Вынос торта и бенгальские огни</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. ДРЕСС-КОД -->
+    <div class="luxury-card anim-scroll">
+        <!-- Букет слева снизу -->
+        <img src="ea008bc205df917932901f19834b2851.jpg" class="blend-img decor-flower decor-left" alt="">
+
+        <h2>Палитра вечера</h2>
+        <p>Наш праздник будет оформлен в оттенках пудры и розового золота. Будем признательны, если вы поддержите эту гамму.</p>
+        
+        <div class="color-diamonds">
+            <div class="diamond" style="background-color: #fdfbfb;" title="Жемчужный"></div>
+            <div class="diamond" style="background-color: #f9e2e9;" title="Светло-розовый"></div>
+            <div class="diamond" style="background-color: #d8aeb7;" title="Пыльная роза"></div>
+            <div class="diamond" style="background-color: #7b3e4d;" title="Бордовый"></div>
+        </div>
+    </div>
+
+    <!-- 5. КАРТА -->
+    <div class="luxury-card anim-scroll">
+        <h2>Ждем вас</h2>
+        <p>Ресторанный комплекс "Цветущая Оранжерея"<br>Московская область</p>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2245.028711311053!2d37.6172993159301!3d55.75582608055318!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a50b315e573%3A0xa886bf5a3d9b2e68!2sThe%20Moscow%20Kremlin!5e0!3m2!1sen!2s!4v1622638848777!5m2!1sen!2s" allowfullscreen="" loading="lazy"></iframe>
+        
+        <br>
+        <a href="https://t.me/your_telegram_username" target="_blank" class="btn-royal">Подтвердить присутствие</a>
+    </div>
+
+</div>
+
+<script>
+    // 1. СКРИПТ ПОЯВЛЕНИЯ КАРТОЧЕК ПРИ СКРОЛЛЕ
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.anim-scroll').forEach((el) => {
+        observer.observe(el);
+    });
+
+    // 2. ГЕНЕРАТОР ПАДАЮЩИХ ЛЕПЕСТКОВ
+    const petalsContainer = document.getElementById('petals-container');
+    const petalCount = 30; // Количество лепестков на экране
+
+    for (let i = 0; i < petalCount; i++) {
+        let petal = document.createElement('div');
+        petal.classList.add('petal');
+        
+        // Случайный размер
+        let size = Math.random() * 15 + 10; 
+        petal.style.width = size + 'px';
+        petal.style.height = size + 'px';
+        
+        // Случайная позиция по горизонтали
+        petal.style.left = Math.random() * 100 + 'vw';
+        
+        // Случайная скорость падения и задержка
+        petal.style.animationDuration = (Math.random() * 5 + 7) + 's';
+        petal.style.animationDelay = Math.random() * 5 + 's';
+        
+        petalsContainer.appendChild(petal);
+    }
+</script>
+
+</body>
+</html>
