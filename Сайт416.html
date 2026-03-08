@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Наше Свадебное Приглашение</title>
+    <!-- Подключаем каллиграфический и читаемый шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* Анимированный нежный градиентный фон */
+        body {
+            font-family: 'Lora', serif;
+            margin: 0;
+            padding: 0;
+            color: #4a4a4a;
+            text-align: center;
+            background: linear-gradient(135deg, #fdfbf7, #f7ece8, #eef3eb, #faede8);
+            background-size: 300% 300%;
+            animation: softGradient 20s ease infinite;
+            overflow-x: hidden;
+        }
+
+        @keyframes softGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1, h2, h3 {
+            font-family: 'Great Vibes', cursive;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 30px 15px;
+            overflow: hidden;
+        }
+
+        /* --- Анимации появления при скролле (слайд с боков) --- */
+        .slide-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: opacity 1s ease-out, transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .slide-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: opacity 1s ease-out, transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .slide-left.active, .slide-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* --- Эффект плавного парения венка --- */
+        .hero {
+            position: relative;
+            display: inline-block;
+            margin-top: 30px;
+            width: 100%;
+            max-width: 420px;
+            animation: floatHero 6s ease-in-out infinite;
+        }
+        @keyframes floatHero {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .wreath-img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0px 10px 15px rgba(0,0,0,0.05));
+        }
+
+        .names {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3.5em;
+            color: #556c4d; /* Оливково-зеленый под листики */
+            margin: 0;
+            width: 100%;
+            line-height: 1;
+        }
+
+        /* Веточки (с легким поворотом) */
+        .divider {
+            margin: 30px auto;
+            max-width: 300px;
+        }
+        .branch-img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.8s ease;
+            filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.03));
+        }
+        .divider:hover .branch-img {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        /* --- Эффект "Glassmorphism" (Матовое стекло) для карточек --- */
+        .glass-card {
+            margin: 40px 0;
+            padding: 35px 25px;
+            background: rgba(255, 255, 255, 0.55); /* Полупрозрачный белый */
+            backdrop-filter: blur(12px); /* Размытие фона под карточкой */
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 32px rgba(90, 100, 80, 0.08);
+        }
+
+        .glass-card h2 {
+            font-size: 3.2em;
+            color: #d19782; /* Приглушенный терракотовый/персиковый */
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .glass-card p {
+            font-size: 1.15em;
+            line-height: 1.7;
+        }
+
+        /* Тайминг: акцентные карточки */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+        .time-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 300px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border-left: 4px solid #d19782;
+            transition: all 0.3s;
+        }
+        .time-box:hover {
+            transform: translateX(10px);
+            border-left-color: #556c4d;
+        }
+        .time-box .time {
+            font-size: 1.3em;
+            font-weight: 500;
+            color: #556c4d;
+            margin-bottom: 5px;
+        }
+        .time-box .event {
+            font-style: italic;
+        }
+
+        /* Дресс-код: плавающие кружки */
+        .colors {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .color-bubble {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.9);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            animation: floatBubble 4s ease-in-out infinite alternate;
+        }
+        .color-bubble:nth-child(2) { animation-delay: 0.5s; }
+        .color-bubble:nth-child(3) { animation-delay: 1s; }
+        .color-bubble:nth-child(4) { animation-delay: 1.5s; }
+        .color-bubble:nth-child(5) { animation-delay: 2s; }
+
+        @keyframes floatBubble {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-8px); }
+        }
+
+        /* Карта */
+        .map-container {
+            margin-top: 20px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 300px;
+            border: none;
+            display: block;
+        }
+
+        /* Стеклянная кнопка Telegram */
+        .tg-btn-glass {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            color: #556c4d;
+            text-decoration: none;
+            padding: 14px 40px;
+            font-size: 1.1em;
+            font-weight: 500;
+            border-radius: 40px;
+            margin-top: 25px;
+            box-shadow: 0 8px 32px rgba(85, 108, 77, 0.15);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .tg-btn-glass:hover {
+            background: rgba(255, 255, 255, 0.9);
+            color: #d19782;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(209, 151, 130, 0.3);
+        }
+
+        @media (max-width: 600px) {
+            .names { font-size: 2.8em; }
+            .glass-card { padding: 25px 15px; }
+            .glass-card h2 { font-size: 2.6em; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- 1. Имена: Парящая секция -->
+    <div class="hero">
+        <img src="__2.png" alt="Венок" class="wreath-img">
+        <h1 class="names">Максим<br>&<br>Анастасия</h1>
+    </div>
+
+    <div class="divider slide-left">
+        <img src="ChatGPT_Image_24__20.png" alt="Цветочная ветвь" class="branch-img">
+    </div>
+
+    <!-- 2. Приветствие (Выезжает справа) -->
+    <div class="glass-card slide-right">
+        <h2>Приглашение</h2>
+        <p>Мы приглашаем вас стать частью самого трогательного события — дня рождения нашей семьи!<br>
+        Обещаем море улыбок, душевного тепла и счастливых моментов.</p>
+        <p style="font-size: 1.4em; color: #556c4d; font-weight: 500; margin-top: 20px;">
+            07 Сентября 2024
+        </p>
+    </div>
+
+    <div class="divider slide-right">
+        <img src="ChatGPT_Image_24__20.png" alt="Цветочная ветвь" class="branch-img" style="transform: scaleX(-1);"> 
+    </div>
+
+    <!-- 3. Тайминг (Выезжает слева) -->
+    <div class="glass-card slide-left">
+        <h2>Программа</h2>
+        <div class="timeline">
+            <div class="time-box">
+                <span class="time">15:00</span>
+                <span class="event">Сбор гостей на террасе</span>
+            </div>
+            <div class="time-box">
+                <span class="time">16:00</span>
+                <span class="event">Церемония обмена кольцами</span>
+            </div>
+            <div class="time-box">
+                <span class="time">17:00</span>
+                <span class="event">Праздничный ужин</span>
+            </div>
+            <div class="time-box">
+                <span class="time">22:00</span>
+                <span class="event">Бенгальские огни и торт</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Дресс-код (Выезжает справа) -->
+    <div class="glass-card slide-right">
+        <h2>Пожелания к нарядам</h2>
+        <p>Наш праздник оформлен в нежных и светлых тонах. Если вы поддержите эту палитру в вашей одежде, мы будем очень счастливы!</p>
+        <!-- Пастельная палитра для нового градиентного фона -->
+        <div class="colors">
+            <div class="color-bubble" style="background-color: #f7ece8;" title="Пудровый"></div>
+            <div class="color-bubble" style="background-color: #eef3eb;" title="Светло-зеленый"></div>
+            <div class="color-bubble" style="background-color: #d19782;" title="Персиковый"></div>
+            <div class="color-bubble" style="background-color: #ffffff;" title="Белый"></div>
+            <div class="color-bubble" style="background-color: #556c4d;" title="Оливковый"></div>
+        </div>
+    </div>
+
+    <div class="divider slide-left">
+        <img src="ChatGPT_Image_24__20.png" alt="Цветочная ветвь" class="branch-img">
+    </div>
+
+    <!-- 5. Карта (Выезжает слева) -->
+    <div class="glass-card slide-left">
+        <h2>Где нас найти</h2>
+        <p>Загородная усадьба "Белый Сад"<br>Московская область, д. Цветочная, 12</p>
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2245.028711311053!2d37.6172993159301!3d55.75582608055318!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a50b315e573%3A0xa886bf5a3d9b2e68!2sThe%20Moscow%20Kremlin!5e0!3m2!1sen!2s!4v1622638848777!5m2!1sen!2s" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+
+    <!-- 6. Телеграм (Выезжает справа) -->
+    <div class="glass-card slide-right">
+        <h2>Присутствие</h2>
+        <p>Пожалуйста, дайте нам знать, сможете ли вы разделить с нами этот день, до 20 августа. Для этого напишите нам в Telegram.</p>
+        <a href="https://t.me/your_telegram_username" target="_blank" class="tg-btn-glass">Подтвердить присутствие</a>
+    </div>
+
+</div>
+
+<!-- Скрипт для шахматного появления слева и справа -->
+<script>
+    function revealSides() {
+        var leftReveals = document.querySelectorAll(".slide-left");
+        var rightReveals = document.querySelectorAll(".slide-right");
+        var windowHeight = window.innerHeight;
+        var elementVisible = 50;
+
+        leftReveals.forEach(function(el) {
+            var elementTop = el.getBoundingClientRect().top;
+            if (elementTop < windowHeight - elementVisible) {
+                el.classList.add("active");
+            }
+        });
+
+        rightReveals.forEach(function(el) {
+            var elementTop = el.getBoundingClientRect().top;
+            if (elementTop < windowHeight - elementVisible) {
+                el.classList.add("active");
+            }
+        });
+    }
+
+    window.addEventListener("scroll", revealSides);
+    revealSides(); // Запуск при загрузке
+</script>
+
+</body>
+</html>
