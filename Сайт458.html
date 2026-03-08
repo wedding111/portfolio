@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Свадьба Ильи и Алины</title>
+    <!-- Элегантные журнальные шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        /* --- ЖИВОЙ ГРАДИЕНТ (Сапфир и Изумруд) --- */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            /* Насыщенный, благородный цвет (не черный, не белый) */
+            background: linear-gradient(135deg, #0f172a, #1e3a8a, #0d9488, #2563eb);
+            background-size: 300% 300%;
+            animation: royalOcean 20s ease infinite alternate;
+            color: #f8fafc;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        @keyframes royalOcean {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 500;
+            margin: 0;
+            letter-spacing: 2px;
+            color: #ffffff;
+        }
+
+        /* --- КНОПКА МУЗЫКИ (Журнальный минимализм) --- */
+        .music-btn {
+            position: fixed; top: 30px; right: 30px; z-index: 9999;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.5); color: #fff;
+            padding: 10px 20px; border-radius: 0; /* Строгие углы */
+            font-family: 'Montserrat', sans-serif; font-size: 0.8em; text-transform: uppercase;
+            letter-spacing: 3px; cursor: pointer; transition: 0.4s;
+            display: flex; align-items: center; gap: 10px;
+            backdrop-filter: blur(5px);
+        }
+        .music-btn:hover { background: #fff; color: #1e3a8a; }
+        .music-icon { font-size: 1.2em; }
+        .music-btn.playing .music-icon { animation: spin 4s linear infinite; }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* --- ЦВЕТЫ ПО ВСЕМУ САЙТУ (ОТ НАЧАЛА ДО КОНЦА) --- */
+        .floral-blend {
+            position: absolute;
+            mix-blend-mode: screen; /* Растворяет черный фон, оставляя свечение */
+            pointer-events: none; /* Чтобы цветы не мешали нажимать на кнопки */
+            z-index: -1;
+            filter: contrast(1.2) brightness(1.1) drop-shadow(0 0 15px rgba(255,255,255,0.2));
+            opacity: 0.7;
+        }
+
+        /* Расставляем 8 огромных цветов по всей высоте страницы */
+        .f1 { top: -5%; left: -15%; width: 700px; animation: floatRotate 25s infinite alternate; }
+        .f2 { top: 10%; right: -20%; width: 800px; animation: floatRotateRev 30s infinite alternate; }
+        .f3 { top: 25%; left: -25%; width: 600px; animation: floatRotate 20s infinite alternate; }
+        .f4 { top: 40%; right: -15%; width: 750px; animation: floatRotateRev 28s infinite alternate; }
+        .f5 { top: 55%; left: -10%; width: 650px; animation: floatRotate 22s infinite alternate; }
+        .f6 { top: 70%; right: -20%; width: 800px; animation: floatRotateRev 26s infinite alternate; }
+        .f7 { top: 85%; left: -20%; width: 700px; animation: floatRotate 24s infinite alternate; }
+        .f8 { bottom: -10%; right: -10%; width: 650px; animation: floatRotateRev 35s infinite alternate; }
+
+        @keyframes floatRotate {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(80px) rotate(15deg); }
+        }
+        @keyframes floatRotateRev {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-80px) rotate(-15deg); }
+        }
+
+        /* --- СТРУКТУРА --- */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 150px; /* Большие отступы для «воздуха» */
+            padding-bottom: 100px;
+        }
+
+        /* Анимация проявления текста */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* --- ГЛАВНЫЙ ЭКРАН --- */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center;
+        }
+        .hero-names {
+            font-size: 6em; line-height: 1.1; margin: 0; font-style: italic;
+            opacity: 0; animation: fadeUp 2s forwards 0.5s;
+        }
+        .hero-and {
+            font-family: 'Montserrat', sans-serif; font-size: 1.5em; font-weight: 300; margin: 15px 0; color: #bae6fd;
+            opacity: 0; animation: fadeUp 2s forwards 1s;
+        }
+        .hero-date {
+            font-family: 'Montserrat', sans-serif; font-size: 1.2em; letter-spacing: 12px; margin-top: 30px; text-transform: uppercase;
+            border-top: 1px solid rgba(255,255,255,0.3); border-bottom: 1px solid rgba(255,255,255,0.3); padding: 15px 0;
+            opacity: 0; animation: fadeUp 2s forwards 1.5s;
+        }
+        
+        @keyframes fadeUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* --- БЛОКИ ТЕКСТА (СТРОГИЕ) --- */
+        .editorial-block {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 60px 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .editorial-block h2 { font-size: 3em; margin-bottom: 30px; font-style: italic; }
+        .editorial-block p { font-size: 1.2em; line-height: 1.8; font-weight: 300; }
+
+        /* --- ТАЙМИНГ (Стильная линия) --- */
+        .timeline { border-left: 1px solid #7dd3fc; padding-left: 40px; margin: 40px auto 0; max-width: 500px; text-align: left; }
+        .t-item { margin-bottom: 50px; position: relative; }
+        .t-item::before {
+            content: ''; position: absolute; left: -45px; top: 15px;
+            width: 10px; height: 10px; background: #7dd3fc; border-radius: 50%;
+            box-shadow: 0 0 15px #7dd3fc;
+        }
+        .t-time { font-family: 'Playfair Display', serif; font-size: 2.5em; color: #bae6fd; line-height: 1; margin-bottom: 10px; font-style: italic; }
+        .t-desc { font-size: 1.1em; font-weight: 300; letter-spacing: 1px; text-transform: uppercase; }
+
+        /* --- ДРЕСС-КОД: ПРЯМОУГОЛЬНЫЕ ПАЛИТРЫ --- */
+        .pantone-colors { display: flex; justify-content: center; gap: 20px; margin-top: 40px; flex-wrap: wrap; }
+        .pantone {
+            width: 80px; height: 120px;
+            border: 1px solid rgba(255,255,255,0.4);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: 0.4s;
+            display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px;
+        }
+        .pantone:hover { transform: translateY(-15px); box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
+        .pantone span { font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.8); }
+
+        /* --- АНКЕТА (Минимализм линий) --- */
+        .form-group { margin-bottom: 40px; text-align: left; }
+        .form-group label.q-title { display: block; margin-bottom: 15px; font-family: 'Playfair Display', serif; font-size: 1.5em; font-style: italic; color: #bae6fd; }
+        
+        /* Прозрачные поля с линией снизу */
+        input[type="text"] {
+            width: 100%; padding: 15px 0;
+            background: transparent; border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            color: #fff; font-family: 'Montserrat', sans-serif; font-size: 1.2em; font-weight: 300;
+            box-sizing: border-box; transition: 0.4s;
+        }
+        input[type="text"]::placeholder { color: rgba(255, 255, 255, 0.5); font-weight: 300; }
+        input[type="text"]:focus { outline: none; border-bottom: 1px solid #7dd3fc; }
+        
+        .radio-wrap { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; cursor: pointer; font-size: 1.1em; font-weight: 300; }
+        input[type="radio"] { accent-color: #7dd3fc; width: 18px; height: 18px; cursor: pointer; }
+
+        .btn-editorial {
+            display: inline-block; width: 100%; padding: 20px; margin-top: 20px;
+            background: #fff; color: #0f172a; border: none; border-radius: 0;
+            font-family: 'Montserrat', sans-serif; font-size: 1em; letter-spacing: 4px; font-weight: 500; text-transform: uppercase;
+            cursor: pointer; transition: 0.4s; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .btn-editorial:hover { background: #bae6fd; transform: translateY(-3px); }
+
+        #success-message { display: none; font-family: 'Playfair Display', serif; font-size: 1.8em; font-style: italic; color: #bae6fd; margin-top: 30px; }
+
+        /* --- КАРТА --- */
+        iframe {
+            width: 100%; height: 350px; border: none; margin-top: 30px;
+            filter: grayscale(100%) invert(90%) contrast(1.2); /* Темная стильная карта */
+        }
+        .btn-tg {
+            display: inline-block; width: auto; padding: 15px 40px; margin-top: 40px;
+            background: transparent; color: #fff; border: 1px solid #fff;
+            text-decoration: none; font-family: 'Montserrat', sans-serif; letter-spacing: 3px; text-transform: uppercase; font-size: 0.9em;
+            transition: 0.4s;
+        }
+        .btn-tg:hover { background: #fff; color: #0f172a; }
+
+        @media (max-width: 768px) {
+            .hero-names { font-size: 4em; }
+            .hero-date { font-size: 0.9em; letter-spacing: 6px; }
+            .container { gap: 80px; padding-bottom: 80px; }
+            .editorial-block { padding: 40px 20px; }
+            .timeline { padding-left: 20px; margin-left: 10px; }
+            .music-btn { top: 15px; right: 15px; padding: 10px; font-size: 0.7em; }
+            
+            /* Уменьшаем цветы для мобилок */
+            .f1, .f2, .f3, .f4, .f5, .f6, .f7, .f8 { width: 400px; }
+            .f1 { left: -50px; } .f2 { right: -50px; } .f3 { left: -80px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- АУДИОПЛЕЕР -->
+<audio id="bgMusic" loop>
+    <source src="Rasster - Phantom.mp3" type="audio/mpeg">
+</audio>
+
+<button class="music-btn" id="musicToggleBtn" onclick="toggleMusic()">
+    <span class="music-icon" id="musicIcon">♪</span>
+    <span id="musicText">МУЗЫКА</span>
+</button>
+
+<!-- 8 ОГРОМНЫХ ЦВЕТОВ ПО ВСЕЙ ВЫСОТЕ САЙТА -->
+<!-- Наложены по очереди для разнообразия -->
+<img src="vecteezy_stunning-abstract-blue-flower-digital-art-elegant-and_58261816.png" class="floral-blend f1 prlx" data-speed="0.15" alt="">
+<img src="vecteezy_stunning-light-blue-flower-blossom-with-delicate-petals-and_58261813.png" class="floral-blend f2 prlx" data-speed="-0.2" alt="">
+<img src="vecteezy_stunning-abstract-blue-flower-digital-art-elegant-and_58261816.png" class="floral-blend f3 prlx" data-speed="0.25" alt="">
+<img src="vecteezy_stunning-light-blue-flower-blossom-with-delicate-petals-and_58261813.png" class="floral-blend f4 prlx" data-speed="-0.15" alt="">
+<img src="vecteezy_stunning-abstract-blue-flower-digital-art-elegant-and_58261816.png" class="floral-blend f5 prlx" data-speed="0.3" alt="">
+<img src="vecteezy_stunning-light-blue-flower-blossom-with-delicate-petals-and_58261813.png" class="floral-blend f6 prlx" data-speed="-0.1" alt="">
+<img src="vecteezy_stunning-abstract-blue-flower-digital-art-elegant-and_58261816.png" class="floral-blend f7 prlx" data-speed="0.2" alt="">
+<img src="vecteezy_stunning-light-blue-flower-blossom-with-delicate-petals-and_58261813.png" class="floral-blend f8 prlx" data-speed="-0.25" alt="">
+
+<div class="container">
+
+    <!-- 1. ГЛАВНЫЙ ЭКРАН -->
+    <div class="hero">
+        <h1 class="hero-names">Илья</h1>
+        <div class="hero-and">и</div>
+        <h1 class="hero-names">Алина</h1>
+        <div class="hero-date">10 Октября 2024</div>
+    </div>
+
+    <!-- 2. ПРИГЛАШЕНИЕ -->
+    <div class="editorial-block reveal">
+        <h2>Эстетика нашего дня</h2>
+        <p>Мы приглашаем вас стать главными зрителями и участниками нашего самого важного события. Разделите с нами этот вечер, наполненный красотой, любовью и безупречным стилем.</p>
+    </div>
+
+    <!-- 3. ТАЙМИНГ -->
+    <div class="editorial-block reveal">
+        <h2>Расписание</h2>
+        <div class="timeline">
+            <div class="t-item">
+                <div class="t-time">15:00</div>
+                <div class="t-desc">Сбор гостей, welcome-коктейль</div>
+            </div>
+            <div class="t-item">
+                <div class="t-time">16:30</div>
+                <div class="t-desc">Церемония обмена клятвами</div>
+            </div>
+            <div class="t-item">
+                <div class="t-time">18:00</div>
+                <div class="t-desc">Торжественный ужин</div>
+            </div>
+            <div class="t-item">
+                <div class="t-time">22:00</div>
+                <div class="t-desc">Вечерняя программа и торт</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. ДРЕСС-КОД -->
+    <div class="editorial-block reveal">
+        <h2>Дресс-код</h2>
+        <p>Просим вас придерживаться нашей цветовой палитры. Строгие костюмы, вечерние платья и элегантные силуэты.</p>
+        <div class="pantone-colors">
+            <div class="pantone" style="background: #e2e8f0;"><span>Ice</span></div>
+            <div class="pantone" style="background: #7dd3fc;"><span>Sky</span></div>
+            <div class="pantone" style="background: #0284c7;"><span>Ocean</span></div>
+            <div class="pantone" style="background: #0f172a;"><span>Midnight</span></div>
+        </div>
+    </div>
+
+    <!-- 5. АНКЕТА ГОСТЯ -->
+    <div class="editorial-block reveal">
+        <h2>Анкета гостя</h2>
+        <p style="margin-bottom: 40px;">Пожалуйста, ответьте до 1 сентября.</p>
+
+        <script>var rsvpSubmitted=false;</script>
+        <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(rsvpSubmitted) {
+            document.getElementById('rsvp-form').style.display='none';
+            document.getElementById('success-message').style.display='block';
+        }"></iframe>
+
+        <form id="rsvp-form" action="https://docs.google.com/forms/d/e/1FAIpQLSeL92D7XykEJvvTiI7JHQOEhrXbrUWIyGzDZDgLdl9ly1-XXg/formResponse" method="POST" target="hidden_iframe" onsubmit="rsvpSubmitted=true;">
+            <div class="form-group">
+                <label class="q-title">Имя и Фамилия</label>
+                <input type="text" name="entry.550485150" placeholder="Впишите ваше имя..." required>
+            </div>
+            <div class="form-group">
+                <label class="q-title">Присутствие</label>
+                <label class="radio-wrap"><input type="radio" name="entry.2017199155" value="Да" required> Принимаю приглашение</label>
+                <label class="radio-wrap"><input type="radio" name="entry.2017199155" value="Нет"> Вынужден(а) отказаться</label>
+            </div>
+            <button type="submit" class="btn-editorial">Отправить</button>
+        </form>
+        <div id="success-message">
+            Благодарим вас! Ответ получен.
+        </div>
+    </div>
+
+    <!-- 6. ЛОКАЦИЯ -->
+    <div class="editorial-block reveal">
+        <h2>Локация</h2>
+        <p>Комплекс "Sapphire Estate"<br>Московская область</p>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2245.028711311053!2d37.6172993159301!3d55.75582608055318!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a50b315e573%3A0xa886bf5a3d9b2e68!2sThe%20Moscow%20Kremlin!5e0!3m2!1sen!2s!4v1622638848777!5m2!1sen!2s" allowfullscreen="" loading="lazy"></iframe>
+        
+        <a href="https://t.me/your_telegram_username" target="_blank" class="btn-tg">Связь с организатором</a>
+    </div>
+
+</div>
+
+<!-- Скрипты -->
+<script>
+    // 1. Анимация появления блоков при скролле
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach((el) => {
+        observer.observe(el);
+    });
+
+    // 2. 3D-Параллакс для 8 цветов на фоне!
+    window.addEventListener('scroll', function() {
+        const scrollY = window.scrollY;
+        document.querySelectorAll('.prlx').forEach(flower => {
+            const speed = parseFloat(flower.getAttribute('data-speed'));
+            // Двигаем цветы вверх или вниз в зависимости от скролла
+            flower.style.marginTop = (scrollY * speed) + 'px';
+        });
+    });
+
+    // 3. Управление музыкой
+    const audio = document.getElementById('bgMusic');
+    const btn = document.getElementById('musicToggleBtn');
+    const text = document.getElementById('musicText');
+    const icon = document.getElementById('musicIcon');
+    
+    let isPlaying = false;
+
+    function toggleMusic() {
+        if (isPlaying) {
+            audio.pause();
+            btn.classList.remove('playing');
+            text.innerText = 'МУЗЫКА';
+            icon.innerText = '♪';
+            isPlaying = false;
+        } else {
+            audio.play().then(() => {
+                btn.classList.add('playing');
+                text.innerText = 'ПАУЗА';
+                icon.innerText = 'ılı';
+                isPlaying = true;
+            }).catch(e => console.log("Браузер заблокировал музыку", e));
+        }
+    }
+</script>
+
+</body>
+</html>
