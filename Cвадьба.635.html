@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Свадебное приглашение — Анна и Дмитрий</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:italic,wght@300;400;600;700&family=Great+Vibes&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-gold: #d4af37;
+            --color-gold-bright: #f9e29c;
+            --color-cream: #fdfaf1;
+            --color-text: #5a4a42;
+        }
+
+        body {
+            background-color: var(--color-cream);
+            color: var(--color-text);
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .silk-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: url('золотойшёлк.jpg') center/cover no-repeat;
+            opacity: 0.35;
+        }
+
+        .ambient-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(to bottom, rgba(253, 250, 241, 0.2), rgba(253, 250, 241, 0.8));
+        }
+
+        .floating-angel {
+            position: absolute;
+            pointer-events: none;
+            z-index: 5;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.08));
+            opacity: 0.75;
+        }
+
+        .gold-shimmer {
+            background: linear-gradient(
+                to right, 
+                #bf953f 0%, 
+                #fcf6ba 25%, 
+                #b38728 50%, 
+                #fbf5b7 75%, 
+                #aa771c 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 6s linear infinite;
+        }
+
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 40px;
+            box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.03);
+        }
+
+        .wedding-day-circle {
+            position: relative;
+            z-index: 1;
+            color: white !important;
+            -webkit-text-fill-color: white !important;
+        }
+        .wedding-day-circle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 35px;
+            height: 35px;
+            background: var(--color-gold);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        #music-btn {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .timer-val {
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            line-height: 1;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #d4af37 0%, #aa771c 100%);
+            color: white;
+            padding: 1rem 3rem;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            font-size: 0.75rem;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(170, 119, 28, 0.2); 
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        h1 { 
+            font-family: 'Great Vibes', cursive; 
+            /* Имена увеличены на ~70% */
+            font-size: clamp(20rem, 51vw, 42rem);
+            line-height: 0.65;
+            padding-bottom: 20px;
+            text-align: center;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.12));
+            z-index: 10;
+            position: relative;
+        }
+
+        @keyframes floatIdle {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+        }
+        .angel-idle {
+            animation: floatIdle 8s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="silk-bg"></div>
+    <div class="ambient-overlay"></div>
+
+    <div id="music-btn" onclick="toggleMusic()">
+        <svg id="music-icon" class="w-5 h-5" fill="var(--color-gold)" viewBox="0 0 24 24">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+    </div>
+    <audio id="main-audio" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3"></audio>
+
+    <!-- Оставлено 3 ангела на главном экране -->
+    <img src="Ангел1.png" class="floating-angel angel-idle w-40 md:w-56" style="top: 5vh; left: 8%;">
+    <img src="Ангел2.png" class="floating-angel angel-idle w-32 md:w-48" style="top: 20vh; right: 5%; animation-delay: -1.5s; opacity: 0.6;">
+    <img src="Ангел3.png" class="floating-angel angel-idle w-48 md:w-60" style="top: 65vh; left: 30%; animation-delay: -3.5s; opacity: 0.8;">
+
+    <!-- Ангелы для нижних секций -->
+    <img src="Ангел2.png" class="floating-angel angel-idle w-40 md:w-52" style="top: 120vh; left: 5%; animation-delay: -2s;">
+    <img src="Ангел3.png" class="floating-angel angel-idle w-32 md:w-48" style="top: 180vh; right: 8%; opacity: 0.6; animation-delay: -4s;">
+    <img src="Ангел1.png" class="floating-angel angel-idle w-48 md:w-64" style="top: 250vh; left: 12%; animation-delay: -1s;">
+    <img src="Ангел2.png" class="floating-angel angel-idle w-36 md:w-52" style="top: 320vh; right: 15%; opacity: 0.7; animation-delay: -3s;">
+    <img src="Ангел3.png" class="floating-angel angel-idle w-28 md:w-44" style="top: 400vh; left: 50%; transform: translateX(-50%); animation-delay: -5s; opacity: 0.5;">
+
+    <!-- Главный экран -->
+    <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 relative z-10 overflow-hidden">
+        <div class="reveal-up opacity-0 w-full flex flex-col items-center">
+            <div class="uppercase tracking-[0.8em] text-[20xl] mb-8 text-gray-400 font-light opacity-50">Приглашение на свадьбу</div>
+            <h1 class="gold-shimmer text-4xl md:text-7xl">Анна & Дмитрий</h1>
+            <p class="text-5xl md:text-30xl italic font-light text-gray-400 mt-10 max-w-5xl">Любовь, созданная небесами</p>
+        </div>
+        <div class="absolute bottom-10 animate-bounce opacity-10">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </div>
+    </section>
+
+    <!-- Остальная часть вашего HTML-кода без изменений -->
+    <section class="py-20 px-6 relative z-10">
+        <div class="max-w-4xl mx-auto glass-panel p-8 md:p-14 reveal-up opacity-0">
+            <div class="grid md:grid-cols-2 gap-14 items-center">
+                <div class="text-center md:text-left">
+                    <h2 class="text-4xl font-serif uppercase tracking-widest mb-6 gold-shimmer">Когда</h2>
+                    <div class="text-8xl font-light mb-4 gold-shimmer leading-none">17.07</div>
+                    <div class="text-xl tracking-[0.3em] uppercase text-gray-400 mb-6">2027 года</div>
+                    <p class="text-xl italic font-serif opacity-70">Суббота, в 16:00</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm p-10 rounded-[40px] border border-white/20">
+                    <div class="grid grid-cols-7 gap-2 text-center text-[10px] uppercase mb-6 opacity-30 font-sans tracking-widest">
+                        <span>пн</span><span>вт</span><span>ср</span><span>чт</span><span>пт</span><span>сб</span><span>вс</span>
+                    </div>
+                    <div class="grid grid-cols-7 gap-3 text-center text-xl font-light font-serif">
+                        <span class="opacity-5">28</span><span class="opacity-5">29</span><span class="opacity-5">30</span><span class="opacity-30">1</span><span class="opacity-30">2</span><span class="opacity-30">3</span><span class="opacity-30">4</span>
+                        <span class="opacity-30">5</span><span class="opacity-30">6</span><span class="opacity-30">7</span><span class="opacity-30">8</span><span class="opacity-30">9</span><span class="opacity-30">10</span><span class="opacity-30">11</span>
+                        <span class="opacity-30">12</span><span class="opacity-30">13</span><span class="opacity-30">14</span><span class="opacity-30">15</span><span class="opacity-30">16</span>
+                        <span class="wedding-day-circle">17</span>
+                        <span class="opacity-30">18</span><span class="opacity-30">19</span><span class="opacity-30">20</span><span class="opacity-30">21</span><span class="opacity-30">22</span><span class="opacity-30">23</span><span class="opacity-30">24</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-14 px-6 relative z-10">
+        <div class="max-w-3xl mx-auto text-center reveal-up opacity-0">
+            <div class="glass-panel py-14 px-8">
+                <h3 class="text-2xl italic mb-12 gold-shimmer">До торжества осталось:</h3>
+                <div class="flex justify-center items-center gap-4 md:gap-12">
+                    <div class="flex flex-col">
+                        <div class="timer-val gold-shimmer" id="d">00</div>
+                        <div class="text-[9px] uppercase tracking-[0.2em] mt-3 opacity-30">Дней</div>
+                    </div>
+                    <div class="text-3xl gold-shimmer opacity-10 mb-8">:</div>
+                    <div class="flex flex-col">
+                        <div class="timer-val gold-shimmer" id="h">00</div>
+                        <div class="text-[9px] uppercase tracking-[0.2em] mt-3 opacity-30">Часов</div>
+                    </div>
+                    <div class="text-3xl gold-shimmer opacity-10 mb-8">:</div>
+                    <div class="flex flex-col">
+                        <div class="timer-val gold-shimmer" id="m">00</div>
+                        <div class="text-[9px] uppercase tracking-[0.2em] mt-3 opacity-30">Минут</div>
+                    </div>
+                    <div class="text-3xl gold-shimmer opacity-10 mb-8">:</div>
+                    <div class="flex flex-col">
+                        <div class="timer-val gold-shimmer" id="s">00</div>
+                        <div class="text-[9px] uppercase tracking-[0.2em] mt-3 opacity-30">Секунд</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 px-6 relative z-10">
+        <div class="max-w-4xl mx-auto text-center reveal-up opacity-0">
+            <h2 class="text-4xl font-serif uppercase mb-10 gold-shimmer">Где</h2>
+            <div class="mb-12">
+                <p class="text-3xl italic gold-shimmer mb-3">«Летний Дворец»</p>
+                <p class="tracking-[0.2em] text-gray-400 uppercase text-[10px] max-w-xs mx-auto opacity-60">Санкт-Петербургское ш., 130, Петергоф</p>
+            </div>
+            <div class="h-[450px] rounded-[50px] overflow-hidden shadow-xl border-[12px] border-white/20">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1998.41113276632!2d29.98808531604588!3d59.85172298184517!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4696395b00000001%3A0x89e830e23e59040c!2z0JvQtdGC0L3QuNC5INCU0LLQvtGA0LXRhg!5e0!3m2!1sru!2sru!4v1694700000000!5m2!1sru!2sru" 
+                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 px-6 relative z-10">
+        <div class="max-w-3xl mx-auto glass-panel p-14 text-center reveal-up opacity-0">
+            <h2 class="text-4xl font-serif uppercase mb-12 tracking-[0.1em] gold-shimmer">Дресс-код</h2>
+            <div class="flex flex-wrap justify-center gap-10">
+                <div class="text-center">
+                    <div class="w-20 h-20 rounded-full bg-[#fdfaf1] border-2 border-white shadow-md mx-auto transform hover:scale-110 transition-transform"></div>
+                    <p class="mt-5 text-[9px] uppercase tracking-widest opacity-30">Шелк</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-20 h-20 rounded-full bg-[#d4af37] border-2 border-white shadow-md mx-auto transform hover:scale-110 transition-transform"></div>
+                    <p class="mt-5 text-[9px] uppercase tracking-widest opacity-30">Золото</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-20 h-20 rounded-full bg-[#f4e1d2] border-2 border-white shadow-md mx-auto transform hover:scale-110 transition-transform"></div>
+                    <p class="mt-5 text-[9px] uppercase tracking-widest opacity-30">Пудра</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-20 h-20 rounded-full bg-[#e6e6fa] border-2 border-white shadow-md mx-auto transform hover:scale-110 transition-transform"></div>
+                    <p class="mt-5 text-[9px] uppercase tracking-widest opacity-30">Лаванда</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-32 text-center relative z-10">
+        <div class="reveal-up opacity-0">
+            <h2 class="text-4xl italic mb-16 gold-shimmer">Ждем вас!</h2>
+            <a href="#" class="btn-gold">Подтвердить</a>
+            <p class="mt-32 text-[10px] tracking-[1.5em] uppercase opacity-15 gold-shimmer font-sans">A & D • 2027</p>
+        </div>
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        const audio = document.getElementById('main-audio');
+        let isPlaying = false;
+        function toggleMusic() {
+            if (!isPlaying) {
+                audio.play().catch(() => {});
+                gsap.to("#music-icon", { rotation: 360, duration: 4, repeat: -1, ease: "none" });
+            } else {
+                audio.pause();
+                gsap.killTweensOf("#music-icon");
+            }
+            isPlaying = !isPlaying;
+        }
+
+        const targetDate = new Date('July 17, 2027 16:00:00').getTime();
+        function updateTimer() {
+            const now = new Date().getTime();
+            const d = targetDate - now;
+            if (d < 0) return;
+            document.getElementById('d').innerText = String(Math.floor(d / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            document.getElementById('h').innerText = String(Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            document.getElementById('m').innerText = String(Math.floor((d % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            document.getElementById('s').innerText = String(Math.floor((d % (1000 * 60)) / 1000)).padStart(2, '0');
+        }
+        setInterval(updateTimer, 1000);
+
+        window.addEventListener('load', () => {
+            gsap.utils.toArray(".reveal-up").forEach(el => {
+                gsap.to(el, {
+                    scrollTrigger: { trigger: el, start: "top 95%" },
+                    opacity: 1, y: -25, duration: 1.8, ease: "power2.out"
+                });
+            });
+
+            gsap.utils.toArray(".floating-angel").forEach((el, i) => {
+                gsap.to(el, {
+                    y: (i % 2 === 0 ? 100 + Math.random() * 50 : -100 - Math.random() * 50),
+                    x: (Math.random() - 0.5) * 60,
+                    scrollTrigger: {
+                        trigger: "body",
+                        start: "top top",
+                        end: "bottom bottom",
+                        scrub: 1.5 + Math.random() * 2
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
