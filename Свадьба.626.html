@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение на свадьбу</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Playfair+Display:italic,wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-deep-rose: #6d597a;
+            --color-accent-rose: #b5838d;
+            --color-text-main: #2d2d2d;
+        }
+
+        body {
+            background-color: #fdfaf6;
+            color: var(--color-text-main);
+            font-family: 'Tenor Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Фон с одним пионом на всю страницу */
+        .peony-bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0.3; /* Увеличена видимость, так как убрали ч/б фильтр */
+        }
+
+        .peony-img {
+            width: 110%; 
+            height: 110%;
+            object-fit: cover;
+            /* Убран фильтр grayscale для сохранения естественной контрастности */
+        }
+
+        .font-serif-heavy {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Увеличенное расстояние между именами и знаком & */
+        .name-part {
+            margin: 2.5rem 0;
+        }
+
+        .ampersand {
+            font-style: italic;
+            opacity: 0.7;
+            margin: 4rem 0;
+            color: var(--color-accent-rose);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            letter-spacing: -0.02em;
+            color: var(--color-deep-rose);
+        }
+
+        .hero-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-overlay {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-shadow: 0 2px 10px rgba(253, 250, 246, 0.8);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 40px;
+        }
+
+        .wedding-day-heart {
+            position: relative;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .wedding-day-heart svg {
+            position: absolute;
+            width: 44px;
+            height: 44px;
+            fill: #b5838d;
+            z-index: -1;
+            animation: pulseHeart 1.5s ease-in-out infinite;
+        }
+        @keyframes pulseHeart {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .timer-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+        }
+        .timer-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--color-deep-rose);
+            font-weight: 700;
+        }
+
+        /* Цвета дресс-кода */
+        .color-item {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0.5);
+        }
+        .color-item:hover {
+            transform: scale(1.3) translateY(-10px);
+            z-index: 10;
+        }
+        .color-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .map-wrapper {
+            width: 100%;
+            height: 450px;
+            border-radius: 35px;
+            overflow: hidden;
+            border: 8px solid white;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+        }
+
+        #music-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            background: white;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Фоновый анимированный пион (контрастный, на весь экран) -->
+    <div class="peony-bg-container">
+        <img src="peony.png" class="peony-img" id="main-peony" alt="Фон пионы">
+    </div>
+
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="music-control" onclick="toggleMusic()">
+        <svg id="music-icon" class="w-6 h-6 text-[#6d597a]" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 3v11H4a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V7.4l8-1.6v5.8A2 2 0 0014 14h-2a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V3z"/>
+        </svg>
+    </div>
+
+    <!-- Hero Section (Без фото пары) -->
+    <div class="hero-container">
+        <div class="hero-overlay">
+            <h2 class="text-sm tracking-[0.8em] uppercase mb-12 text-gray-500 font-bold">Приглашение на свадьбу</h2>
+            <div class="text-6xl md:text-8xl font-serif-heavy text-[#4a3a54] text-center italic" id="main-names">
+                <span class="name-part">Мария</span>
+                <span class="ampersand">&</span>
+                <span class="name-part">Алексей</span>
+            </div>
+            <div class="mt-20 animate-bounce">
+                <svg class="w-8 h-8 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Секция: Дата -->
+    <section class="py-24 px-6 relative">
+        <div class="max-w-5xl mx-auto glass-card p-10 md:p-20 grid md:grid-cols-2 gap-16 items-center reveal-up">
+            <div class="text-center md:text-left">
+                <h3 class="section-title mb-8">Дата торжества</h3>
+                <p class="text-xl mb-12 text-gray-500 font-serif italic">Мы выбрали этот особенный день, чтобы сказать друг другу «Да»</p>
+                <div class="inline-block bg-white/60 p-8 rounded-[40px] border border-white">
+                    <div class="grid grid-cols-7 gap-4 text-center text-xs mb-4 opacity-40">
+                        <span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span>
+                    </div>
+                    <div class="grid grid-cols-7 gap-4 text-center text-sm">
+                        <span class="opacity-20">31</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span>
+                        <span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span>
+                        <span class="wedding-day-heart">
+                            <svg viewBox="0 0 32 32"><path d="M16 28.5c-.4 0-.8-.2-1.1-.4-2.8-2.6-12.9-12.1-12.9-18.1 0-4.4 3.6-8 8-8 2.2 0 4.2.9 5.7 2.4 1.5-1.5 3.5-2.4 5.7-2.4 4.4 0 8 3.6 8 8 0 6.1-10.1 15.6-12.9 18.1-.3.2-.7.4-1.1.4z"/></svg>
+                            14
+                        </span>
+                        <span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center md:text-right space-y-4">
+                <div class="text-8xl font-light text-[#b5838d]">14</div>
+                <div class="text-3xl uppercase tracking-widest text-gray-400">Сентября</div>
+                <div class="text-xl font-serif italic text-gray-400">2027 года, 15:30</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция: Таймер -->
+    <section class="py-24 px-6 bg-[#f7f2ee]/30">
+        <div class="max-w-4xl mx-auto text-center reveal-up">
+            <h3 class="section-title mb-12">До начала осталось</h3>
+            <div class="timer-container">
+                <div class="timer-item">
+                    <div class="timer-num" id="days">00</div>
+                    <div class="text-[10px] uppercase tracking-widest mt-2 text-gray-400">Дней</div>
+                </div>
+                <div class="timer-item">
+                    <div class="timer-num" id="hours">00</div>
+                    <div class="text-[10px] uppercase tracking-widest mt-2 text-gray-400">Часов</div>
+                </div>
+                <div class="timer-item">
+                    <div class="timer-num" id="mins">00</div>
+                    <div class="text-[10px] uppercase tracking-widest mt-2 text-gray-400">Минут</div>
+                </div>
+                <div class="timer-item">
+                    <div class="timer-num" id="secs">00</div>
+                    <div class="text-[10px] uppercase tracking-widest mt-2 text-gray-400">Секунд</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция: Дресс-код -->
+    <section class="py-32 px-6">
+        <div class="max-w-5xl mx-auto text-center reveal-up">
+            <h3 class="section-title mb-10">Дресс-код</h3>
+            <p class="text-lg font-serif italic text-gray-500 mb-16 max-w-2xl mx-auto">Будем признательны, если вы поддержите цветовую гамму нашего праздника в своих нарядах</p>
+            
+            <div class="flex flex-wrap justify-center gap-8 md:gap-14 mb-20" id="palette">
+                <div class="color-item">
+                    <div class="color-circle" style="background-color: #ffcad4;"></div>
+                    <p class="text-[10px] mt-4 uppercase tracking-widest text-gray-400">Пудра</p>
+                </div>
+                <div class="color-item">
+                    <div class="color-circle" style="background-color: #f4acb7;"></div>
+                    <p class="text-[10px] mt-4 uppercase tracking-widest text-gray-400">Роза</p>
+                </div>
+                <div class="color-item">
+                    <div class="color-circle" style="background-color: #9d8189;"></div>
+                    <p class="text-[10px] mt-4 uppercase tracking-widest text-gray-400">Мокко</p>
+                </div>
+                <div class="color-item">
+                    <div class="color-circle" style="background-color: #ffe5d9;"></div>
+                    <p class="text-[10px] mt-4 uppercase tracking-widest text-gray-400">Беж</p>
+                </div>
+                <div class="color-item">
+                    <div class="color-circle" style="background-color: #d8e2dc;"></div>
+                    <p class="text-[10px] mt-4 uppercase tracking-widest text-gray-400">Шалфей</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция: Локация -->
+    <section class="py-24 px-6 bg-[#f7f2ee]/30">
+        <div class="max-w-6xl mx-auto reveal-up">
+            <div class="text-center mb-16">
+                <h3 class="section-title mb-6">Место проведения</h3>
+                <p class="text-gray-500 font-serif italic text-xl">Загородный клуб «Лесное Поместье», мкр. Солнечный, 1</p>
+            </div>
+            
+            <div class="map-wrapper">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2244.430481195!2d37.6173!3d55.7558!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTXCsDQ1JzIwLjkiTiAzN8KwMzcnMDIuMyJF!5e0!3m2!1sru!2sru!4v1631545600000!5m2!1sru!2sru" 
+                    width="100%" 
+                    height="100%" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция: Telegram -->
+    <section class="py-32 px-6">
+        <div class="max-w-3xl mx-auto glass-card p-16 md:p-24 text-center reveal-up shadow-xl" style="background: linear-gradient(135deg, #4a3a54, #6d597a);">
+            <h3 class="font-serif text-4xl text-white mb-8">Telegram-канал</h3>
+            <p class="text-rose-100/70 mb-12 font-serif italic text-lg">Здесь мы будем делиться таймингом, важными новостями и фотографиями после свадьбы</p>
+            <a href="#" class="inline-block bg-white text-[#4a3a54] px-16 py-5 rounded-full uppercase tracking-widest font-bold text-sm hover:scale-105 transition-transform">Присоединиться</a>
+        </div>
+    </section>
+
+    <footer class="py-20 text-center opacity-30 text-xs tracking-[1em] uppercase">
+        14.09.2027 • Москва
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        const music = document.getElementById('bg-music');
+        let isPlaying = false;
+
+        function toggleMusic() {
+            if (!isPlaying) {
+                music.play().catch(() => {});
+                isPlaying = true;
+                gsap.to("#music-icon", { rotation: 360, duration: 4, repeat: -1, ease: "linear" });
+            } else {
+                music.pause();
+                isPlaying = false;
+                gsap.killTweensOf("#music-icon");
+            }
+        }
+
+        // Таймер
+        const targetDate = new Date('September 14, 2027 15:30:00').getTime();
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = d;
+            document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
+            document.getElementById('mins').innerText = m < 10 ? '0' + m : m;
+            document.getElementById('secs').innerText = s < 10 ? '0' + s : s;
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        window.addEventListener('load', () => {
+            // Анимация фона (один пион) - сильное увеличение при скролле
+            gsap.to("#main-peony", {
+                scrollTrigger: {
+                    trigger: "body",
+                    start: "top top",
+                    end: "bottom bottom",
+                    scrub: 1.5
+                },
+                scale: 2.5, // Еще сильнее увеличивается
+                rotation: 10,
+                opacity: 0.5,
+                y: 50
+            });
+
+            // Анимация имен (появление)
+            gsap.from(".name-part, .ampersand", {
+                y: 50,
+                opacity: 0,
+                duration: 2,
+                stagger: 0.3,
+                ease: "power3.out"
+            });
+
+            // Анимация дресс-кода (появление при скролле)
+            gsap.to(".color-item", {
+                scrollTrigger: {
+                    trigger: "#palette",
+                    start: "top 85%"
+                },
+                scale: 1,
+                opacity: 1,
+                stagger: 0.2,
+                duration: 1.2,
+                ease: "back.out(1.7)"
+            });
+
+            // Общая анимация блоков
+            gsap.utils.toArray(".reveal-up").forEach(el => {
+                gsap.from(el, {
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 90%",
+                        toggleActions: "play none none reverse"
+                    },
+                    y: 60,
+                    opacity: 0,
+                    duration: 1.5,
+                    ease: "power2.out"
+                });
+            });
+        });
+    </script>
+</body>
+</html>
